@@ -6,7 +6,8 @@ public class Magician : Character {
 
 	//members used for controller input/movement
 	int num_buttons = 3;
-	bool[] buttons;
+	bool action_button;
+	bool[] directions;
 	//inspector variables
 	public int player_num;
 	public bool keyboard_user;
@@ -18,10 +19,10 @@ public class Magician : Character {
 	public override void Start () {
 		//run base class initializer
 		base.Start ();
-		buttons = new bool[num_buttons];
-		for (int i = 0; i < buttons.Length; i++) {
-			buttons[i] = false;
-		}
+		directions = new bool[2];
+		directions [0] = false;
+		directions [1] = false;
+		action_button = false;
 		//current button mapping:
 		// 0 :  move left 
 		// 1 :  move right 
@@ -70,19 +71,19 @@ public class Magician : Character {
 	void ProcessInputKeyboard(){
 		//uses computer keys to allow easier beginning development for other members of the group. 
 		if (Input.GetKeyDown (KeyboardControls[player_num][0])) {
-			buttons [0] = true;
+			directions [0] = true;
 		} 
 		if (Input.GetKeyUp (KeyboardControls[player_num][0])) {
-			buttons [0] = false;
+			directions [0] = false;
 		}
 		if (Input.GetKeyDown (KeyboardControls[player_num][1])) {
-			buttons [1] = true;
+			directions [1] = true;
 		} 
 		if (Input.GetKeyUp (KeyboardControls[player_num][1])) {
-			buttons [1] = false;
+			directions [1] = false;
 		}
 		if (Input.GetKeyDown (KeyboardControls[player_num][2])) {
-			buttons [2] = true;
+			action_button = true;
 		}
 	}
 	//initialize a controller to this magician
@@ -96,30 +97,43 @@ public class Magician : Character {
 	//uses InControl as InputManager
 	void ProcessInputController(){
 		rb.AddForce (Vector3.right * controller.LeftStickX * movement_velocity);
+		if (controller.LeftStickX < 0) {
+			directions [0] = true;
+			directions [1] = false;
+		} else if (controller.LeftStickX > 0) {
+			directions [1] = true;
+			directions [0] = false;
+		} else {
+			directions [0] = false;
+			directions [1] = false;
+		}
 	}
 	void ProcessMovement(){
-		//move left 
-		if (buttons [0]) {
-			rb.AddForce (Vector3.left * movement_velocity);
-		}
-
+		//move left
+		if (directions [0]) {
+			rb.velocity = Vector3.left * movement_velocity;
+		} 
 		//move right
-		if (buttons [1]) {
-			rb.AddForce (Vector3.right * movement_velocity);
+		else if (directions [1]) {
+			rb.velocity = Vector3.right * movement_velocity;
+		} 
+		//dont move
+		else {
+			rb.velocity = Vector3.zero;
 		}
 	}
 	//function to process pressing the action button
 	void ProcessAction(){
 
 		//if X button has been pressed 
-		if (buttons [2]) {
+		if (action_button) {
 
 
 
 		}
 		//set back the button to false by default to 
 		// only process action once per button press 
-		buttons [2] = false;
+		action_button = false;
 	}
 	//Processes animation changes that are based on velocity
 	void ProcessVelocityAnimation(){
