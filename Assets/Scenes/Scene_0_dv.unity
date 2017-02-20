@@ -134,6 +134,16 @@ Prefab:
       propertyPath: m_Name
       value: Magician 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114530428788232442, guid: 8e971fcb2f9e842f7b711101ee36085c,
+        type: 2}
+      propertyPath: keyboard_user
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114530428788232442, guid: 8e971fcb2f9e842f7b711101ee36085c,
+        type: 2}
+      propertyPath: movement_velocity
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8e971fcb2f9e842f7b711101ee36085c, type: 2}
   m_IsPrefabParent: 0
@@ -736,6 +746,11 @@ Prefab:
     - target: {fileID: 1732503030401260, guid: d87e35fa876804749b83f67f7b9ff581, type: 2}
       propertyPath: m_Name
       value: Magician 1 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114530428788232442, guid: d87e35fa876804749b83f67f7b9ff581,
+        type: 2}
+      propertyPath: movement_velocity
+      value: 7.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d87e35fa876804749b83f67f7b9ff581, type: 2}
