@@ -15,6 +15,16 @@ public class Magician : Character {
 	GameObject closet;
 	bool in_closet = false;
 	bool hiding = false;
+
+	//members for using magical ability
+	public GameObject ability_object;
+	public bool using_ability = false;
+
+	//members for interacting with magical box
+	public bool touching_box = false;
+	GameObject box;
+	public bool in_box = false;
+
 	//inspector variables
 	public int player_num;
 	public bool keyboard_user;
@@ -22,6 +32,7 @@ public class Magician : Character {
 	bool controller_set = false;
 	KeyCode[][] KeyboardControls;
 	int num_players = 4;
+
 	// Use this for initialization
 	public override void Start () {
 		//run base class initializer
@@ -36,7 +47,6 @@ public class Magician : Character {
 		// 1 :  move right 
 		// 2 :  action button 
 		InitKeyboardControls();
-
 	}
 	
 	// Update is called once per frame
@@ -78,6 +88,7 @@ public class Magician : Character {
 		KeyboardControls[1][3] = KeyCode.Semicolon;
 
 	}
+
 	//process player input from the keyboard
 	//DOES NOT SUPPORT MULTIPLE MAGICIANS
 	void ProcessInputKeyboard(){
@@ -137,7 +148,7 @@ public class Magician : Character {
 			rb.velocity = Vector3.zero;
 		}
 
-		if (in_closet)
+		if (in_closet || in_box)
 			rb.velocity = Vector3.zero;
 	}
 	//function to process pressing the first action button 
@@ -166,24 +177,78 @@ public class Magician : Character {
 
 			if (touching_closet) {
 				closet.GetComponent<Closet> ().Action2 (this.gameObject);
+				action_button2 = false;
+				return;
 			}
+			if (touching_box) {
+				//if playing the magician controlling the box
+				// no need to do regular action
+				if (player_num == 0) {
+					UseAbility ();
+					action_button2 = false;
+					return;
+				}
+				box.GetComponent<MagicalBox> ().Action (this.gameObject);
+				action_button2 = false;
+				return;
+			}
+			UseAbility ();
+
 		}
 		//set back the button to false by default to 
 		// only process action once per button press 
 		action_button2 = false;
 	}
-	//
+
+
+	/// Ability Functions 
+	/// 
+	///  each magician is expected to have their 
+	///  ability object attached to their GameObject and Magician script 
+
+
+	public void UseAbility(){
+		if (ability_object == null)
+			return;
+		print ("ability");
+		ability_object.SetActive (true);
+		ability_object.GetComponent<Ability> ().UseAbility ();
+	}
+
 	public void EnterCloset(){
 		in_closet = true;
 		hiding = true;
-		sprend.color = new Color (1, 1, 1, 0);
+		Disappear ();
 	}
 	//
 	public void ExitCloset(){
 		in_closet = false;
 		hiding = false;
+		Reappear ();
+	}
+
+	public void EnterBox(){
+		in_box = true;
+		hiding = true;
+		Disappear ();
+	}
+	//
+	public void ExitBox(){
+		in_box = false;
+		hiding = false;
+		Reappear ();
+	}
+	//sets the magician sprite to invisible
+	// TO DO: add juice, particles, maybe puff of smoke?
+	public void Disappear(){
+		sprend.color = new Color (1, 1, 1, 0);
+	}
+	//sets the magician sprite to visible
+	// TO DO: add juice, particles, maybe puff of smoke?
+	public void Reappear(){
 		sprend.color = new Color (1, 1, 1, 1);
 	}
+	//function to return true when magician is hiding anywhere
 	public bool Hiding(){
 		return hiding;
 	}
@@ -200,12 +265,20 @@ public class Magician : Character {
 			touching_closet = true;
 			closet = coll.gameObject;
 		}
+		if (coll.gameObject.tag == "Magical Box") {
+			touching_box = true;
+			box = coll.gameObject;
+		}
 
 	}
 	void OnTriggerExit(Collider coll){
 		if (coll.gameObject.tag == "Closet") {
 			touching_closet = false;
 			closet = null;
+		}
+		if (coll.gameObject.tag == "Magical Box") {
+			touching_box = false;
+			box = null;
 		}
 	}
 }
