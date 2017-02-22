@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4346615544214276}
   - component: {fileID: 212035374091712898}
   - component: {fileID: 54792502726276810}
-  - component: {fileID: 65347556131667410}
+  - component: {fileID: 65184182091055512}
   m_Layer: 0
   m_Name: Wall
   m_TagString: Environment
@@ -57,7 +57,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &65347556131667410
+--- !u!65 &65184182091055512
 BoxCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -67,7 +67,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.28, y: 5.12, z: 0.2}
+  m_Size: {x: 0.32, y: 1.28, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!212 &212035374091712898
 SpriteRenderer:
@@ -100,7 +100,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 21300000, guid: 320416b5bf6d447398ed60c9fc22a2b3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: dce542df4f82c45b7a14f17033e4813b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

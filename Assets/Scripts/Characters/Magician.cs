@@ -5,9 +5,16 @@ using InControl;
 public class Magician : Character {
 
 	//members used for controller input/movement
-	int num_buttons = 3;
-	bool action_button;
+	int num_buttons = 4;
+	bool action_button1;
+	bool action_button2;
 	bool[] directions;
+
+	//members used for closet manipulation
+	bool touching_closet = false;
+	GameObject closet;
+	bool in_closet = false;
+	bool hiding = false;
 	//inspector variables
 	public int player_num;
 	public bool keyboard_user;
@@ -22,7 +29,8 @@ public class Magician : Character {
 		directions = new bool[2];
 		directions [0] = false;
 		directions [1] = false;
-		action_button = false;
+		action_button1 = false;
+		action_button2 = false;
 		//current button mapping:
 		// 0 :  move left 
 		// 1 :  move right 
@@ -43,6 +51,8 @@ public class Magician : Character {
 		if(keyboard_user) ProcessInputKeyboard ();
 		ProcessMovement ();
 		ProcessVelocityAnimation ();
+		ProcessAction1 ();
+		ProcessAction2 ();
 	}
 	//initialize keyboard control 2d array
 	void InitKeyboardControls(){
@@ -59,11 +69,13 @@ public class Magician : Character {
 		//ONLY SET UP FOR TWO PLAYERS ON ONE KEYBOARD, SORRY, TOO MANY BUTTONS!
 		KeyboardControls[0][0] = KeyCode.A;
 		KeyboardControls[0][1] = KeyCode.S;
-		KeyboardControls[0][2] = KeyCode.F;
+		KeyboardControls[0][2] = KeyCode.D;
+		KeyboardControls[0][3] = KeyCode.F;
 
 		KeyboardControls[1][0] = KeyCode.J;
 		KeyboardControls[1][1] = KeyCode.K;
-		KeyboardControls[1][2] = KeyCode.Semicolon;
+		KeyboardControls[1][2] = KeyCode.L;
+		KeyboardControls[1][3] = KeyCode.Semicolon;
 
 	}
 	//process player input from the keyboard
@@ -83,7 +95,10 @@ public class Magician : Character {
 			directions [1] = false;
 		}
 		if (Input.GetKeyDown (KeyboardControls[player_num][2])) {
-			action_button = true;
+			action_button1 = true;
+		}
+		if (Input.GetKeyDown (KeyboardControls[player_num][3])) {
+			action_button2 = true;
 		}
 	}
 	//initialize a controller to this magician
@@ -121,19 +136,56 @@ public class Magician : Character {
 		else {
 			rb.velocity = Vector3.zero;
 		}
+
+		if (in_closet)
+			rb.velocity = Vector3.zero;
 	}
-	//function to process pressing the action button
-	void ProcessAction(){
+	//function to process pressing the first action button 
+	void ProcessAction1(){
 
 		//if X button has been pressed 
-		if (action_button) {
+		if (action_button1) {
 
+			print ("action1");
 
-
+			if (touching_closet) {
+				closet.GetComponent<Closet> ().Action1 ();
+			}
 		}
 		//set back the button to false by default to 
 		// only process action once per button press 
-		action_button = false;
+		action_button1 = false;
+	}
+	//function to process pressing the second action button
+	void ProcessAction2(){
+
+		//if X button has been pressed 
+		if (action_button2) {
+
+			print ("action2");
+
+			if (touching_closet) {
+				closet.GetComponent<Closet> ().Action2 (this.gameObject);
+			}
+		}
+		//set back the button to false by default to 
+		// only process action once per button press 
+		action_button2 = false;
+	}
+	//
+	public void EnterCloset(){
+		in_closet = true;
+		hiding = true;
+		sprend.color = new Color (1, 1, 1, 0);
+	}
+	//
+	public void ExitCloset(){
+		in_closet = false;
+		hiding = false;
+		sprend.color = new Color (1, 1, 1, 1);
+	}
+	public bool Hiding(){
+		return hiding;
 	}
 	//Processes animation changes that are based on velocity
 	void ProcessVelocityAnimation(){
@@ -141,6 +193,19 @@ public class Magician : Character {
 			sprend.flipX = true;
 		} else if (rb.velocity.x < 0) {
 			sprend.flipX = false;
+		}
+	}
+	void OnTriggerEnter(Collider coll){
+		if (coll.gameObject.tag == "Closet") {
+			touching_closet = true;
+			closet = coll.gameObject;
+		}
+
+	}
+	void OnTriggerExit(Collider coll){
+		if (coll.gameObject.tag == "Closet") {
+			touching_closet = false;
+			closet = null;
 		}
 	}
 }
