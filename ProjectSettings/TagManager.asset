@@ -8,6 +8,7 @@ TagManager:
   - Environment
   - Closet
   - Magical Box
+  - DebugVisibleArea
   layers:
   - Default
   - TransparentFX
@@ -23,6 +24,11 @@ TagManager:
   - 
   - 
   - 
+  - Background
+  - Visible Area Mesh
+  - Hidden Mask
+  - RenderCamera
+  - Unselectable
   - 
   - 
   - 
