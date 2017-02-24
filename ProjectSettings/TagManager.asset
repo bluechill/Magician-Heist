@@ -16,10 +16,10 @@ TagManager:
   - 
   - Player
   - Background
-  - 
-  - 
-  - 
-  - 
+  - Visible Area Mesh
+  - Hidden Mask
+  - RenderCamera
+  - Unselectable
   - 
   - 
   - 

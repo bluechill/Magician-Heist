@@ -26,6 +26,20 @@ public class Light_LineOfSight : LayerMonoBehavior {
 		var lineSegmentEnds = new List<Vector2> ();
 
 		foreach (GameObject go in LayerMonoBehavior.FindGameObjectsWithLayer(CullingLayers.value >> 1)) {
+			var lmb = go.GetComponent<LayerMonoBehavior> ();
+			if (lmb != null)
+				lmb.ShowHidden ();
+		}
+
+		float FOV = 60f / 180f * Mathf.PI;
+
+		var rotate = Quaternion.FromToRotation (Vector3.up, this.transform.up);
+
+		float minFOV = Mathf.PI / 2f - FOV / 2f + rotate.eulerAngles.z;
+		float maxFOV = Mathf.PI / 2f + FOV / 2f + rotate.eulerAngles.z;
+		float conePrecision = 50 / Mathf.PI * (maxFOV - minFOV);
+
+		foreach (GameObject go in LayerMonoBehavior.FindGameObjectsWithLayer(CullingLayers.value >> 1)) {
 			lineSegmentEnds.Clear ();
 
 			var coll = go.GetComponent<Collider2D> ();
@@ -51,7 +65,10 @@ public class Light_LineOfSight : LayerMonoBehavior {
 				Vector3 direction = (vec - pos2D).normalized;
 
 				float angle = Mathf.Atan2 (direction.y, direction.x);
-				float amount = 0.0001f;
+				float amount = 0.000001f;
+
+//				if (!(angle > minFOV && angle < maxFOV))
+//					continue;
 
 				angle -= amount;
 				Vector3 direction2 = new Vector3 (Mathf.Cos (angle), Mathf.Sin (angle), 0.0f);
@@ -62,17 +79,55 @@ public class Light_LineOfSight : LayerMonoBehavior {
 				RaycastHit2D hit = Physics2D.Raycast (pos2D, direction, 20.0f, CullingLayers.value);
 				if (hit.collider != null) {
 					hits.Add (new Vector3 (hit.point.x, hit.point.y));
+
+					var lmb = hit.collider.gameObject.GetComponent<LayerMonoBehavior> ();
+					if (lmb != null)
+						lmb.HideHidden ();
 				}
 
 				hit = Physics2D.Raycast (pos2D, direction2, 20.0f, CullingLayers.value);
 				if (hit.collider != null) {
 					hits.Add (new Vector3 (hit.point.x, hit.point.y));
+
+					var lmb = hit.collider.gameObject.GetComponent<LayerMonoBehavior> ();
+					if (lmb != null)
+						lmb.HideHidden ();
 				}
 
 				hit = Physics2D.Raycast (pos2D, direction3, 20.0f, CullingLayers.value);
 				if (hit.collider != null) {
 					hits.Add (new Vector3 (hit.point.x, hit.point.y));
+
+					var lmb = hit.collider.gameObject.GetComponent<LayerMonoBehavior> ();
+					if (lmb != null)
+						lmb.HideHidden ();
 				}
+			}
+		}
+
+		{
+			float angle = minFOV;
+			Vector3 direction = new Vector3 (Mathf.Cos (angle), Mathf.Sin (angle), 0.0f);
+
+			RaycastHit2D hit = Physics2D.Raycast (pos2D, direction, 20.0f, CullingLayers.value);
+			if (hit.collider != null) {
+				hits.Add (new Vector3 (hit.point.x, hit.point.y));
+
+				var lmb = hit.collider.gameObject.GetComponent<LayerMonoBehavior> ();
+				if (lmb != null)
+					lmb.HideHidden ();
+			}
+
+			angle = maxFOV;
+			direction = new Vector3 (Mathf.Cos (angle), Mathf.Sin (angle), 0.0f);
+
+			hit = Physics2D.Raycast (pos2D, direction, 20.0f, CullingLayers.value);
+			if (hit.collider != null) {
+				hits.Add (new Vector3 (hit.point.x, hit.point.y));
+
+				var lmb = hit.collider.gameObject.GetComponent<LayerMonoBehavior> ();
+				if (lmb != null)
+					lmb.HideHidden ();
 			}
 		}
 
@@ -121,7 +176,7 @@ public class Light_LineOfSight : LayerMonoBehavior {
 		int C1 = 1;
 		int C2 = 2;
 
-		for (int x = 0; x < (tris.Length-3); x += 3) {
+		for (int x = 0; x < 3 * (vertex.Length - 2); x += 3) {	
 			tris [x] = C2;
 			tris [x + 1] = C1;
 			tris [x + 2] = 0;
@@ -129,6 +184,10 @@ public class Light_LineOfSight : LayerMonoBehavior {
 			C1++;
 			C2++;
 		}
+
+//		if (C2 >= vertex.Length) {
+//			print ("die");
+//		}
 
 		tris [tris.Length - 3] = 1;
 		tris [tris.Length - 2] = vertex.Length-1;

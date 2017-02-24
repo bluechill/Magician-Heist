@@ -35,6 +35,8 @@ public class LayerMonoBehavior : MonoBehaviour {
 			return null;
 	}
 
+	private GameObject hiddenObject;
+
 	protected void Awake() {
 		IList<GameObject> cache;
 		if (!layersCache.TryGetValue(gameObject.layer, out cache))
@@ -44,6 +46,34 @@ public class LayerMonoBehavior : MonoBehaviour {
 		}
 
 		cache.Add(gameObject);
+		Transform hidden = this.transform.Find ("Hidden");
+
+		if (hidden != null)
+			hiddenObject = hidden.gameObject;
+	}
+
+	public void ShowHidden ()
+	{
+		if (hiddenObject == null)
+			return;
+
+		if (hiddenObject.GetComponent<SpriteRenderer> ())
+			hiddenObject.GetComponent<SpriteRenderer> ().enabled = true;
+
+		if (GetComponent<SpriteRenderer> ())
+			GetComponent<SpriteRenderer> ().enabled = false;
+	}
+
+	public void HideHidden ()
+	{
+		if (hiddenObject == null)
+			return;
+		
+		if (hiddenObject.GetComponent<SpriteRenderer> ())
+			hiddenObject.GetComponent<SpriteRenderer> ().enabled = false;
+
+		if (GetComponent<SpriteRenderer> ())
+			GetComponent<SpriteRenderer> ().enabled = true;
 	}
 
 	protected void OnDestroy()
