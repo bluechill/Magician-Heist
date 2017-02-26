@@ -9,6 +9,7 @@ TagManager:
   - Closet
   - Magical Box
   - DebugVisibleArea
+  - Fire
   layers:
   - Default
   - TransparentFX
@@ -30,12 +31,7 @@ TagManager:
   - RenderCamera
   - Unselectable
   - AI Targets
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Unrenderable
   - 
   - 
   - 
