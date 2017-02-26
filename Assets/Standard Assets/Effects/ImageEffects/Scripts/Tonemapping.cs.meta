@@ -1,10 +1,12 @@
 fileFormatVersion: 2
-guid: e50e925fb93c78246bf995d9dc3a2330
+guid: d72a218b06d0c4534a4ca2b855b20f30
+timeCreated: 1487987839
+licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences:
-  - tonemapper: {fileID: 4800000, guid: 003377fc2620a44939dadde6fe3f8190, type: 3}
+  defaultReferences: []
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
   assetBundleName: 
+  assetBundleVariant: 

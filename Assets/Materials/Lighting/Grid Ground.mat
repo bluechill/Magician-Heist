@@ -7,7 +7,7 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: Grid Ground
-  m_Shader: {fileID: 4800000, guid: f70d8af33a7284fec946f59e624319e0, type: 3}
+  m_Shader: {fileID: 4800000, guid: 0e1d39fc9166840c5a0aa86ea186af5c, type: 3}
   m_ShaderKeywords: _EMISSION _EMISSIONMAP _LIGHTMAPPING_DYNAMIC_LIGHTMAPS _LIGHTMAPPING_REALTIME
     _UVSEC_UV1
   m_LightmapFlags: 0
@@ -143,7 +143,7 @@ Material:
     m_Colors:
     - first:
         name: _Color
-      second: {r: 1, g: 1, b: 1, a: 1}
+      second: {r: 0, g: 0, b: 0, a: 1}
     - first:
         name: _EmissionColor
       second: {r: 1.3348337, g: 1.3348337, b: 1.3348337, a: 1.3348337}

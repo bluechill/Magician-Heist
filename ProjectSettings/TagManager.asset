@@ -4,6 +4,10 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - Magician
+  - Environment
+  - Closet
+  - Magical Box
   - DebugVisibleArea
   layers:
   - Default
@@ -15,6 +19,11 @@ TagManager:
   - 
   - 
   - Player
+  - Magical Box
+  - Magic Box Collider
+  - 
+  - 
+  - 
   - Background
   - Visible Area Mesh
   - Hidden Mask
