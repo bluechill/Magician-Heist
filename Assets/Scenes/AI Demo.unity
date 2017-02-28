@@ -610,7 +610,7 @@ MonoBehaviour:
   animationSpeed: 2
   movementAmount: 1
   movementTime: 1
-  fov: {fileID: 0}
+  lampJump: {fileID: 7400000, guid: 87f0b0c18ac0b444a81fdf735985a3f8, type: 2}
 --- !u!111 &61251692
 Animation:
   m_ObjectHideFlags: 0
@@ -10682,6 +10682,7 @@ MonoBehaviour:
   - {fileID: 162982157}
   - {fileID: 113781129}
   aiPointsOfInterst: {fileID: 1615331677}
+  guardWalk: {fileID: 7400000, guid: 23220d7f390f845258b22d78d9bc8a04, type: 2}
 --- !u!1 &2113173751
 GameObject:
   m_ObjectHideFlags: 0

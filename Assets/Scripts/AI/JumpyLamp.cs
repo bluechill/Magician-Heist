@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Experimental.Director;
 
 public class JumpyLamp : LayerMonoBehavior {
 	
@@ -9,11 +10,12 @@ public class JumpyLamp : LayerMonoBehavior {
 	public float movementAmount = 1.0f;
 	public float movementTime = 1.0f;
 
-	public FieldOfView fov;
+	public AnimationClip lampJump;
 
 	private Animator animator;
 	private Rigidbody rb;
 
+	private bool animating = true;
 	private bool increasing = true;
 	private Vector3 startPos;
 
@@ -30,9 +32,10 @@ public class JumpyLamp : LayerMonoBehavior {
 	void Update () {
 		float amount = 0f;
 
-		if ((this.transform.position - startPos).x >= movementAmount ||
-			(this.transform.position - startPos).x <= 0f)
-			increasing = !increasing;
+		if ((this.transform.position - startPos).x >= movementAmount)
+			increasing = false;
+		else if ((this.transform.position - startPos).x <= 0f)
+			increasing = true;
 
 		if (increasing) {
 			this.transform.rotation = Quaternion.Euler (new Vector3 (0f, 0f, 0f));
@@ -43,5 +46,16 @@ public class JumpyLamp : LayerMonoBehavior {
 		}
 
 		rb.velocity = new Vector3(amount, 0f,0f);
+
+		if (rb.velocity.magnitude > 0f && !animating) {
+			var playableClip = AnimationClipPlayable.Create (lampJump);
+			playableClip.speed = animationSpeed;
+			animator.Play (playableClip);
+			animating = true;
+		}
+	}
+
+	void SetAnimationStopped() {
+		animating = false;
 	}
 }
