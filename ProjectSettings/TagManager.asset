@@ -9,6 +9,8 @@ TagManager:
   - Closet
   - Magical Box
   - DebugVisibleArea
+  - Fire
+  - Item
   layers:
   - Default
   - TransparentFX
@@ -29,12 +31,7 @@ TagManager:
   - Hidden Mask
   - RenderCamera
   - Unselectable
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Item
   - 
   - 
   - 
