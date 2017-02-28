@@ -20,7 +20,7 @@ public class Guard : MonoBehaviour {
 	public Transform[] patrolPoints;
 	public Transform aiPointsOfInterst;
 
-	private int destinationPoint;
+	private int destinationPoint = 0;
 	private NavMeshAgent agent;
 	private Animator animator;
 
@@ -54,6 +54,21 @@ public class Guard : MonoBehaviour {
 		if (fov.visibleTargets.Count > 0) {
 			agent.destination = fov.visibleTargets [0].transform.position;
 			mode = GuardMode.Attack;
+		}
+
+		if (agent.isOnOffMeshLink && agent.currentOffMeshLinkData.linkType != OffMeshLinkType.LinkTypeManual)
+			agent.CompleteOffMeshLink ();
+		else if (agent.isOnOffMeshLink) {
+			var obj = agent.currentOffMeshLinkData.offMeshLink;
+
+			if (obj.GetComponent<Door> () != null) {
+				bool open = obj.GetComponent<Door> ().open;
+
+				if (!open)
+					obj.GetComponent<Door> ().OpenDoor ();
+				else
+					agent.ResetPath ();
+			}
 		}
 	}
 
