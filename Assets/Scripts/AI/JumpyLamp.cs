@@ -19,6 +19,7 @@ public class JumpyLamp : LayerMonoBehavior {
 	private bool increasing = true;
 	private Vector3 startPos;
 
+	private bool frozen = false;
 	// Use this for initialization
 	void Start () {
 		animator = GetComponent<Animator> ();
@@ -30,6 +31,8 @@ public class JumpyLamp : LayerMonoBehavior {
 	
 	// Update is called once per frame
 	void Update () {
+		if (frozen)
+			return;
 		float amount = 0f;
 
 		if ((this.transform.position - startPos).x >= movementAmount)
@@ -46,7 +49,6 @@ public class JumpyLamp : LayerMonoBehavior {
 		}
 
 		rb.velocity = new Vector3(amount, 0f,0f);
-
 		if (rb.velocity.magnitude > 0f && !animating) {
 			var playableClip = AnimationClipPlayable.Create (lampJump);
 			playableClip.speed = animationSpeed;
@@ -57,5 +59,18 @@ public class JumpyLamp : LayerMonoBehavior {
 
 	void SetAnimationStopped() {
 		animating = false;
+	}
+
+	void SetAnimationsStarted(){
+		animating = true;
+	}
+	public void Freeze(){
+		frozen = true;
+	}
+	public void Unfreeze(){
+		Invoke ("UnfreezeDelay", 0.5f);
+	}
+	void UnfreezeDelay(){
+		frozen = false;
 	}
 }

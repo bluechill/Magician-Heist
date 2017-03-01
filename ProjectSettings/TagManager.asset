@@ -11,6 +11,7 @@ TagManager:
   - DebugVisibleArea
   - Fire
   - Item
+  - Lamp
   layers:
   - Default
   - TransparentFX
@@ -35,9 +36,6 @@ TagManager:
   - Unrenderable
   - Character
   - Item
-  - 
-  - 
-  - 
   - 
   - 
   - 

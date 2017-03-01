@@ -198,7 +198,7 @@ public class Magician : Character {
 					action_button2 = false;
 					return;
 				}
-				box.GetComponent<MagicalBox> ().Action (this.gameObject);
+				box.transform.parent.GetComponent<MagicalBox> ().Action (this.gameObject);
 				action_button2 = false;
 				return;
 			}
@@ -297,6 +297,11 @@ public class Magician : Character {
 			if(held_item != pickup_item)
 				pickup_item.GetComponent<SpriteRenderer> ().color = Color.red;
 		}
+		if (coll.gameObject.tag == "Lamp") {
+			pickup_item = coll.gameObject;
+			touching_item = true;
+			num_items_touching++;
+		}
 
 	}
 	void OnTriggerExit(Collider coll){
@@ -312,9 +317,20 @@ public class Magician : Character {
 			coll.gameObject.GetComponent<SpriteRenderer> ().color = Color.white;
 			LeaveItem ();
 		}
+		if (coll.gameObject.tag == "Lamp") {
+			LeaveItem ();
+		}
 	}
 	//picks up the most recently && currently touched item
 	void PickupItem(){
+		if (!pickup_item)
+			return;
+
+		//	Lamp specific pick-up actions
+		//		stop animation 
+		if (pickup_item.tag == "Lamp") {
+			PickupLamp ();
+		}
 		held_item = pickup_item;
 		held_item.transform.parent = transform;
 		held_item.GetComponent<Rigidbody> ().isKinematic = true;
@@ -332,6 +348,10 @@ public class Magician : Character {
 		held_item.transform.position = new Vector3 (held_item.transform.position.x + x_offset, held_item.transform.position.y + 0.5f, 0);
 	}
 	void DropItem(){
+		if (held_item.tag == "Lamp") {
+			DropLamp ();
+		}
+			
 		held_item.transform.parent = null;
 		held_item.GetComponent<Rigidbody> ().isKinematic = false;
 		held_item = null;
@@ -343,6 +363,14 @@ public class Magician : Character {
 			touching_item = false;
 			pickup_item = null;
 		}
+	}
+
+	//Lamp specific object interactions
+	void PickupLamp(){
+		pickup_item.GetComponent<JumpyLamp> ().Freeze ();
+	}
+	void DropLamp(){
+		held_item.GetComponent<JumpyLamp> ().Unfreeze ();
 	}
 }
 
