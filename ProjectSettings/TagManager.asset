@@ -31,6 +31,9 @@ TagManager:
   - Hidden Mask
   - RenderCamera
   - Unselectable
+  - AI Targets
+  - Unrenderable
+  - Character
   - Item
   - 
   - 

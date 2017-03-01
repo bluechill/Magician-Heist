@@ -6,7 +6,7 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Horizontal Wall
+  m_Name: AI-Ground Hideable
   m_Shader: {fileID: 4800000, guid: 0e1d39fc9166840c5a0aa86ea186af5c, type: 3}
   m_ShaderKeywords: _EMISSION
   m_LightmapFlags: 1
@@ -43,7 +43,7 @@ Material:
         name: _EmissionMap
       second:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
+        m_Scale: {x: 20, y: 1}
         m_Offset: {x: 0, y: 0}
     - first:
         name: _MainTex
@@ -70,6 +70,9 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - first:
+        name: PixelSnap
+      second: 0
     - first:
         name: _BumpScale
       second: 1
