@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Experimental.Director;
 
-public class Door : MonoBehaviour {
+public class Door : LayerMonoBehavior {
 
 	public bool open = false;
 	public bool animating = false;
