@@ -156,7 +156,11 @@ public class Magician : Character {
         if (blockedInput) {
             this.gameObject.tag = "UnconsciousMagician"; // Change tag to make revive available
             this.gameObject.layer = 11;
+<<<<<<< HEAD
             rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionZ; 
+=======
+            rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionZ;
+>>>>>>> 9e8dac4... Some knockout and Revive Stuff
             this.transform.eulerAngles = new Vector3(0, 0, 90f); // Rotate the Magician
             if (this.gameObject.GetComponentInChildren<Camera>() != null)   
                 this.GetComponentInChildren<Camera>().transform.eulerAngles = new Vector3(0, 0); // Fix Camera Rotation

@@ -9,6 +9,14 @@ TagManager:
   - Closet
   - Magical Box
   - DebugVisibleArea
+<<<<<<< HEAD
+=======
+  - Fire
+  - Item
+  - Knockout
+  - UnconsciousMagician
+  - UnconsciousGuard
+>>>>>>> 9e8dac4... Some knockout and Revive Stuff
   layers:
   - Default
   - TransparentFX
@@ -21,7 +29,7 @@ TagManager:
   - Player
   - Magical Box
   - Magic Box Collider
-  - 
+  - Unconscious Player
   - 
   - 
   - Background
@@ -29,9 +37,6 @@ TagManager:
   - Hidden Mask
   - RenderCamera
   - Unselectable
-  - 
-  - 
-  - 
   - 
   - 
   - 
