@@ -10,6 +10,7 @@ public class Timer : MonoBehaviour {
     int minutes;
     int passedMinutes; //Used for Calculating Endgame Score
     double seconds;
+    GameObject Magician;
 
     // Use this for initialization
     void Start() {
@@ -18,10 +19,13 @@ public class Timer : MonoBehaviour {
         hours = 22;
         minutes = 00;
         passedMinutes = 0;
+        Magician = GameObject.Find("Magician");
     }
 
     // Update is called once per frame
     void Update() {
+        if (Magician.GetComponent<Transform>().position.y < 4.8)
+            gameOver = true;
         if (!gameOver) {
             seconds += 1;
             if (seconds == 60) {
