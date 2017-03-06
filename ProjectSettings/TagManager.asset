@@ -11,6 +11,10 @@ TagManager:
   - DebugVisibleArea
   - Fire
   - Item
+  - Window
+  - Lamp
+  - Unconscious Magician
+  - Guard
   layers:
   - Default
   - TransparentFX
@@ -23,8 +27,8 @@ TagManager:
   - Player
   - Magical Box
   - Magic Box Collider
-  - 
-  - 
+  - Unconscious Player
+  - Lamp
   - 
   - Background
   - Visible Area Mesh
@@ -35,9 +39,6 @@ TagManager:
   - Unrenderable
   - Character
   - Item
-  - 
-  - 
-  - 
   - 
   - 
   - 
