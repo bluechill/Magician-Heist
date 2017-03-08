@@ -115,16 +115,11 @@ MonoBehaviour:
   sprend: {fileID: 0}
   __________________: 0
   movement_velocity: 10
-  touching_item: 0
-  holding_item: 0
-  num_items_touching: 0
-  pickup_item: {fileID: 0}
-  held_item: {fileID: 0}
   ability_object: {fileID: 1662231176005574}
   using_ability: 0
   touching_box: 0
   in_box: 0
-  player_num: 3
+  player_num: 0
   keyboard_user: 1
 --- !u!135 &135628822692202432
 SphereCollider:

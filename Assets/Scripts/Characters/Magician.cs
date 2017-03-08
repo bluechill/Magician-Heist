@@ -8,11 +8,14 @@ public class Magician : Character {
 	int num_buttons = 4;
 	bool action_button1;
 	bool action_button2;
+    public bool action_button3; //public for revive purposes
 	bool[] directions;
 
 	//members for picking up / dropping items
 	public bool touching_item = false;
 	public bool holding_item = false;
+    bool holding_briefcase = false;
+    public bool Game_Won = false;
 	public int num_items_touching = 0;
 	public GameObject pickup_item;
 	public GameObject held_item;
@@ -48,6 +51,7 @@ public class Magician : Character {
 		directions [1] = false;
 		action_button1 = false;
 		action_button2 = false;
+        action_button3 = false;
 		//current button mapping:
 		// 0 :  move left 
 		// 1 :  move right 
@@ -75,8 +79,8 @@ public class Magician : Character {
 		KeyboardControls = new KeyCode[num_players][];
 
 		for (int i = 0; i < num_players; i++) {
-			KeyboardControls [i] = new KeyCode[num_buttons];
-			for (int j = 0; j < num_buttons; j++) {
+			KeyboardControls [i] = new KeyCode[num_buttons + 1];
+			for (int j = 0; j < num_buttons + 1; j++) {
 				KeyboardControls [i] [j] = KeyCode.X;
 			}
 		}
@@ -87,13 +91,15 @@ public class Magician : Character {
 		KeyboardControls[0][1] = KeyCode.S;
 		KeyboardControls[0][2] = KeyCode.D;
 		KeyboardControls[0][3] = KeyCode.F;
+        KeyboardControls[0][4] = KeyCode.C;
 
-		KeyboardControls[1][0] = KeyCode.J;
+        KeyboardControls[1][0] = KeyCode.J;
 		KeyboardControls[1][1] = KeyCode.K;
 		KeyboardControls[1][2] = KeyCode.L;
 		KeyboardControls[1][3] = KeyCode.Semicolon;
+        KeyboardControls[1][4] = KeyCode.M;
 
-	}
+    }
 
 	//process player input from the keyboard
 	//DOES NOT SUPPORT MULTIPLE MAGICIANS
@@ -117,7 +123,11 @@ public class Magician : Character {
 		if (Input.GetKeyDown (KeyboardControls[player_num][3])) {
 			action_button2 = true;
 		}
-	}
+        if (Input.GetKeyDown(KeyboardControls[player_num][4])) {
+            print("Action Button 3");
+            action_button3 = true;
+        }
+    }
 	//initialize a controller to this magician
 	void TryInitializeController(){
 		if (InputManager.Devices.Count > player_num) {
@@ -128,34 +138,66 @@ public class Magician : Character {
 	//processes input from the Magician's controller 
 	//uses InControl as InputManager
 	void ProcessInputController(){
-		rb.AddForce (Vector3.right * controller.LeftStickX * movement_velocity);
-		if (controller.LeftStickX < 0) {
-			directions [0] = true;
-			directions [1] = false;
-		} else if (controller.LeftStickX > 0) {
-			directions [1] = true;
-			directions [0] = false;
-		} else {
-			directions [0] = false;
-			directions [1] = false;
-		}
+        if (!blockedInput) { // Only process movement if not Unconscious
+            rb.AddForce(Vector3.right * controller.LeftStickX * movement_velocity);
+            if (controller.LeftStickX < 0) {
+                directions[0] = true;
+                directions[1] = false;
+            }
+            else if (controller.LeftStickX > 0) {
+                directions[1] = true;
+                directions[0] = false;
+            }
+            else {
+                directions[0] = false;
+                directions[1] = false;
+            }
+        }
 	}
 	void ProcessMovement(){
-		//move left
-		if (directions [0]) {
-			rb.velocity = Vector3.left * movement_velocity;
-		} 
-		//move right
-		else if (directions [1]) {
-			rb.velocity = Vector3.right * movement_velocity;
-		} 
-		//dont move
-		else {
-			rb.velocity = Vector3.zero;
-		}
+		if (blockedInput) {
+            this.gameObject.tag = "Unconscious Magician"; // Change tag to make revive available
+            //this.gameObject.layer = 11;
+            rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionZ; 
+            rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionZ;
+            this.transform.eulerAngles = new Vector3(0, 0, 90f); // Rotate the Magician
+            if (this.gameObject.GetComponentInChildren<Camera>() != null)   
+                this.GetComponentInChildren<Camera>().transform.eulerAngles = new Vector3(0, 0); // Fix Camera Rotation
+        }
+		if (!blockedInput) {
 
-		if (in_closet || in_box)
-			rb.velocity = Vector3.zero;
+			if (knockedOut) {
+				Invoke ("ResetKnockout", 1f);
+				knockedOut = false;
+			}
+            rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionZ;
+            this.transform.eulerAngles = new Vector3(0, 0); // Change Player and Camera Back
+            if (this.gameObject.GetComponentInChildren<Camera>() != null)
+                this.gameObject.GetComponentInChildren<Camera>().transform.eulerAngles = new Vector3(0, 0);
+            //move left
+			if (directions[0] && (IsGrounded() || IsGrounded2())) {
+                rb.velocity = Vector3.left * movement_velocity;
+            }
+            //move right
+			else if (directions[1] && (IsGrounded() || IsGrounded2())) {
+                rb.velocity = Vector3.right * movement_velocity;
+            }
+			//dont move
+			else if (!IsGrounded2()){
+				rb.velocity = Vector3.down * movement_velocity / 2.0f;
+			}
+			//dont move
+			else {
+				rb.velocity = Vector3.zero;
+			}
+
+            if (in_closet || in_box)
+                rb.velocity = Vector3.zero;
+        }
+	}
+	void ResetKnockout(){
+		this.gameObject.tag = "Magician"; // Change tag back after knocked out
+		this.gameObject.layer = 8;
 	}
 	//function to process pressing the first action button 
 	void ProcessAction1(){
@@ -181,7 +223,7 @@ public class Magician : Character {
 	void ProcessAction2(){
 
 		//if X button has been pressed 
-		if (action_button2) {
+		if (action_button2 && !blockedInput) {
 
 			print ("action2");
 
@@ -198,7 +240,7 @@ public class Magician : Character {
 					action_button2 = false;
 					return;
 				}
-				box.transform.parent.GetComponent<MagicalBox> ().Action (this.gameObject);
+				box.GetComponent<MagicalBox> ().Action (this.gameObject);
 				action_button2 = false;
 				return;
 			}
@@ -227,12 +269,14 @@ public class Magician : Character {
 
 	public void EnterCloset(){
 		in_closet = true;
+		char_hiding = true;
 		hiding = true;
 		Disappear ();
 	}
 	//
 	public void ExitCloset(){
 		in_closet = false;
+		char_hiding = false;
 		hiding = false;
 		Reappear ();
 	}
@@ -240,12 +284,14 @@ public class Magician : Character {
 	public void EnterBox(){
 		in_box = true;
 		hiding = true;
+		char_hiding = true;
 		Disappear ();
 	}
 	//
 	public void ExitBox(){
 		in_box = false;
 		hiding = false;
+		char_hiding = false;
 		Reappear ();
 	}
 	//sets the magician sprite to invisible
@@ -296,14 +342,14 @@ public class Magician : Character {
 			num_items_touching++;
 			if(held_item != pickup_item)
 				pickup_item.GetComponent<SpriteRenderer> ().color = Color.red;
+            if (coll.gameObject.layer == 23)
+                holding_briefcase = true;
 		}
-		if (coll.gameObject.tag == "Lamp") {
-			pickup_item = coll.gameObject;
-			touching_item = true;
-			num_items_touching++;
-		}
-
-	}
+        if (coll.gameObject.tag == "Exit" && holding_briefcase) {
+            Game_Won = true;
+            print("Game_Won");
+        }
+    }
 	void OnTriggerExit(Collider coll){
 		if (coll.gameObject.tag == "Closet") {
 			touching_closet = false;
@@ -317,20 +363,10 @@ public class Magician : Character {
 			coll.gameObject.GetComponent<SpriteRenderer> ().color = Color.white;
 			LeaveItem ();
 		}
-		if (coll.gameObject.tag == "Lamp") {
-			LeaveItem ();
-		}
 	}
-	//picks up the most recently && currently touched item
-	void PickupItem(){
-		if (!pickup_item)
-			return;
 
-		//	Lamp specific pick-up actions
-		//		stop animation 
-		if (pickup_item.tag == "Lamp") {
-			PickupLamp ();
-		}
+    //picks up the most recently && currently touched item
+    void PickupItem(){
 		held_item = pickup_item;
 		held_item.transform.parent = transform;
 		held_item.GetComponent<Rigidbody> ().isKinematic = true;
@@ -348,14 +384,11 @@ public class Magician : Character {
 		held_item.transform.position = new Vector3 (held_item.transform.position.x + x_offset, held_item.transform.position.y + 0.5f, 0);
 	}
 	void DropItem(){
-		if (held_item.tag == "Lamp") {
-			DropLamp ();
-		}
-			
 		held_item.transform.parent = null;
 		held_item.GetComponent<Rigidbody> ().isKinematic = false;
 		held_item = null;
 		holding_item = false;
+        holding_briefcase = false; // Always going to be false when dropping there's a better way probably to do this but at 5am yea.....
 	}
 	void LeaveItem(){
 		num_items_touching--;
@@ -365,12 +398,44 @@ public class Magician : Character {
 		}
 	}
 
-	//Lamp specific object interactions
-	void PickupLamp(){
-		pickup_item.GetComponent<JumpyLamp> ().Freeze ();
+    // If a player runs into another Unconscious Magician They can press action_button 2 to revive them
+	bool IsGrounded(){
+		print ("checking");
+		RaycastHit hit; 
+		Physics.Raycast(transform.position, -Vector3.up, out hit, 1f, 1 << LayerMask.NameToLayer("Environment"));
+		if (hit.collider != null) {
+			//ray hit an environment object
+
+			float distance = Mathf.Abs(hit.point.y - transform.position.y);
+			print (distance);
+			return true;
+		}
+		print ("not grounded");
+		return false;
 	}
-	void DropLamp(){
-		held_item.GetComponent<JumpyLamp> ().Unfreeze ();
+	bool IsGrounded2(){
+		print ("checking");
+		RaycastHit hit, hit2;
+
+		Vector3 extents = GetComponent<Collider> ().bounds.extents;
+
+		Vector3 posLeft = transform.position - new Vector3(extents.x, 0f,0f);
+		Vector3 posRight = transform.position + new Vector3(extents.x, 0f,0f);
+
+		int layer = 1 << LayerMask.NameToLayer ("Default");
+
+		Physics.Raycast(posLeft, -Vector3.up, out hit, 1f, layer);
+		Physics.Raycast(posRight, -Vector3.up, out hit2, 1f, layer);
+
+		if (hit.collider != null || hit2.collider != null) {
+			//ray hit an environment object
+
+			float distance = Mathf.Abs(hit.point.y - transform.position.y);
+			print (distance);
+			return true;
+		}
+		print ("not grounded");
+		return false;
 	}
 }
 
