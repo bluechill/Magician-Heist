@@ -43,12 +43,12 @@ Material:
         name: _EmissionMap
       second:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
+        m_Scale: {x: 100, y: 100}
         m_Offset: {x: 0, y: 0}
     - first:
         name: _MainTex
       second:
-        m_Texture: {fileID: 2800000, guid: 1d0c184845252df44a655359de388cb8, type: 3}
+        m_Texture: {fileID: 2800000, guid: 520dac89fd5014ece979e2a1774a661a, type: 3}
         m_Scale: {x: 100, y: 100}
         m_Offset: {x: 0, y: 0}
     - first:

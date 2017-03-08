@@ -45,7 +45,7 @@ public class FieldOfView : MonoBehaviour {
 
 			Vector3 directionToTarget = (target.position - transform.position).normalized;
 
-			if (Vector3.Angle (transform.up, directionToTarget) < viewAngle / 2f) {
+			if (DirectionToAngle(directionToTarget, false) < viewAngle / 2f) {
 				float distanceToTarget = Vector3.Distance (transform.position, target.position);
 
 				if (!Physics.Raycast (transform.position, directionToTarget, distanceToTarget, obstacleMask)) {
@@ -66,7 +66,13 @@ public class FieldOfView : MonoBehaviour {
 		ViewCastInfo oldViewCast = new ViewCastInfo ();
 
 		for (int i = 0; i <= rayCount; ++i) {
-			float angle = -transform.eulerAngles.z - viewAngle / 2f + rayAngleSize * i;
+			float angle = 0f;
+
+			if (this.transform.rotation.eulerAngles.y == 180f)
+				angle = transform.eulerAngles.z - viewAngle / 2f + rayAngleSize * i;
+			else
+				angle = -transform.eulerAngles.z - viewAngle / 2f + rayAngleSize * i;
+
 			ViewCastInfo newViewCast = ViewCast (angle);
 
 			if (i > 0) {
@@ -176,6 +182,15 @@ public class FieldOfView : MonoBehaviour {
 			angleInDegrees -= transform.eulerAngles.z;
 		
 		return new Vector3 (Mathf.Sin (angleInDegrees * Mathf.Deg2Rad), Mathf.Cos (angleInDegrees * Mathf.Deg2Rad), 0);
+	}
+
+	public float DirectionToAngle(Vector3 direction, bool angleIsGlobal) {
+		float angleInDegrees = Mathf.Atan2 (direction.y, direction.x) * Mathf.Rad2Deg;
+
+		if (!angleIsGlobal)
+			angleInDegrees -= transform.eulerAngles.z;
+
+		return angleInDegrees;
 	}
 
 	public struct ViewCastInfo {
