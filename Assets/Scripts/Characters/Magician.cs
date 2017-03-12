@@ -8,11 +8,14 @@ public class Magician : Character {
 	int num_buttons = 4;
 	bool action_button1;
 	bool action_button2;
+    public bool action_button3; //public for revive purposes
 	bool[] directions;
 
 	//members for picking up / dropping items
 	public bool touching_item = false;
 	public bool holding_item = false;
+    bool holding_briefcase = false;
+    public bool Game_Won = false;
 	public int num_items_touching = 0;
 	public GameObject pickup_item;
 	public GameObject held_item;
@@ -48,6 +51,7 @@ public class Magician : Character {
 		directions [1] = false;
 		action_button1 = false;
 		action_button2 = false;
+        action_button3 = false;
 		//current button mapping:
 		// 0 :  move left 
 		// 1 :  move right 
@@ -75,8 +79,8 @@ public class Magician : Character {
 		KeyboardControls = new KeyCode[num_players][];
 
 		for (int i = 0; i < num_players; i++) {
-			KeyboardControls [i] = new KeyCode[num_buttons];
-			for (int j = 0; j < num_buttons; j++) {
+			KeyboardControls [i] = new KeyCode[num_buttons + 1];
+			for (int j = 0; j < num_buttons + 1; j++) {
 				KeyboardControls [i] [j] = KeyCode.X;
 			}
 		}
@@ -87,13 +91,15 @@ public class Magician : Character {
 		KeyboardControls[0][1] = KeyCode.S;
 		KeyboardControls[0][2] = KeyCode.D;
 		KeyboardControls[0][3] = KeyCode.F;
+        KeyboardControls[0][4] = KeyCode.C;
 
-		KeyboardControls[1][0] = KeyCode.J;
+        KeyboardControls[1][0] = KeyCode.J;
 		KeyboardControls[1][1] = KeyCode.K;
 		KeyboardControls[1][2] = KeyCode.L;
 		KeyboardControls[1][3] = KeyCode.Semicolon;
+        KeyboardControls[1][4] = KeyCode.M;
 
-	}
+    }
 
 	//process player input from the keyboard
 	//DOES NOT SUPPORT MULTIPLE MAGICIANS
@@ -117,7 +123,11 @@ public class Magician : Character {
 		if (Input.GetKeyDown (KeyboardControls[player_num][3])) {
 			action_button2 = true;
 		}
-	}
+        if (Input.GetKeyDown(KeyboardControls[player_num][4])) {
+            print("Action Button 3");
+            action_button3 = true;
+        }
+    }
 	//initialize a controller to this magician
 	void TryInitializeController(){
 		if (InputManager.Devices.Count > player_num) {
@@ -128,34 +138,55 @@ public class Magician : Character {
 	//processes input from the Magician's controller 
 	//uses InControl as InputManager
 	void ProcessInputController(){
-		rb.AddForce (Vector3.right * controller.LeftStickX * movement_velocity);
-		if (controller.LeftStickX < 0) {
-			directions [0] = true;
-			directions [1] = false;
-		} else if (controller.LeftStickX > 0) {
-			directions [1] = true;
-			directions [0] = false;
-		} else {
-			directions [0] = false;
-			directions [1] = false;
-		}
+        if (!blockedInput) { // Only process movement if not Unconscious
+            rb.AddForce(Vector3.right * controller.LeftStickX * movement_velocity);
+            if (controller.LeftStickX < 0) {
+                directions[0] = true;
+                directions[1] = false;
+            }
+            else if (controller.LeftStickX > 0) {
+                directions[1] = true;
+                directions[0] = false;
+            }
+            else {
+                directions[0] = false;
+                directions[1] = false;
+            }
+        }
 	}
 	void ProcessMovement(){
-		//move left
-		if (directions [0]) {
-			rb.velocity = Vector3.left * movement_velocity;
-		} 
-		//move right
-		else if (directions [1]) {
-			rb.velocity = Vector3.right * movement_velocity;
-		} 
-		//dont move
-		else {
-			rb.velocity = Vector3.zero;
-		}
+        if (blockedInput) {
+            this.gameObject.tag = "UnconsciousMagician"; // Change tag to make revive available
+            this.gameObject.layer = 11;
+            rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionZ; 
+            rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionZ;
+            this.transform.eulerAngles = new Vector3(0, 0, 90f); // Rotate the Magician
+            if (this.gameObject.GetComponentInChildren<Camera>() != null)   
+                this.GetComponentInChildren<Camera>().transform.eulerAngles = new Vector3(0, 0); // Fix Camera Rotation
+        }
+        if (!blockedInput) {
+            this.gameObject.tag = "Magician"; // Change tag back after knocked out
+            this.gameObject.layer = 8;
+            rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionZ;
+            this.transform.eulerAngles = new Vector3(0, 0); // Change Player and Camera Back
+            if (this.gameObject.GetComponentInChildren<Camera>() != null)
+                this.gameObject.GetComponentInChildren<Camera>().transform.eulerAngles = new Vector3(0, 0);
+            //move left
+            if (directions[0]) {
+                rb.velocity = Vector3.left * movement_velocity;
+            }
+            //move right
+            else if (directions[1]) {
+                rb.velocity = Vector3.right * movement_velocity;
+            }
+            //dont move
+            else {
+                rb.velocity = Vector3.zero;
+            }
 
-		if (in_closet || in_box)
-			rb.velocity = Vector3.zero;
+            if (in_closet || in_box)
+                rb.velocity = Vector3.zero;
+        }
 	}
 	//function to process pressing the first action button 
 	void ProcessAction1(){
@@ -296,9 +327,14 @@ public class Magician : Character {
 			num_items_touching++;
 			if(held_item != pickup_item)
 				pickup_item.GetComponent<SpriteRenderer> ().color = Color.red;
+            if (coll.gameObject.layer == 23)
+                holding_briefcase = true;
 		}
-
-	}
+        if (coll.gameObject.tag == "Exit" && holding_briefcase) {
+            Game_Won = true;
+            print("Game_Won");
+        }
+    }
 	void OnTriggerExit(Collider coll){
 		if (coll.gameObject.tag == "Closet") {
 			touching_closet = false;
@@ -313,8 +349,9 @@ public class Magician : Character {
 			LeaveItem ();
 		}
 	}
-	//picks up the most recently && currently touched item
-	void PickupItem(){
+
+    //picks up the most recently && currently touched item
+    void PickupItem(){
 		held_item = pickup_item;
 		held_item.transform.parent = transform;
 		held_item.GetComponent<Rigidbody> ().isKinematic = true;
@@ -336,6 +373,7 @@ public class Magician : Character {
 		held_item.GetComponent<Rigidbody> ().isKinematic = false;
 		held_item = null;
 		holding_item = false;
+        holding_briefcase = false; // Always going to be false when dropping there's a better way probably to do this but at 5am yea.....
 	}
 	void LeaveItem(){
 		num_items_touching--;
@@ -344,6 +382,9 @@ public class Magician : Character {
 			pickup_item = null;
 		}
 	}
+
+    // If a player runs into another Unconscious Magician They can press action_button 2 to revive them
+    
 }
 
 
