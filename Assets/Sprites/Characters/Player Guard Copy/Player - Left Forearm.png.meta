@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 8f5cc014f6fac43a192bac6e663644ce
-timeCreated: 1488246816
+guid: cb8a310fba0fc43158ca0db893e47af9
+timeCreated: 1489008070
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: Guard - Thigh_0
+    21300000: Guard - Left Forearm_0
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -67,19 +67,43 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+  - buildTarget: iPhone
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Android
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: WebGL
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Guard - Thigh_0
+      name: Guard - Left Forearm_0
       rect:
         serializedVersion: 2
-        x: 170
-        y: 247
-        width: 134
-        height: 240
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 190
+        y: 514
+        width: 71
+        height: 166
+      alignment: 9
+      pivot: {x: 0.47658357, y: 0.840535}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
