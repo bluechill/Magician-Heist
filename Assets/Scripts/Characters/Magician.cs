@@ -414,7 +414,6 @@ public class Magician : Character {
 		return false;
 	}
 	bool IsGrounded2(){
-		print ("checking");
 		RaycastHit hit, hit2;
 
 		Vector3 extents = GetComponent<Collider> ().bounds.extents;
@@ -424,17 +423,15 @@ public class Magician : Character {
 
 		int layer = 1 << LayerMask.NameToLayer ("Default");
 
-		Physics.Raycast(posLeft, -Vector3.up, out hit, 1f, layer);
-		Physics.Raycast(posRight, -Vector3.up, out hit2, 1f, layer);
+		Physics.Raycast(posLeft, -Vector3.up, out hit, 2f, layer);
+		Physics.Raycast(posRight, -Vector3.up, out hit2, 2f, layer);
 
 		if (hit.collider != null || hit2.collider != null) {
 			//ray hit an environment object
 
 			float distance = Mathf.Abs(hit.point.y - transform.position.y);
-			print (distance);
 			return true;
 		}
-		print ("not grounded");
 		return false;
 	}
 }
