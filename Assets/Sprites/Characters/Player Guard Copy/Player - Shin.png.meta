@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 03dccc9b9ff494572b5fe1f113a4446d
-timeCreated: 1488230813
+guid: 5480ac1f2ff3a45cda1914612ff12184
+timeCreated: 1489008108
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: Guard - Head_0
+    21300000: Guard - Shin_0
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -67,19 +67,43 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+  - buildTarget: iPhone
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Android
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: WebGL
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Guard - Head_0
+      name: Guard - Shin_0
       rect:
         serializedVersion: 2
         x: 171
-        y: 812
-        width: 160
-        height: 174
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        y: 144
+        width: 137
+        height: 179
+      alignment: 9
+      pivot: {x: 0.46359253, y: 0.80651516}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
