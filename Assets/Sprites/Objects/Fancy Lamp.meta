@@ -1,7 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: a594cadb3f74c4220839669eb24847d2
 folderAsset: yes
 timeCreated: 1489362324
+=======
+guid: 11415bd5e9bba4506b146de34d8d9f18
+folderAsset: yes
+timeCreated: 1489370332
+>>>>>>> origin/gold_spike_demo
 licenseType: Free
 DefaultImporter:
   userData: 

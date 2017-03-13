@@ -4,13 +4,17 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - Magical Box
   - Magician
   - Environment
-  - Closet
-  - Magical Box
-  - DebugVisibleArea
-  - Fire
+  - Up Escalator Entrance
+  - Up Escalator Exit
+  - Door
+  - Up Stairs
   - Item
+  - Down Stairs
+  - Guard Constraint
+  - Guard
   layers:
   - Default
   - TransparentFX
@@ -20,21 +24,18 @@ TagManager:
   - UI
   - 
   - 
+  - Environment
   - Player
-  - Magical Box
-  - Magic Box Collider
-  - 
-  - 
-  - 
-  - Background
-  - Visible Area Mesh
-  - Hidden Mask
-  - RenderCamera
-  - Unselectable
-  - AI Targets
-  - Unrenderable
-  - Character
   - Item
+  - Player Trigger
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
   - 
   - 
   - 
