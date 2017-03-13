@@ -26,7 +26,7 @@ public class Guard : LayerMonoBehavior {
 	private int destinationPoint = 0;
 	private NavMeshAgent agent;
 	private Animator animator;
-	private bool animating = true;
+	public bool animating = true;
 
 	// Use this for initialization
 	void Start () {
@@ -69,7 +69,7 @@ public class Guard : LayerMonoBehavior {
 			agent.CompleteOffMeshLink ();
 		else if (agent.isOnOffMeshLink) {
 			var obj = agent.currentOffMeshLinkData.offMeshLink;
-
+			print (obj.tag);
 			if (obj.GetComponent<Door> () != null) {
 				bool open = obj.GetComponent<Door> ().open;
 
