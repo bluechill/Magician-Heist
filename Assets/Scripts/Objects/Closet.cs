@@ -35,18 +35,7 @@ public class Closet : MonoBehaviour {
 	}
 	//occurs when a magician presses action 2
 	public void Action2(GameObject magician){
-		Magician mag = magician.GetComponent<Magician> ();
-		if (!open) {
-			return;
-		} else {
-			if (!mag.Hiding ()) {
-				mag.EnterCloset ();
-				eyes_rend.sprite = sprites [++num_inside];
-			} else {
-				mag.ExitCloset ();
-				eyes_rend.sprite = sprites [--num_inside];
-			}
-		}
+
 	}
 
 }
