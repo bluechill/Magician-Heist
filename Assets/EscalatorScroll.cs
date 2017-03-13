@@ -9,7 +9,7 @@ public class EscalatorScroll : MonoBehaviour {
 	int num_set;
 	// Use this for initialization
 	void Start () {
-		InvokeRepeating ("ResetSet", 1.75f, 1.75f);
+		InvokeRepeating ("ResetSet", 1f, 1f);
 		num_set = stair_sets.Length - 1;
 	}
 
@@ -25,7 +25,7 @@ public class EscalatorScroll : MonoBehaviour {
 	void MoveStairs(){
 		float movement = Time.deltaTime * scroll_speed;
 		for (int i = 0; i < stair_sets.Length; i++) {
-			stair_sets [i].transform.localPosition = new Vector3 (stair_sets[i].transform.localPosition.x + movement, stair_sets[i].transform.localPosition.y, 0);
+			stair_sets [i].transform.localPosition = new Vector3 (stair_sets[i].transform.localPosition.x + movement, stair_sets[i].transform.localPosition.y + movement, 0);
 		}
 	}
 	void ResetSet(){
