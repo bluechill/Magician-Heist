@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.57481706, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -13660,11 +13660,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4242571999414964, guid: 8052861d91eaf4793aff70bfafa978b2, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -39.04
+      value: -55.6
       objectReference: {fileID: 0}
     - target: {fileID: 4242571999414964, guid: 8052861d91eaf4793aff70bfafa978b2, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 4.32
+      value: -2.9
       objectReference: {fileID: 0}
     - target: {fileID: 4242571999414964, guid: 8052861d91eaf4793aff70bfafa978b2, type: 2}
       propertyPath: m_LocalPosition.z
@@ -19389,11 +19389,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4794220909667740, guid: ddfda07199a114d21a279c0465cccc4c, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -36.43
+      value: -53
       objectReference: {fileID: 0}
     - target: {fileID: 4794220909667740, guid: ddfda07199a114d21a279c0465cccc4c, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 4.26
+      value: -3
       objectReference: {fileID: 0}
     - target: {fileID: 4794220909667740, guid: ddfda07199a114d21a279c0465cccc4c, type: 2}
       propertyPath: m_LocalPosition.z
@@ -26199,7 +26199,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 0
+  orthographic: 1
   orthographic size: 5
   m_Depth: -1
   m_CullingMask:
@@ -26241,9 +26241,9 @@ MonoBehaviour:
   targets:
   - {fileID: 1029397621}
   - {fileID: 628943270}
-  damping: 1
-  lookAheadFactor: 3
-  lookAheadReturnSpeed: 0.5
+  damping: 0
+  lookAheadFactor: 0
+  lookAheadReturnSpeed: 0
   lookAheadMoveThreshold: 0.1
 --- !u!1 &835970857
 GameObject:
