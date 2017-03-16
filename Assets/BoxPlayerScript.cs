@@ -10,7 +10,6 @@ public class BoxPlayerScript : PlayerScript {
 	Rigidbody rb;
 	public float vel;
 	public float escalator_speed;
-	bool right,left;
 	public bool[] actions;
 	int num_actions = 3;
 
@@ -29,6 +28,9 @@ public class BoxPlayerScript : PlayerScript {
 
 	public bool is_up_escalator = false;
 	public GameObject touching_up_escalator;
+
+
+	public List<GameObject> players_in_box;
 
 	// Use this for initialization
 	void Start () {
@@ -67,11 +69,15 @@ public class BoxPlayerScript : PlayerScript {
 	}
 
 	void ProcessMovement(){
-
+		if (is_knocked_out) {
+			rb.velocity = Vector3.down * 5f;
+			Idle ();
+			return;
+		}
 		if (using_up_escalator) {
 			rb.useGravity = false;
 			float movement = Time.deltaTime * escalator_speed;
-			transform.position = new Vector3 (transform.position.x + movement, transform.position.y, 2f);
+			transform.position = new Vector3 (transform.position.x + movement, transform.position.y, -1f);
 			return;
 		}
 		if (Input.GetKeyDown(key_mappings[player_num][0])) {
@@ -102,19 +108,33 @@ public class BoxPlayerScript : PlayerScript {
 		if (left) {
 
 			rb.velocity = Vector3.left * vel;
+			if (is_ability) {
+				rb.velocity /= 3;
+				Reveal ();
+			}
 			Animate ();
 		}
 		if (right) {
 
 			rb.velocity = Vector3.right * vel;
+			if (is_ability) {
+				rb.velocity /= 3;
+				Reveal ();
+			}
 			Animate ();
 		}
 		if (right && left) {
 			rb.velocity = Vector3.zero;
+			if (is_ability) {
+				Hide ();
+			}
 			Idle ();
 		}
 		if (!right && !left) {
 			rb.velocity = Vector3.zero;
+			if (is_ability) {
+				Hide ();
+			}
 			Idle ();
 		}
 		if (!IsGrounded ()) {
@@ -123,10 +143,17 @@ public class BoxPlayerScript : PlayerScript {
 	}
 	void ProcessRotation(){
 
-		if (rb.velocity.x < -0.05f)
-			this.transform.rotation = Quaternion.Euler(new Vector3(0f,180f,0f));
-		else if (rb.velocity.x > 0.05f)
-			this.transform.rotation = Quaternion.Euler(new Vector3(0f,0f,0f));
+		if (rb.velocity.x < -0.05f) {
+			this.transform.rotation = Quaternion.Euler (new Vector3 (0f, 180f, 0f));
+			if (is_holding && held_object.GetComponent<Item>().flash_light) {
+				held_object.transform.rotation = Quaternion.Euler (new Vector3 (0f, 180f, 270f));
+			}
+		} else if (rb.velocity.x > 0.05f) {
+			this.transform.rotation = Quaternion.Euler (new Vector3 (0f, 0f, 0f));
+			if (is_holding && held_object.GetComponent<Item>().flash_light) {
+				held_object.transform.rotation = Quaternion.Euler (new Vector3 (0f, 0f, 270f));
+			}
+		}
 
 	}
 	void ProcessActions(){
@@ -151,7 +178,14 @@ public class BoxPlayerScript : PlayerScript {
 			touching_up_escalator.GetComponentInParent<UpEscalator> ().UseEscalator ();
 			return;
 		}
-
+		if (is_touching_up_stairs) {
+			UseUpStairs ();
+			return;
+		}
+		if (is_touching_down_stairs) {
+			UseDownStairs ();
+			return;
+		}
 		if (is_in_box) {
 			ExitBox ();
 			return;
@@ -160,6 +194,9 @@ public class BoxPlayerScript : PlayerScript {
 		if (is_touching_box) {
 			EnterBox ();
 			return;
+		}
+		if (is_touching_door) {
+			OpenDoor ();
 		}
 
 		if (is_holding) {
@@ -217,6 +254,9 @@ public class BoxPlayerScript : PlayerScript {
 			return;
 		held_object = touching_objects [0];
 		is_holding = true;
+		if (held_object.GetComponent<Item> ().briefcase) {
+			is_holding_briefcase = true;
+		}
 		StopTouching (held_object);
 		if (held_object.GetComponent<Item> ().is_player) {
 			held_object.GetComponent<Item> ().current_player.GetComponent<PlayerScript> ().GetPickedUp (this.gameObject);
@@ -238,6 +278,23 @@ public class BoxPlayerScript : PlayerScript {
 		} else if (coll.gameObject.tag == "Magical Box") {
 			print ("touching box");
 			TouchBox (coll.gameObject);
+		}   else if (coll.gameObject.tag == "Up Stairs") {
+			is_touching_up_stairs = true;
+			touching_stairs = coll.gameObject;
+			touching_stairs.GetComponent<Stairs> ().activated = true;
+
+		} else if (coll.gameObject.tag == "Down Stairs") {
+			is_touching_down_stairs = true;
+			touching_stairs = coll.gameObject;
+			touching_stairs.GetComponent<Stairs> ().activated = true;
+		} else if (coll.gameObject.tag == "Door") {
+			is_touching_door = true;
+			touching_door = coll.gameObject;
+		} else if (coll.gameObject.tag == "Finish") {
+			if (is_holding_briefcase) {
+				print ("win!");
+				Win ();
+			}
 		}
 	}
 	void OnTriggerExit(Collider coll){
@@ -249,6 +306,19 @@ public class BoxPlayerScript : PlayerScript {
 			touching_up_escalator = null;
 		} else if (coll.gameObject.tag == "Magical Box") {
 			StopTouchBox (coll.gameObject);
+		}  else if (coll.gameObject.tag == "Up Stairs") {
+			is_touching_up_stairs = false;
+			touching_stairs.GetComponent<Stairs> ().activated = false;
+			touching_stairs = null;
+
+		} else if (coll.gameObject.tag == "Down Stairs") {
+			is_touching_down_stairs = false;
+			touching_stairs.GetComponent<Stairs> ().activated = false;
+			touching_stairs = null;
+
+		}  else if (coll.gameObject.tag == "Door") {
+			is_touching_door = false;
+			touching_door = null;
 		}
 	}
 	void StartTouching(GameObject obj){
@@ -279,18 +349,28 @@ public class BoxPlayerScript : PlayerScript {
 			animator.SetBool ("box ability", true);
 			animator.SetBool ("ability", true);
 			capsule.center = new Vector3 (0,0,0);
+			Hide ();
 		} else {
 			body.SetActive (true);
 			ability.SetActive (false);
 			animator.SetBool ("box ability", false);
 			animator.SetBool ("ability", false);
 			capsule.center = new Vector3(0f,-0.175f, 0f);
-			if (is_being_held) {
-				print ("error??");
-			}
+			touching_box = null;
 			is_touching_box = false;
+			RemoveAllFromBox ();
+			Reveal ();
 		}
 
+	}
+	void RemoveAllFromBox(){
+		List<GameObject> to_remove = new List<GameObject>();
+		foreach (GameObject player in players_in_box) {
+			to_remove.Add (player);
+		}
+		foreach (GameObject player in to_remove) {
+			player.GetComponent<PlayerScript> ().ExitBox ();
+		}
 	}
 	void TransformIntoItem(){
 		if (held_object.GetComponent<Item> ().is_player) {
@@ -298,12 +378,14 @@ public class BoxPlayerScript : PlayerScript {
 		}
 		body.SetActive (false);
 		is_transformed = true;
+		Hide ();
 		held_object.GetComponent<Item> ().SetPlayer (this.gameObject, player_num);
 		TransformDrop ();
 	}
 	void RevertBack(){
 		body.SetActive (true);
 		is_transformed = false;
+		Reveal ();
 		if (is_being_held) {
 			being_held_by.GetComponent<PlayerScript> ().Drop ();
 		}
@@ -330,7 +412,7 @@ public class BoxPlayerScript : PlayerScript {
 		if (hit.collider != null || hit2.collider != null) {
 			//ray hit an environment object
 
-			float distance = Mathf.Abs(hit.point.y - transform.position.y);
+			//float distance = Mathf.Abs(hit.point.y - transform.position.y);
 			return true;
 		}
 		return false;

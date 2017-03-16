@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Item : MonoBehaviour {
+	public bool briefcase = false;
+	public bool flash_light = false;
 	public bool is_player = false;
 	public int player_num = -1;
 	public GameObject current_player;
