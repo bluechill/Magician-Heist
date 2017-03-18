@@ -33,8 +33,14 @@ ExportedObj/
 sysinfo.txt
 
 # Builds
+/*.app/
+/*_Data/
+*.7z
 *.apk
+*.exe
 *.unitypackage
+.DS_Store
+thumbs.db
 
 ## VS
 
