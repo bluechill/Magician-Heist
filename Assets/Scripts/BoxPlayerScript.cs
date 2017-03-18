@@ -1,25 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using InControl;
 public class BoxPlayerScript : PlayerScript {
 
+	public float action_cooldown = 0.5f;
+	public bool cooldown = false;
 
-	Animator animator;
-	public AnimationClip walkClip;
-	Rigidbody rb;
 	public float vel;
 	public float escalator_speed;
-	public bool[] actions;
-	int num_actions = 3;
 
 	public int player_num;
 
-	public KeyCode[][] key_mappings;
-
 	public bool is_touching = false;
-
-	public bool is_transformed = false;
 
 	public int num_touching = 0;
 	public List<GameObject> touching_objects;
@@ -32,45 +25,115 @@ public class BoxPlayerScript : PlayerScript {
 
 	public List<GameObject> players_in_box;
 
-	// Use this for initialization
-	void Start () {
-		rb = GetComponent<Rigidbody> ();
-		animator = GetComponent<Animator> ();
-		capsule = GetComponent<CapsuleCollider> ();
-		actions = new bool[num_actions];
-		for (int i = 0; i < num_actions; i++) {
-			actions[i] = false;
-		}
-		InitKeys ();
-	}
-	void InitKeys(){
-		key_mappings = new KeyCode[3][];
-		key_mappings [0] = new KeyCode[4];
-		key_mappings [1] = new KeyCode[4];
-		key_mappings [2] = new KeyCode[4];
+	public bool keyboard_user;
+	InputDevice controller;
+	bool controller_set = false;
 
-		key_mappings [0][0] = KeyCode.W;
-		key_mappings [0][1] = KeyCode.E;
-		key_mappings [0][2] = KeyCode.R;
-		key_mappings [0][3] = KeyCode.T;
-
-		key_mappings [1][0] = KeyCode.S;
-		key_mappings [1][1] = KeyCode.D;
-		key_mappings [1][2] = KeyCode.F;
-		key_mappings [1][3] = KeyCode.G;
-	}
 	// Update is called once per frame
 	void Update () {
+		age = Time.time - birthtime;
+
+		TryInitializeController ();
+
 		ProcessMovement ();
 		ProcessRotation ();
 		ProcessActions ();
 		ProcessHold ();
 		ProcessTransformed ();
 	}
+	//initialize a controller to this magician
+	void TryInitializeController(){
+		if (InputManager.Devices.Count > player_num) {
+			controller = InputManager.Devices [player_num];
+			controller_set = true;
+		}
+	}
+	//uses InControl as InputManager
+	void ProcessInputController(){
+			rb.AddForce(Vector3.right * controller.LeftStickX * vel);
+			if (controller.LeftStickX < 0) {
+				left = true;
+				right = false;
+			}
+			else if (controller.LeftStickX > 0) {
+				right = true;
+				left = false;
+			}
+			else {
+				right = false;
+				left = false;
+			}
+
+		if (controller.Action1) {
+			if (!cooldown) {
+				actions [0] = true;
+				cooldown = true;
+				Invoke ("ActionCooldown", action_cooldown);
+			}
+			return;
+		}
+		if (controller.Action2) {
+			if (!cooldown) {
+				actions [1] = true;
+				cooldown = true;
+				Invoke ("ActionCooldown", action_cooldown);
+			}
+			return;
+		}
+
+	}
+	void Animate(){
+		print ("animate");
+		//animator.speed = rb.velocity.magnitude;
+		animator.SetBool ("idle", false);
+
+	}
+	void Idle(){
+		print ("Idle");
+		//animator.speed = 0.4f;
+		animator.SetBool ("idle", true);
+
+	}
+
+	void PickUp(){
+		if (num_touching == 0 || is_holding)
+			return;
+		held_object = touching_objects [0];
+		is_holding = true;
+		if (held_object.GetComponent<Item> ().briefcase) {
+			is_holding_briefcase = true;
+		}
+		StopTouching (held_object);
+		if (held_object.GetComponent<Item> ().is_player) {
+			held_object.GetComponent<Item> ().current_player.GetComponent<PlayerScript> ().GetPickedUp (this.gameObject);
+		}
+	}
+	public void TransformIntoItem(){
+		if (held_object.GetComponent<Item> ().is_player) {
+			return;
+		}
+		body.SetActive (false);
+		is_transformed = true;
+		Hide ();
+		held_object.GetComponent<Item> ().SetPlayer (this.gameObject, player_num);
+		TransformDrop ();
+	}
+	public void RevertBack(){
+		body.SetActive (true);
+		is_transformed = false;
+		Reveal ();
+		if (is_being_held) {
+			being_held_by.GetComponent<PlayerScript> ().Drop ();
+		}
+		held_object.GetComponent<Item> ().ResetPlayer ();
+		transform.position = new Vector3 (transform.position.x, transform.position.y + 0.5f, 0f);
+		PickUp ();
+	}
 
 	void ProcessMovement(){
 		if (is_knocked_out) {
 			rb.velocity = Vector3.down * 5f;
+			print (player_num + "knockout idle");
 			Idle ();
 			return;
 		}
@@ -78,6 +141,10 @@ public class BoxPlayerScript : PlayerScript {
 			rb.useGravity = false;
 			float movement = Time.deltaTime * escalator_speed;
 			transform.position = new Vector3 (transform.position.x + movement, transform.position.y, -1f);
+			return;
+		}
+		if (is_using_stairs) {
+			rb.velocity = Vector3.zero;
 			return;
 		}
 		if (Input.GetKeyDown(key_mappings[player_num][0])) {
@@ -104,7 +171,9 @@ public class BoxPlayerScript : PlayerScript {
 			transform.position = inside_box.transform.position;
 			return;
 		}
-
+		if (controller_set) {
+			ProcessInputController ();
+		}
 		if (left) {
 
 			rb.velocity = Vector3.left * vel;
@@ -115,7 +184,6 @@ public class BoxPlayerScript : PlayerScript {
 			Animate ();
 		}
 		if (right) {
-
 			rb.velocity = Vector3.right * vel;
 			if (is_ability) {
 				rb.velocity /= 3;
@@ -128,6 +196,7 @@ public class BoxPlayerScript : PlayerScript {
 			if (is_ability) {
 				Hide ();
 			}
+			print (player_num + "right left idle");
 			Idle ();
 		}
 		if (!right && !left) {
@@ -135,8 +204,10 @@ public class BoxPlayerScript : PlayerScript {
 			if (is_ability) {
 				Hide ();
 			}
+			print (player_num + "!right !left idle");
 			Idle ();
 		}
+
 		if (!IsGrounded ()) {
 			rb.velocity += Vector3.down * vel;
 		}
@@ -197,6 +268,7 @@ public class BoxPlayerScript : PlayerScript {
 		}
 		if (is_touching_door) {
 			OpenDoor ();
+			return;
 		}
 
 		if (is_holding) {
@@ -235,32 +307,6 @@ public class BoxPlayerScript : PlayerScript {
 			return;
 		}
 		transform.position = held_object.transform.position;
-	}
-
-
-	void Animate(){
-		animator.speed = 2f * rb.velocity.magnitude;
-		animator.SetBool ("idle", false);
-
-	}
-	void Idle(){
-		animator.speed = 0.4f;
-		animator.SetBool ("idle", true);
-
-	}
-
-	void PickUp(){
-		if (num_touching == 0 || is_holding)
-			return;
-		held_object = touching_objects [0];
-		is_holding = true;
-		if (held_object.GetComponent<Item> ().briefcase) {
-			is_holding_briefcase = true;
-		}
-		StopTouching (held_object);
-		if (held_object.GetComponent<Item> ().is_player) {
-			held_object.GetComponent<Item> ().current_player.GetComponent<PlayerScript> ().GetPickedUp (this.gameObject);
-		}
 	}
 		
 	void OnTriggerEnter(Collider coll){
@@ -372,50 +418,12 @@ public class BoxPlayerScript : PlayerScript {
 			player.GetComponent<PlayerScript> ().ExitBox ();
 		}
 	}
-	void TransformIntoItem(){
-		if (held_object.GetComponent<Item> ().is_player) {
-			return;
-		}
-		body.SetActive (false);
-		is_transformed = true;
-		Hide ();
-		held_object.GetComponent<Item> ().SetPlayer (this.gameObject, player_num);
-		TransformDrop ();
+
+
+	public void ActionCooldown(){
+		cooldown = false;
 	}
-	void RevertBack(){
-		body.SetActive (true);
-		is_transformed = false;
-		Reveal ();
-		if (is_being_held) {
-			being_held_by.GetComponent<PlayerScript> ().Drop ();
-		}
-		held_object.GetComponent<Item> ().ResetPlayer ();
-		transform.position = new Vector3 (transform.position.x, transform.position.y + 0.5f, 0f);
-		PickUp ();
-	}
-	void TransformDrop(){
-		is_holding = false;
-	}
-	bool IsGrounded(){
-		RaycastHit hit, hit2;
 
-		Vector3 extents = GetComponent<Collider> ().bounds.extents;
 
-		Vector3 posLeft = transform.position - new Vector3(extents.x, 0f,0f);
-		Vector3 posRight = transform.position + new Vector3(extents.x, 0f,0f);
-
-		int layer = 1 << LayerMask.NameToLayer ("Default");
-
-		Physics.Raycast(posLeft, -Vector3.up, out hit, 1.1f, layer);
-		Physics.Raycast(posRight, -Vector3.up, out hit2, 1.1f, layer);
-
-		if (hit.collider != null || hit2.collider != null) {
-			//ray hit an environment object
-
-			//float distance = Mathf.Abs(hit.point.y - transform.position.y);
-			return true;
-		}
-		return false;
-	}
 
 }
