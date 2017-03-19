@@ -84,13 +84,13 @@ public class BoxPlayerScript : PlayerScript {
 	}
 	void Animate(){
 		print ("animate");
-		//animator.speed = rb.velocity.magnitude;
+		animator.speed = 1f;
 		animator.SetBool ("idle", false);
 
 	}
 	void Idle(){
 		print ("Idle");
-		//animator.speed = 0.4f;
+		animator.speed = 1f;
 		animator.SetBool ("idle", true);
 
 	}
