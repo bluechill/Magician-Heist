@@ -31,9 +31,12 @@ public class PlayerScript : MonoBehaviour {
 	public bool is_touching_up_stairs = false;
 	public bool is_touching_down_stairs = false;
 	public bool is_touching_door = false;
+	public bool is_touching_elevator = false;
+	public bool is_in_elevator = false;
 	public bool is_holding_briefcase = false;
 	public GameObject touching_box;
 	public GameObject touching_door;
+	public GameObject touching_elevator;
 	public GameObject inside_box;
 	public GameObject touching_stairs;
 	public GameObject win_menu;
@@ -45,7 +48,7 @@ public class PlayerScript : MonoBehaviour {
 	public bool is_ability = false;
 	public bool is_transformed = false;
 	public bool is_knocked_out = false;
-
+	public bool is_holding_key = false;
 
 
 	public void Start(){
@@ -69,6 +72,7 @@ public class PlayerScript : MonoBehaviour {
 		}
 		held_object = null;
 		is_holding = false;
+		is_holding_key = false;
 
 	}
 
@@ -178,7 +182,21 @@ public class PlayerScript : MonoBehaviour {
 		animator.SetBool ("using_stairs", false);
 	}
 	public void OpenDoor(){
-		touching_door.GetComponentInChildren<Door> ().OpenDoor ();
+		touching_door.GetComponentInChildren<Door> ().SwitchState (is_holding_key);
+	}
+	public void OpenElevator(){
+		touching_elevator.GetComponentInChildren<Elevator> ().SwitchState ();
+	}
+	public void UseElevator(){
+		touching_elevator.GetComponentInChildren<Elevator> ().Use (true, this.gameObject);
+	}
+	public void GetInElevator(){
+		is_in_elevator = true;
+		touching_elevator.GetComponentInChildren<Elevator> ().GetIn (this.gameObject);
+	}
+	public void GetOutElevator(){
+		is_in_elevator = false;
+		touching_elevator.GetComponentInChildren<Elevator> ().GetOut (this.gameObject);
 	}
 	public void KnockOut(){
 		is_knocked_out = true;

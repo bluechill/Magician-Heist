@@ -73,8 +73,9 @@ public class Guard : LayerMonoBehavior {
 			if (obj.GetComponent<Door> () != null) {
 				bool open = obj.GetComponent<Door> ().open;
 
-				if (!open)
-					obj.GetComponent<Door> ().OpenDoor ();
+				if (!open) {
+				}
+					//obj.GetComponent<Door> ().OpenDoor ();
 				else
 					agent.ResetPath ();
 			}

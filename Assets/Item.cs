@@ -5,6 +5,7 @@ using UnityEngine;
 public class Item : MonoBehaviour {
 	public bool briefcase = false;
 	public bool flash_light = false;
+	public bool magical_key = false;
 	public bool is_player = false;
 	public int player_num = -1;
 	public GameObject current_player;
@@ -15,7 +16,7 @@ public class Item : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+
 	}
 
 	public void SetPlayer(GameObject obj, int n){
