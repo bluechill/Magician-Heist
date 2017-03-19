@@ -106,6 +106,9 @@ public class BoxPlayerScript : PlayerScript {
 		StopTouching (held_object);
 		if (held_object.GetComponent<Item> ().is_player) {
 			held_object.GetComponent<Item> ().current_player.GetComponent<PlayerScript> ().GetPickedUp (this.gameObject);
+			if (held_object.GetComponent<Item> ().magical_key) {
+				is_holding_key = true;
+			}
 		}
 	}
 	public void TransformIntoItem(){
@@ -270,6 +273,10 @@ public class BoxPlayerScript : PlayerScript {
 			OpenDoor ();
 			return;
 		}
+		if (is_touching_elevator) {
+			OpenElevator ();
+			return;
+		}
 
 		if (is_holding) {
 			Drop ();
@@ -282,11 +289,17 @@ public class BoxPlayerScript : PlayerScript {
 		actions [1] = false;
 		if (is_holding && !is_transformed) {
 			TransformIntoItem ();
+		} else if (is_touching_elevator && !is_in_elevator && touching_elevator.GetComponent<Elevator>().open) {
+			GetInElevator ();
+			return;
+		} else if (is_touching_elevator && is_in_elevator && touching_elevator.GetComponent<Elevator>().open) {
+			UseElevator ();
+			return;
 		} else if (!is_transformed) {
 			UseAbility ();
 		} else if (is_transformed) {
 			RevertBack ();
-		}
+		} 
 
 	}
 	void ProcessAction3(){
@@ -324,7 +337,7 @@ public class BoxPlayerScript : PlayerScript {
 		} else if (coll.gameObject.tag == "Magical Box") {
 			print ("touching box");
 			TouchBox (coll.gameObject);
-		}   else if (coll.gameObject.tag == "Up Stairs") {
+		} else if (coll.gameObject.tag == "Up Stairs") {
 			is_touching_up_stairs = true;
 			touching_stairs = coll.gameObject;
 			touching_stairs.GetComponent<Stairs> ().activated = true;
@@ -341,7 +354,10 @@ public class BoxPlayerScript : PlayerScript {
 				print ("win!");
 				Win ();
 			}
-		}
+		}  else if (coll.gameObject.tag == "Elevator") {
+			is_touching_elevator = true;
+			touching_elevator = coll.gameObject;
+		} 
 	}
 	void OnTriggerExit(Collider coll){
 		if (coll.gameObject.tag == "Item") {
@@ -365,7 +381,10 @@ public class BoxPlayerScript : PlayerScript {
 		}  else if (coll.gameObject.tag == "Door") {
 			is_touching_door = false;
 			touching_door = null;
-		}
+		}  else if (coll.gameObject.tag == "Elevator") {
+			is_touching_elevator = false;
+			touching_elevator = null;
+		} 
 	}
 	void StartTouching(GameObject obj){
 		if (obj == held_object)

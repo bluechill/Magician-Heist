@@ -15,6 +15,7 @@ TagManager:
   - Down Stairs
   - Guard Constraint
   - Guard
+  - Elevator
   layers:
   - Default
   - TransparentFX
