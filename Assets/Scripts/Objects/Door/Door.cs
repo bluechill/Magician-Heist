@@ -7,53 +7,28 @@ using UnityEngine.Experimental.Director;
 public class Door : LayerMonoBehavior {
 
 	public bool open = false;
-	public bool animating = false;
-	public AnimationClip doorOpen;
+	public GameObject wall;
 
-	private Animator animator;
-	private OffMeshLink link;
+	public void SwitchState(bool key){
+		if (!open) {
+			if (key) {
+				open = true;
 
-	void Start() {
-		animator = GetComponent<Animator> ();
-		link = GetComponent<OffMeshLink> ();
-		animator.Stop ();
-	}
-
-	// Use this for initialization
-	public void OpenDoor()
-	{
-		if (!open && !animating) {
-			animating = true;
-
-			var playableClip = AnimationClipPlayable.Create (doorOpen);
-			animator.speed = 1.0f;
-			animator.Play (playableClip);
+			}
+		} else {
+			open = false;
 		}
 	}
 
-	void SetOpenDoor()
-	{
-		open = true;
-	}
-
-	public void CloseDoor()
-	{
-		if (open && !animating) {
-			animating = true;
-
-			var playableClip = AnimationClipPlayable.Create (doorOpen);
-			animator.speed = -1.0f;
-			animator.Play (playableClip);
+	void Update(){
+		if (open) {
+			wall.SetActive (false);
+			GetComponentInParent<SpriteRenderer> ().enabled = false;
+			GetComponent<SpriteRenderer> ().enabled = true;
+		} else {
+			wall.SetActive (true);
+			GetComponentInParent<SpriteRenderer> ().enabled = false;
+			GetComponent<SpriteRenderer> ().enabled = false;
 		}
-	}
-
-	void SetCloseDoor()
-	{
-		open = false;
-	}
-
-	void FinishAnimating()
-	{
-		animating = false;
 	}
 }
