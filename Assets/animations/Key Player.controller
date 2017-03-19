@@ -5,7 +5,7 @@ AnimatorController:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Player
+  m_Name: Key Player
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: Speed
@@ -848,7 +848,7 @@ AnimatorState:
   m_SpeedParameterActive: 0
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 0b6c2f30ef38544b991cf6c223fddc40, type: 2}
+  m_Motion: {fileID: 7400000, guid: 4811331ba76a74ac597b2fba14104bf0, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
