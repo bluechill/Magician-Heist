@@ -1,9 +1,10 @@
 fileFormatVersion: 2
 guid: 59913c8a65664466bacf4451c9a2489a
-timeCreated: 1489362367
+timeCreated: 1489902527
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: Magician - Box - Lower Arm_0
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -34,7 +35,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -92,7 +93,20 @@ TextureImporter:
     overridden: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: Magician - Box - Lower Arm_0
+      rect:
+        serializedVersion: 2
+        x: 891
+        y: 1874
+        width: 284
+        height: 718
+      alignment: 9
+      pivot: {x: 0.5249844, y: 0.5691785}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
     outline: []
   spritePackingTag: 
   userData: 
