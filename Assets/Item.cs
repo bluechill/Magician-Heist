@@ -9,8 +9,9 @@ public class Item : MonoBehaviour {
 	public bool is_player = false;
 	public bool gold_bar = false;
 	public bool tree = false;
-	public bool keycard = false;
+	public bool key_card = false;
 	public bool held = false;
+    public bool thrown = false;
 	public int player_num = -1;
 	public bool enabled = false;
 	public GameObject current_player;
@@ -21,7 +22,7 @@ public class Item : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (tree && held) {
+		if ((tree && held) || flash_light) {
 			transform.rotation = Quaternion.Euler (new Vector3 (0f, 0f, 90f));
 		} else {
 			transform.rotation = Quaternion.Euler (new Vector3 (0f, 0f, 0f));
@@ -32,6 +33,11 @@ public class Item : MonoBehaviour {
 		} else {
 			GetComponent<Rigidbody> ().isKinematic = true;
 		}
+        if(GetComponent<Rigidbody>().velocity.magnitude <= 0.1f)
+        {
+
+        
+        }
 	}
 
 	public void SetPlayer(GameObject obj, int n){
@@ -44,4 +50,14 @@ public class Item : MonoBehaviour {
 		is_player = false;
 		player_num = -1;
 	}
+    public void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "Guard" && !other.gameObject.GetComponent<StatePatternEnemy>().knockout && thrown)
+        {
+            other.gameObject.GetComponent<StatePatternEnemy>().Knockout();
+            thrown = false;
+            GetComponent<Rigidbody>().velocity = Vector3.zero;
+
+        }
+    }
 }

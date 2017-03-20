@@ -23,6 +23,7 @@ public class StatePatternEnemy : MonoBehaviour {
     public NavMeshAgent agent;
     private Animator animator;
     private bool animating = true;
+    private bool animating_ko = false;
 
     [HideInInspector] public Transform chaseTarget;
     [HideInInspector] public IEnemyState currentState;
@@ -30,7 +31,8 @@ public class StatePatternEnemy : MonoBehaviour {
     [HideInInspector] public SearchState searchState;
     [HideInInspector] public SitState sitState;
     [HideInInspector] public AttackState attackState;
-
+    bool idling = true;
+    public bool knockout = false;
     private void Awake() {
         patrolState = new PatrolState(this);
         searchState = new SearchState(this);
@@ -56,21 +58,40 @@ public class StatePatternEnemy : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        if (knockout && animating_ko)
+        {
+            agent.velocity = Vector3.zero;
+            return;
+        }
         print(currentState);
         currentState.UpdateState();
-        if (agent.velocity.magnitude > 0f && !animating) {
-            var playableClip = AnimationClipPlayable.Create(guardWalk);
-            playableClip.speed = agent.speed;
-            animator.Play(playableClip);
-            animating = true;
+        if (agent.velocity.magnitude > 0f && idling) {
+            animator.Play("Guard Walking");
+            idling = false;
         }
 
-        if (agent.velocity.x <= 0.0f)
+        if (agent.velocity.x < 0.0f)
+        {
             this.transform.rotation = Quaternion.Euler(new Vector3(0f, 180f, 0f));
+
+
+        }
         else if (agent.velocity.x > 0.0f)
+        {
             this.transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, 0f));
+        } else if(!idling)
+        {
+            animator.Play("Guard Idling");
+            idling = true;
+        }
+        if (knockout && !animating_ko)
+        {
+            animating_ko = true;
+            animator.Play("Guard Knockout");
+            idling = false;
+            Invoke("Wakeup", 4f);
 
-
+        }
         if (agent.isOnOffMeshLink && agent.currentOffMeshLinkData.linkType != OffMeshLinkType.LinkTypeManual)
             agent.CompleteOffMeshLink();
         else if (agent.isOnOffMeshLink) {
@@ -90,5 +111,14 @@ public class StatePatternEnemy : MonoBehaviour {
 
     private void OnTriggerEnter(Collider coll) {
         currentState.OnTriggerEnter(coll);
+    }
+    public void Knockout()
+    {
+        knockout = true;
+    }
+    public void Wakeup()
+    {
+        animating_ko = false;
+        knockout = false;
     }
 }

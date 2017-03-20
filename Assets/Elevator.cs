@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Elevator : MonoBehaviour {
-
+    public bool locked = false;
 	public bool open = false;
 	public GameObject door_open;
 	public List<GameObject> players_in;
@@ -24,7 +24,8 @@ public class Elevator : MonoBehaviour {
 
 		}
 	}
-	public void SwitchState(){
+	public void SwitchState(GameObject player){
+
 		open = !open;
 	}
 	public void GetIn(GameObject player){
@@ -38,7 +39,20 @@ public class Elevator : MonoBehaviour {
 			return;
 		if (!up && !down_connection)
 			return;
-		
+
+        if (!up && locked)
+        {
+            if (player.GetComponent<PlayerScript>().is_holding_key_card)
+            {
+                locked = false;
+
+            } else
+            {
+                return;
+            }
+
+
+        }
 		mode = up;
 		open = false;
 		Use2 ();

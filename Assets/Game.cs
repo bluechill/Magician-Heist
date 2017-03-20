@@ -7,7 +7,9 @@ using UnityEngine.SceneManagement;
 public class Game : MonoBehaviour {
 
 	public static Game GameInstance;
-
+    public GameObject[] tutorials;
+    public GameObject tutorial;
+    public int tut = 0;
 	public Text timer_text;
 	public Text win_score;
 	public GameObject win_menu;
@@ -21,26 +23,55 @@ public class Game : MonoBehaviour {
 	void Start () {
 		GameInstance = this;
 		start_time = Time.time;
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		run_time = Time.time - start_time;
+        tutorial.SetActive(true);
+        Tutorial();
+    }
+
+    // Update is called once per frame
+    void Update () {
+        if (tut < tutorials.Length)
+        {
+            return;
+        }
+
+        run_time = Time.time - start_time;
 		if (run_time >= time_limit) {
 			Lose ();
 		}
 
 		timer_text.text = "Time Remaining: " + ((time_limit - run_time)).ToString("0.00");
 	}
-
-	public void Win(){
+    void Tutorial()
+    {
+        if (tut >= tutorials.Length)
+        {
+            return;
+        }
+        if (tut > 0)
+        {
+            tutorials[tut - 1].SetActive(false);
+        }
+        tutorials[tut].SetActive(true);
+        tut++;
+        if (tut >= tutorials.Length)
+        {
+            Invoke("EndTut", 4f);
+            return;
+        }
+        Invoke("Tutorial", 4f);
+    }
+    void EndTut()
+    {
+        tutorial.SetActive(false);
+    }
+    public void Win(){
 		win_menu.SetActive (true);
 		win_score.text = gold_bars.ToString();
-		Invoke ("Restart", 4f);
+		Invoke ("Restart", 5f);
 	}
 	public void Lose(){
 		lose_menu.SetActive (true);
-		Invoke ("Restart", 4f);
+		Invoke ("Restart", 5f);
 	}
 	public void Restart(){
 		SceneManager.LoadScene (SceneManager.GetActiveScene().name);
