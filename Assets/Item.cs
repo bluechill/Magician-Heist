@@ -7,7 +7,12 @@ public class Item : MonoBehaviour {
 	public bool flash_light = false;
 	public bool magical_key = false;
 	public bool is_player = false;
+	public bool gold_bar = false;
+	public bool tree = false;
+	public bool keycard = false;
+	public bool held = false;
 	public int player_num = -1;
+	public bool enabled = false;
 	public GameObject current_player;
 	// Use this for initialization
 	void Start () {
@@ -16,7 +21,17 @@ public class Item : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
+		if (tree && held) {
+			transform.rotation = Quaternion.Euler (new Vector3 (0f, 0f, 90f));
+		} else {
+			transform.rotation = Quaternion.Euler (new Vector3 (0f, 0f, 0f));
+		}
+		if (enabled) {
+			GetComponent<Rigidbody> ().isKinematic = false;
+			GetComponent<SpriteRenderer> ().sortingOrder = 30;
+		} else {
+			GetComponent<Rigidbody> ().isKinematic = true;
+		}
 	}
 
 	public void SetPlayer(GameObject obj, int n){
