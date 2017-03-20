@@ -56,7 +56,7 @@ public class PatrolState : IEnemyState {
 
         enemy.agent.destination = enemy.patrolPoints[nextWayPoint].position;
         enemy.agent.Resume();
-        if (enemy.agent.remainingDistance <= enemy.agent.stoppingDistance && !enemy.agent.pathPending) {
+        if (enemy.agent.remainingDistance <= enemy.agent.stoppingDistance * 2f && !enemy.agent.pathPending) {
             nextWayPoint = (nextWayPoint + 1) % enemy.patrolPoints.Length;
         } 
     }

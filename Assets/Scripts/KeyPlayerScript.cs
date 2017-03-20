@@ -18,6 +18,10 @@ public class KeyPlayerScript : PlayerScript {
 		ProcessActions ();
 		ProcessHold ();
 		ProcessTransformed ();
+        if (is_ability && is_being_held)
+        {
+            if(!ability.GetComponent<Item>().thrown) transform.position =  Vector3.Lerp(transform.position, ability.transform.position, 0.1f);
+        }
 	}
 
 	public override void UseAbility(){
@@ -36,6 +40,7 @@ public class KeyPlayerScript : PlayerScript {
 			ability.SetActive (false);
 			animator.SetBool ("key ability", false);
 			animator.SetBool ("ability", false);
+            ability.GetComponent<Item>().enabled = true;
 
 			transform.position = new Vector3 (ability.transform.position.x, ability.transform.position.y + 0.5f, 0f);
 			if (player_holding_me) {

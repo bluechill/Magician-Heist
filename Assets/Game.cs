@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class Game : MonoBehaviour {
 
+    public bool do_tut = true;
 	public static Game GameInstance;
     public GameObject[] tutorials;
     public GameObject tutorial;
@@ -23,12 +24,25 @@ public class Game : MonoBehaviour {
 	void Start () {
 		GameInstance = this;
 		start_time = Time.time;
-        tutorial.SetActive(true);
-        Tutorial();
+
+        if (do_tut)
+        {
+            tutorial.SetActive(true);
+            Tutorial();
+        }
+        else tut = tutorials.Length;
     }
 
     // Update is called once per frame
     void Update () {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Restart();
+        }
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            RestartNoTut();
+        }
         if (tut < tutorials.Length)
         {
             return;
@@ -67,13 +81,18 @@ public class Game : MonoBehaviour {
     public void Win(){
 		win_menu.SetActive (true);
 		win_score.text = gold_bars.ToString();
-		Invoke ("Restart", 5f);
+		Invoke ("RestartNoTut", 5f);
 	}
 	public void Lose(){
 		lose_menu.SetActive (true);
-		Invoke ("Restart", 5f);
+		Invoke ("RestartNoTut", 5f);
 	}
-	public void Restart(){
-		SceneManager.LoadScene (SceneManager.GetActiveScene().name);
-	}
+    public void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+    public void RestartNoTut()
+    {
+        SceneManager.LoadScene("play_test_no_tut");
+    }
 }
