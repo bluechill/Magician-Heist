@@ -62,11 +62,12 @@ public class PlayerScript : MonoBehaviour {
 	public bool is_ability = false;
 	public bool is_transformed = false;
 	public bool is_knocked_out = false;
-	public bool is_holding_key = false;
-	public bool is_touching_closet = false;
+    public bool is_holding_key = false;
+    public bool is_holding_key_card = false;
+    public bool is_touching_closet = false;
 	public bool is_in_closet = false;
 
-
+    public bool grounded = false;
 	public bool is_touching_desk_overlap = false;
 	public GameObject touching_desk_overlap;
 
@@ -89,17 +90,37 @@ public class PlayerScript : MonoBehaviour {
 		if (held_object.GetComponent<Item> ().briefcase) {
 			is_holding_briefcase = false;
 		}
-		if (held_object.GetComponent<Item> ().magical_key) {
-			is_holding_key = false;
-			held_object.GetComponentInParent<KeyPlayerScript> ().DropMe ();
-		}
-		if (is_touching_desk_overlap) {
+        if (held_object.GetComponent<Item>().magical_key)
+        {
+            is_holding_key = false;
+            held_object.GetComponentInParent<KeyPlayerScript>().DropMe();
+        }
+        if (held_object.GetComponent<Item>().key_card)
+        {
+            is_holding_key_card = false;
+        }
+        if (is_touching_desk_overlap) {
 			held_object.GetComponent<Item> ().enabled = false;
 			held_object.transform.position = new Vector3(touching_desk_overlap.transform.position.x, touching_desk_overlap.transform.position.y + 0.5f, 0f);
 		}
 		held_object.GetComponent<Item> ().held = false;
-		held_object = null;
+        if (rb.velocity.x > 0f)
+        {
+            print("throw");
+            held_object.GetComponent<Item>().thrown = true;
+            held_object.GetComponent<Rigidbody>().isKinematic = false;
+            held_object.GetComponent<Rigidbody>().velocity = ((Vector3.right + (Vector3.up*0.5f)) * 10f);
+
+        }
+        else if (rb.velocity.x < 0f)
+        {
+            held_object.GetComponent<Item>().thrown = true;
+            held_object.GetComponent<Rigidbody>().isKinematic = false;
+            held_object.GetComponent<Rigidbody>().velocity = ((Vector3.left + (Vector3.up * 0.5f)) * 10f);
+        }
+        held_object = null;
 		is_holding = false;
+
 
 	}
 
@@ -191,7 +212,7 @@ public class PlayerScript : MonoBehaviour {
 		touching_door.GetComponentInChildren<Door> ().SwitchState (is_holding_key);
 	}
 	public void SwitchElevator(){
-		touching_elevator.GetComponentInChildren<Elevator> ().SwitchState ();
+		touching_elevator.GetComponentInChildren<Elevator> ().SwitchState (this.gameObject);
 		elevator_ready = touching_elevator.GetComponentInChildren<Elevator> ().open;
 
 	}
@@ -321,7 +342,12 @@ public class PlayerScript : MonoBehaviour {
 			is_holding_key = true;
 			held_object.GetComponentInParent<KeyPlayerScript> ().PickMeUp (this.gameObject);
 		}
-		held_object.GetComponent<Item> ().held = true;
+        if (held_object.GetComponent<Item>().key_card)
+        {
+            is_holding_key_card = true;
+        }
+        held_object.GetComponent<Item>().thrown = false;
+        held_object.GetComponent<Item> ().held = true;
 		held_object.GetComponent<Item> ().enabled = true;
 	}
 	public void TransformIntoItem(){
@@ -349,7 +375,7 @@ public class PlayerScript : MonoBehaviour {
 	public void ProcessMovement(){
 		if (is_knocked_out) {
 			rb.velocity = Vector3.down * 5f;
-			print (player_num + "knockout idle");
+			//print (player_num + "knockout idle");
 			Idle ();
 			return;
 		}
@@ -444,7 +470,6 @@ public class PlayerScript : MonoBehaviour {
 			if (is_ability) {
 				Hide ();
 			}
-			print (player_num + "right left idle");
 			Idle ();
 		}
 		if (!right && !left) {
@@ -452,15 +477,14 @@ public class PlayerScript : MonoBehaviour {
 			if (is_ability) {
 				Hide ();
 			}
-			print (player_num + "!right !left idle");
 			Idle ();
 		}
 		if (is_in_elevator || is_in_closet) {
 			rb.velocity = Vector3.zero;
 			return;
 		}
-
-		if (!IsGrounded ()) {
+        grounded = IsGrounded();
+		if (!grounded) {
 			rb.velocity = Vector3.down * vel;
 			return;
 		}
@@ -598,11 +622,17 @@ public class PlayerScript : MonoBehaviour {
 		} else if (coll.gameObject.tag == "Closet") {
 			is_touching_closet = true;
 			touching_closet = coll.gameObject;
-		} else if (coll.gameObject.tag == "Desk Overlap") {
-			is_touching_desk_overlap = true;
-			touching_desk_overlap = coll.gameObject;
-		} 
-	}
+		}
+        else if (coll.gameObject.tag == "Desk Overlap")
+        {
+            is_touching_desk_overlap = true;
+            touching_desk_overlap = coll.gameObject;
+        }
+        else if (coll.gameObject.tag == "Guard")
+        {
+            if(!is_knocked_out && !is_hiding && !coll.gameObject.GetComponent<StatePatternEnemy>().knockout)  KnockOut();
+        }
+    }
 	public void OnTriggerExit(Collider coll){
 		if (coll.gameObject.tag == "Item") {
 			if (coll.gameObject.GetComponent<Item> ().magical_key && player_num != 1) {

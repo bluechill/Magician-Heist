@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4652402655061354}
   - component: {fileID: 65699989541614614}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41,7 +41,7 @@ GameObject:
   - component: {fileID: 54238312671493958}
   m_Layer: 0
   m_Name: Key Card
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -129,8 +129,9 @@ MonoBehaviour:
   is_player: 0
   gold_bar: 0
   tree: 0
-  keycard: 1
+  key_card: 1
   held: 0
+  thrown: 0
   player_num: -1
   enabled: 0
   current_player: {fileID: 0}
