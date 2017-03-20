@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Stairs : MonoBehaviour {
-	public GameObject destination;
+public class VaultDoor : MonoBehaviour {
+
 	// Use this for initialization
 	void Start () {
 		
@@ -13,9 +13,4 @@ public class Stairs : MonoBehaviour {
 	void Update () {
 		
 	}
-
-	public void Use(GameObject player){
-		player.transform.position = destination.transform.position;
-	}
-
 }
