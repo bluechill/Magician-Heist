@@ -8,12 +8,16 @@ public class Door : LayerMonoBehavior {
 
 	public bool open = false;
 	public GameObject wall;
-
+	public bool locked = false;
 	public void SwitchState(bool key){
 		if (!open) {
-			if (key) {
+			if (locked) {
+				if (key) {
+					open = true;
+					locked = false;
+				}
+			} else {
 				open = true;
-
 			}
 		} else {
 			open = false;

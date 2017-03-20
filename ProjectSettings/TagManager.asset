@@ -16,6 +16,12 @@ TagManager:
   - Guard Constraint
   - Guard
   - Elevator
+  - Desk
+  - Desk Overlap
+  - Tree
+  - Stairs
+  - Closet
+  - Exit
   layers:
   - Default
   - TransparentFX
@@ -32,10 +38,10 @@ TagManager:
   - Background
   - Guard
   - Box Ability
-  - 
-  - 
-  - 
-  - 
+  - Key Ability
+  - Pallet
+  - Gold Bar
+  - Scenery
   - 
   - 
   - 

@@ -41,10 +41,5 @@ public class UpEscalator : MonoBehaviour {
 			activated = false;
 		}
 	}
-	public void UseEscalator(){
-		num_using = touching_players.Count;
-		foreach (GameObject player in touching_players) {
-			player.GetComponent<PlayerScript> ().UseUpEscalator ();
-		}
-	}
+
 }

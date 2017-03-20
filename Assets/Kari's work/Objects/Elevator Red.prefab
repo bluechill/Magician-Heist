@@ -21,9 +21,10 @@ GameObject:
   - component: {fileID: 4569001605036902}
   - component: {fileID: 212916892442168478}
   - component: {fileID: 65723073755698706}
+  - component: {fileID: 114543979188391638}
   m_Layer: 0
   m_Name: Elevator Red
-  m_TagString: Untagged
+  m_TagString: Elevator
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -78,11 +79,29 @@ BoxCollider:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1818557982847570}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1.7, y: 2.43, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114543979188391638
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1818557982847570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc5c748507c174262b0f9c58f18a6e14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  open: 0
+  door_open: {fileID: 1856976585770738}
+  players_in: []
+  players_moving: []
+  has_players: 0
+  up_connection: {fileID: 0}
+  down_connection: {fileID: 0}
 --- !u!212 &212587181265068456
 SpriteRenderer:
   m_ObjectHideFlags: 1
