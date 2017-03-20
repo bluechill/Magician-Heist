@@ -22,6 +22,10 @@ TagManager:
   - Stairs
   - Closet
   - Exit
+  - Fire
+  - Table
+  - Extra Loot
+  - Briefcase
   layers:
   - Default
   - TransparentFX
@@ -42,7 +46,7 @@ TagManager:
   - Pallet
   - Gold Bar
   - Scenery
-  - 
+  - KO'd Player
   - 
   - 
   - 
