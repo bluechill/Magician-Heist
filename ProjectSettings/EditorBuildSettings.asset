@@ -11,5 +11,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Win Scene.unity
   - enabled: 0
     path: Assets/Scenes/Game Over Scene.unity
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Level-1.unity
+  - enabled: 1
+    path: Assets/play_test_tut.unity
+  - enabled: 1
+    path: Assets/play_test_no_tut.unity

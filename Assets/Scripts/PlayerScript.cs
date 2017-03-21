@@ -453,7 +453,7 @@ public class PlayerScript : MonoBehaviour {
 			rb.velocity = Vector3.left * vel;
 			if (is_ability) {
 				rb.velocity /= 3;
-				Reveal ();
+				//Reveal ();
 			}
 			Animate ();
 		}
@@ -461,7 +461,7 @@ public class PlayerScript : MonoBehaviour {
 			rb.velocity = Vector3.right * vel;
 			if (is_ability) {
 				rb.velocity /= 3;
-				Reveal ();
+				//Reveal ();
 			}
 			Animate ();
 		}
@@ -630,7 +630,7 @@ public class PlayerScript : MonoBehaviour {
         }
         else if (coll.gameObject.tag == "Guard")
         {
-            if(!is_knocked_out && !is_hiding && !coll.gameObject.GetComponent<StatePatternEnemy>().knockout)  KnockOut();
+            if(!is_knocked_out && !is_hiding && !coll.gameObject.GetComponent<StatePatternEnemy>().knockout && !is_ability)  KnockOut();
         }
     }
 	public void OnTriggerExit(Collider coll){
