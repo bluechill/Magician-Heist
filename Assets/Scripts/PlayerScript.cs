@@ -379,40 +379,42 @@ public class PlayerScript : MonoBehaviour {
 			Idle ();
 			return;
 		}
+		if (keyboard_user) {
+			if (Input.GetKeyDown(key_mappings[player_num][0])) {
+				left = true;
+			}
+			if (Input.GetKeyUp(key_mappings[player_num][0])) {
+				left = false;
+			}
+			if (Input.GetKeyDown(key_mappings[player_num][1])) {
+				right = true;
+			} 		
+			if (Input.GetKeyUp(key_mappings[player_num][1])) {
+				right = false;
+			}
+			if (Input.GetKeyDown(key_mappings[player_num][2])) {
+				up = true;
+			}
+			if (Input.GetKeyUp(key_mappings[player_num][2])) {
+				up = false;
+			}
+			if (Input.GetKeyDown(key_mappings[player_num][3])) {
+				down = true;
+			} 		
+			if (Input.GetKeyUp(key_mappings[player_num][3])) {
+				down = false;
+			}
 
-		if (Input.GetKeyDown(key_mappings[player_num][0])) {
-			left = true;
-		}
-		if (Input.GetKeyUp(key_mappings[player_num][0])) {
-			left = false;
-		}
-		if (Input.GetKeyDown(key_mappings[player_num][1])) {
-			right = true;
-		} 		
-		if (Input.GetKeyUp(key_mappings[player_num][1])) {
-			right = false;
-		}
-		if (Input.GetKeyDown(key_mappings[player_num][2])) {
-			up = true;
-		}
-		if (Input.GetKeyUp(key_mappings[player_num][2])) {
-			up = false;
-		}
-		if (Input.GetKeyDown(key_mappings[player_num][3])) {
-			down = true;
-		} 		
-		if (Input.GetKeyUp(key_mappings[player_num][3])) {
-			down = false;
-		}
+
+			if (Input.GetKeyDown(key_mappings[player_num][4])) {
+				actions [0] = true;
+			}
+			if (Input.GetKeyDown(key_mappings[player_num][5])) {
+				actions [1] = true;
+			}
 
 
-		if (Input.GetKeyDown(key_mappings[player_num][4])) {
-			actions [0] = true;
 		}
-		if (Input.GetKeyDown(key_mappings[player_num][5])) {
-			actions [1] = true;
-		}
-
 
 
 		if (is_in_box) {

@@ -81,7 +81,7 @@ public class Game : MonoBehaviour {
     public void Win(){
 		win_menu.SetActive (true);
 		win_score.text = gold_bars.ToString();
-		Invoke ("RestartNoTut", 5f);
+        Invoke("RestartNoTut", 5f);
 	}
 	public void Lose(){
 		lose_menu.SetActive (true);
