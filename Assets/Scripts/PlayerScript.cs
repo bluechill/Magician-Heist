@@ -710,7 +710,10 @@ public class PlayerScript : MonoBehaviour {
 		List<Collider> taggedColliders = new List<Collider> ();
 
 		for (int i = 0; i < colliders.Length; ++i) {
-			if (colliders [i].tag == "Item" && !colliders[i].transform.IsChildOf(this.transform))
+			if ((colliders [i].tag == "Item" //||
+//				 colliders[i].tag == "Door" ||
+//				 colliders[i].tag == "Eleavtor"
+				) && !colliders[i].transform.IsChildOf(this.transform))
 				taggedColliders.Add (colliders [i]);
 		}
 
