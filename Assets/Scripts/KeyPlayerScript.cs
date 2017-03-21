@@ -53,9 +53,9 @@ public class KeyPlayerScript : PlayerScript {
 	}
 
 	public void RemoveTouchingPlayers(){
-		foreach (GameObject player in players_touching_key) {
-			player.GetComponent<PlayerScript>().StopTouching (ability);
-		}
+//		foreach (GameObject player in players_touching_key) {
+//			player.GetComponent<PlayerScript>().StopTouching (ability);
+//		}
 	}
 
 	public void DropMe(){

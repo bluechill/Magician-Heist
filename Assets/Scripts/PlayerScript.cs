@@ -14,7 +14,7 @@ public class PlayerScript : MonoBehaviour {
 
 	public bool is_touching = false;
 	public int num_touching = 0;
-	public List<GameObject> touching_objects;
+	public GameObject nearestActionObject = null;
 	public GameObject transformed_object;
 	public GameObject right_hand;
 
@@ -326,15 +326,17 @@ public class PlayerScript : MonoBehaviour {
 
 	}
 
-	public void PickUp(){
-		if (num_touching == 0 || is_holding)
+	public void PickUp()
+	{
+		if (nearestActionObject == null)
 			return;
-		held_object = touching_objects [0];
+		
+		held_object = nearestActionObject;
 		is_holding = true;
 		if (held_object.GetComponent<Item> ().briefcase) {
 			is_holding_briefcase = true;
 		}
-		StopTouching (held_object);
+
 		if (held_object.GetComponent<Item> ().is_player) {
 			held_object.GetComponent<Item> ().current_player.GetComponent<PlayerScript> ().GetPickedUp (this.gameObject);
 		}
@@ -349,6 +351,9 @@ public class PlayerScript : MonoBehaviour {
         held_object.GetComponent<Item>().thrown = false;
         held_object.GetComponent<Item> ().held = true;
 		held_object.GetComponent<Item> ().enabled = true;
+
+		nearestActionObject.GetComponent<Item> ().SetHighlight (false);
+		nearestActionObject = null;
 	}
 	public void TransformIntoItem(){
 		if (held_object.GetComponent<Item> ().is_player) {
@@ -590,12 +595,8 @@ public class PlayerScript : MonoBehaviour {
 
 	public void OnTriggerEnter(Collider coll){
 		if (coll.gameObject.tag == "Item") {
-
 			if (coll.gameObject.GetComponent<Item> ().magical_key && player_num != 1) {
 				coll.gameObject.GetComponentInParent<KeyPlayerScript> ().players_touching_key.Add (this.gameObject);
-				StartTouching (coll.gameObject);
-			} else {
-				StartTouching (coll.gameObject);
 			}
 
 		} else if (coll.gameObject.tag == "Magical Box") {
@@ -637,9 +638,6 @@ public class PlayerScript : MonoBehaviour {
 		if (coll.gameObject.tag == "Item") {
 			if (coll.gameObject.GetComponent<Item> ().magical_key && player_num != 1) {
 				coll.gameObject.GetComponentInParent<KeyPlayerScript> ().players_touching_key.Remove (this.gameObject);
-				StopTouching (coll.gameObject);
-			} else {
-				StopTouching (coll.gameObject);
 			}
 		} else if (coll.gameObject.tag == "Magical Box") {
 			StopTouchBox (coll.gameObject);
@@ -659,28 +657,6 @@ public class PlayerScript : MonoBehaviour {
 		}  else if (coll.gameObject.tag == "Desk Overlap") {
 			is_touching_desk_overlap = false;
 			touching_desk_overlap = null;
-		} 
-	}
-	public void StartTouching(GameObject obj){
-		if (obj == held_object)
-			return;
-		if (obj.GetComponent<Item> ().magical_key && player_num == 1) {
-			return;
-		}
-		is_touching = true;
-		touching_objects.Add (obj);
-		num_touching++;
-	}
-	public void StopTouching(GameObject obj){
-		if (obj == held_object)
-			return;
-		if (obj.GetComponent<Item> ().magical_key && player_num == 1) {
-			return;
-		}
-		num_touching--;
-		touching_objects.Remove (obj);
-		if (num_touching == 0) {
-			is_touching = false;
 		} 
 	}
 		
@@ -710,4 +686,62 @@ public class PlayerScript : MonoBehaviour {
 		ReappearBody ();
 	}
 
+	private void FindNearestItem() {
+		if (is_holding)
+			return;
+
+		float boxWidth = 0.5f;
+		float sign = 1.0f;
+
+		if (this.transform.localEulerAngles.y >= 180f)
+			sign *= -1f;
+
+		Collider[] colliders = Physics.OverlapBox (this.transform.position + new Vector3(boxWidth / 2f * sign, 0f, 0f), new Vector3 (boxWidth, 1.0f, 1.0f));
+
+		if (colliders.Length == 0)
+		{
+			if (nearestActionObject != null)
+				nearestActionObject.GetComponent<Item> ().SetHighlight (false);
+			
+			nearestActionObject = null;
+			return;
+		}
+
+		List<Collider> taggedColliders = new List<Collider> ();
+
+		for (int i = 0; i < colliders.Length; ++i) {
+			if (colliders [i].tag == "Item" && !colliders[i].transform.IsChildOf(this.transform))
+				taggedColliders.Add (colliders [i]);
+		}
+
+		if (taggedColliders.Count == 0)
+		{
+			if (nearestActionObject != null)
+				nearestActionObject.GetComponent<Item> ().SetHighlight (false);
+			
+			nearestActionObject = null;
+			return;
+		}
+
+		Collider closest = taggedColliders [0];
+		float zeroDistance = Vector3.Distance (taggedColliders [0].ClosestPointOnBounds (this.transform.position), this.transform.position);
+
+		for (int i = 1; i < taggedColliders.Count; ++i) {
+			float distance = Vector3.Distance (taggedColliders [1].ClosestPointOnBounds (this.transform.position), this.transform.position);
+			if (distance < zeroDistance) {
+				closest = colliders [i];
+				zeroDistance = distance;
+			}
+		}
+
+		if (closest.gameObject != nearestActionObject && nearestActionObject != null)
+			nearestActionObject.GetComponent<Item> ().SetHighlight (false);
+
+		nearestActionObject = closest.gameObject;
+		nearestActionObject.GetComponent<Item> ().SetHighlight (true);
+	}
+
+	void FixedUpdate() {
+		FindNearestItem ();
+	}
 }

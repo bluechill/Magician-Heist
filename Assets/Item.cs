@@ -15,9 +15,13 @@ public class Item : MonoBehaviour {
 	public int player_num = -1;
 	public bool enabled = false;
 	public GameObject current_player;
+	public bool highlight = false;
+	private MaterialPropertyBlock propertyBlock;
+	private SpriteRenderer srend;
 	// Use this for initialization
 	void Start () {
-		
+		propertyBlock = new MaterialPropertyBlock ();
+		srend = GetComponent<SpriteRenderer> ();
 	}
 	
 	// Update is called once per frame
@@ -38,6 +42,12 @@ public class Item : MonoBehaviour {
 
         
         }
+
+		srend.GetPropertyBlock(propertyBlock);
+		propertyBlock.SetFloat("_Outline", highlight ? 1f : 0);
+		propertyBlock.SetColor("_OutlineColor", Color.red);
+		propertyBlock.SetFloat("_OutlineSize", 24);
+		srend.SetPropertyBlock(propertyBlock);
 	}
 
 	public void SetPlayer(GameObject obj, int n){
@@ -60,4 +70,9 @@ public class Item : MonoBehaviour {
 
         }
     }
+
+	public void SetHighlight(bool shouldHighlight)
+	{
+		highlight = shouldHighlight;	
+	}
 }
