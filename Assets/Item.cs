@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[ExecuteInEditMode]
 public class Item : MonoBehaviour {
 	public bool briefcase = false;
 	public bool flash_light = false;
@@ -16,13 +17,15 @@ public class Item : MonoBehaviour {
 	public bool enabled = false;
 	public GameObject current_player;
 	public bool highlight = false;
+
+	[ColorUsage(true, true, 0f, 8f, 0.125f, 3f)]
 	public Color highlightColor = Color.red;
 	private MaterialPropertyBlock propertyBlock;
 	private SpriteRenderer srend;
 	// Use this for initialization
 	void Start () {
 		propertyBlock = new MaterialPropertyBlock ();
-		srend = GetComponent<SpriteRenderer> ();
+		srend = GetComponent<SpriteRenderer>();
 	}
 	
 	// Update is called once per frame
@@ -44,10 +47,21 @@ public class Item : MonoBehaviour {
         
         }
 
+		UpdateOutline (highlight);
+	}
+
+	public void UpdateOutline(bool enable)
+	{
+		if (propertyBlock == null)
+			propertyBlock = new MaterialPropertyBlock ();
+
+		if (srend == null)
+			srend = GetComponent<SpriteRenderer>();
+
 		srend.GetPropertyBlock(propertyBlock);
-		propertyBlock.SetFloat("_Outline", highlight ? 1f : 0);
+		propertyBlock.SetFloat("_Outline", enable ? 1f : 0);
 		propertyBlock.SetColor("_OutlineColor", highlightColor);
-		propertyBlock.SetFloat("_OutlineSize", 8);
+		propertyBlock.SetFloat("_OutlineSize", 2);
 		srend.SetPropertyBlock(propertyBlock);
 	}
 

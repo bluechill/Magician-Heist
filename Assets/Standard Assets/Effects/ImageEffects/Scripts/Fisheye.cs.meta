@@ -1,12 +1,10 @@
 fileFormatVersion: 2
-guid: ad49de3a7e66346a7a62e8e8bf7bd2b7
-timeCreated: 1487987838
-licenseType: Free
+guid: 4739c22ef73ad62488fe344c8fe9addd
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - fishEyeShader: {fileID: 4800000, guid: 874ceab4425f64bccb1d14032f4452b1, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
   assetBundleName: 
-  assetBundleVariant: 
