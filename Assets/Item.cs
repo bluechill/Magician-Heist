@@ -46,7 +46,7 @@ public class Item : MonoBehaviour {
 		srend.GetPropertyBlock(propertyBlock);
 		propertyBlock.SetFloat("_Outline", highlight ? 1f : 0);
 		propertyBlock.SetColor("_OutlineColor", Color.red);
-		propertyBlock.SetFloat("_OutlineSize", 24);
+		propertyBlock.SetFloat("_OutlineSize", 8);
 		srend.SetPropertyBlock(propertyBlock);
 	}
 
