@@ -16,6 +16,7 @@ public class Item : MonoBehaviour {
 	public bool enabled = false;
 	public GameObject current_player;
 	public bool highlight = false;
+	public Color highlightColor = Color.red;
 	private MaterialPropertyBlock propertyBlock;
 	private SpriteRenderer srend;
 	// Use this for initialization
@@ -45,7 +46,7 @@ public class Item : MonoBehaviour {
 
 		srend.GetPropertyBlock(propertyBlock);
 		propertyBlock.SetFloat("_Outline", highlight ? 1f : 0);
-		propertyBlock.SetColor("_OutlineColor", Color.red);
+		propertyBlock.SetColor("_OutlineColor", highlightColor);
 		propertyBlock.SetFloat("_OutlineSize", 8);
 		srend.SetPropertyBlock(propertyBlock);
 	}
