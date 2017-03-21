@@ -479,6 +479,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a429bc984375e46858b1de5d9d88ec2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  do_tut: 1
   tutorials:
   - {fileID: 695805459}
   - {fileID: 1220257959}
@@ -494,7 +495,7 @@ MonoBehaviour:
   win_menu: {fileID: 157448946}
   lose_menu: {fileID: 1153485462}
   gold_bars: 0
-  time_limit: 360
+  time_limit: 540
   run_time: 0
   start_time: 0
 --- !u!4 &45636263
@@ -11521,6 +11522,16 @@ Prefab:
         type: 2}
       propertyPath: m_SortingOrder
       value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 195956789474928724, guid: 000f9b73ea7927a4d9bb444655f63dbe,
+        type: 2}
+      propertyPath: m_StoppingDistance
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 195956789474928724, guid: 000f9b73ea7927a4d9bb444655f63dbe,
+        type: 2}
+      propertyPath: m_AutoBraking
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 000f9b73ea7927a4d9bb444655f63dbe, type: 2}
@@ -31239,7 +31250,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:

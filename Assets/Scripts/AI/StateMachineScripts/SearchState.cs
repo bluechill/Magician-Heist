@@ -1,11 +1,12 @@
-﻿using UnityEngine;
-using System.Collections;
-
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class SearchState : IEnemyState {
     private readonly StatePatternEnemy enemy;
     private float searchTimer;
-
     public SearchState(StatePatternEnemy statePatternEnemy) {
         enemy = statePatternEnemy;
     }
@@ -19,8 +20,16 @@ public class SearchState : IEnemyState {
     public void OnTriggerEnter(Collider coll) {
         if (coll.gameObject.layer == 19)
             ToAttackState();
+        if (coll.gameObject.layer == 9 && !enemy.cooldown)
+        {
+            enemy.cooldown = true;
+            ToPatrolState();
+        }
     }
+    public void HitCooldown()
+    {
 
+    }
     public void ToPatrolState() {
         enemy.currentState = enemy.patrolState;
         enemy.agent.speed = enemy.patrolSpeed;

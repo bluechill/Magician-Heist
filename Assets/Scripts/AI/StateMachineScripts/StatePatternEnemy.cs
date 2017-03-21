@@ -10,6 +10,8 @@ public class StatePatternEnemy : MonoBehaviour {
     public float KODuration = 10f;
     public float patrolSpeed = 2.0f;
     public float searchSpeed = 3.5f;
+    public bool cooldown = false;
+    public bool cooldown_invoke = false;
 
     public FieldOfView fov;
 
@@ -55,9 +57,18 @@ public class StatePatternEnemy : MonoBehaviour {
             currentState = patrolState;
         }
     }
-	
+	void Cooldown()
+    {
+        cooldown = false;
+        cooldown_invoke = false;
+    }
 	// Update is called once per frame
 	void Update () {
+        if (cooldown && !cooldown_invoke)
+        {
+            cooldown_invoke = true;
+            Invoke("Cooldown", 4f);
+        }
         if (knockout && animating_ko)
         {
             agent.velocity = Vector3.zero;

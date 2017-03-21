@@ -129,7 +129,9 @@ MonoBehaviour:
   is_player: 0
   gold_bar: 0
   tree: 0
+  key_card: 0
   held: 0
+  thrown: 0
   player_num: -1
   enabled: 0
   current_player: {fileID: 0}
@@ -163,7 +165,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
-  m_SortingOrder: 30
+  m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: 2462fc19ee966406c8cee2bc49683f90, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
