@@ -27070,6 +27070,10 @@ Prefab:
       propertyPath: highlight
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1012037106332146, guid: bc54e89b7bd87404baf8ac4afbf8ad93, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: bc54e89b7bd87404baf8ac4afbf8ad93, type: 2}
   m_IsPrefabParent: 0
