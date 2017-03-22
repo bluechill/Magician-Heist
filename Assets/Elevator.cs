@@ -89,7 +89,6 @@ public class Elevator : MonoBehaviour {
 		player.GetComponent<PlayerScript> ().DisappearBody ();
 		player.GetComponent<PlayerScript>().elevator_ready = false;
 		player.GetComponent<PlayerScript>().is_touching_elevator = false;
-		player.GetComponent<PlayerScript>().touching_elevator = null;
 		player.GetComponent<PlayerScript>().is_in_elevator = true;
 	}
 	public void MoveFloor(GameObject player, float distance, bool up){

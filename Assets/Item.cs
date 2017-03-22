@@ -16,15 +16,10 @@ public class Item : MonoBehaviour {
 	public int player_num = -1;
 	public bool enabled = false;
 	public GameObject current_player;
-	public bool highlight = false;
-
-	[ColorUsage(true, true, 0f, 8f, 0.125f, 3f)]
-	public Color highlightColor = Color.red;
 	private MaterialPropertyBlock propertyBlock;
 	private SpriteRenderer srend;
 	// Use this for initialization
 	void Start () {
-		propertyBlock = new MaterialPropertyBlock ();
 		srend = GetComponent<SpriteRenderer>();
 	}
 	
@@ -46,23 +41,6 @@ public class Item : MonoBehaviour {
 
         
         }
-
-		UpdateOutline (highlight);
-	}
-
-	public void UpdateOutline(bool enable)
-	{
-		if (propertyBlock == null)
-			propertyBlock = new MaterialPropertyBlock ();
-
-		if (srend == null)
-			srend = GetComponent<SpriteRenderer>();
-
-		srend.GetPropertyBlock(propertyBlock);
-		propertyBlock.SetFloat("_Outline", enable ? 1f : 0);
-		propertyBlock.SetColor("_OutlineColor", highlightColor);
-		propertyBlock.SetFloat("_OutlineSize", 2);
-		srend.SetPropertyBlock(propertyBlock);
 	}
 
 	public void SetPlayer(GameObject obj, int n){
@@ -85,9 +63,4 @@ public class Item : MonoBehaviour {
 
         }
     }
-
-	public void SetHighlight(bool shouldHighlight)
-	{
-		highlight = shouldHighlight;	
-	}
 }
