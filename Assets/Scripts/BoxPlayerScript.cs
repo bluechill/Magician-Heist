@@ -36,7 +36,6 @@ public class BoxPlayerScript : PlayerScript {
 			animator.SetBool ("box ability", false);
 			animator.SetBool ("ability", false);
 			capsule.center = new Vector3(0f,-0.175f, 0f);
-			touching_box = null;
 			is_touching_box = false;
 			RemoveAllFromBox ();
 			Reveal ();

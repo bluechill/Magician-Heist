@@ -49,11 +49,6 @@ public class PlayerScript : MonoBehaviour {
 	public bool is_in_elevator = false;
 	public bool elevator_ready = false;
 	public bool is_holding_briefcase = false;
-	public GameObject touching_box;
-	public GameObject touching_door;
-	public GameObject touching_elevator;
-	public GameObject touching_stairs;
-	public GameObject touching_closet;
 	public GameObject inside_box;
 
 	public GameObject ability;
@@ -136,11 +131,9 @@ public class PlayerScript : MonoBehaviour {
 	}
 	public void TouchBox(GameObject box){
 		is_touching_box = true;
-		touching_box = box;
 	}
 	public void StopTouchBox(GameObject box){
 		is_touching_box = false;
-		touching_box = null;
 	}
 
 	public void TransformDrop(){
@@ -194,9 +187,9 @@ public class PlayerScript : MonoBehaviour {
 		is_hiding = true;
 		is_in_box = true;
 		body.SetActive (false);
-		inside_box = touching_box;
+		inside_box = nearestActionObject;
 		inside_box.GetComponentInParent<BoxPlayerScript> ().players_in_box.Add (this.gameObject);
-		StopTouchBox (touching_box);
+		StopTouchBox (nearestActionObject);
 		Hide ();
 	}
 	public void ExitBox(){
@@ -208,17 +201,18 @@ public class PlayerScript : MonoBehaviour {
 		Reveal ();
 	}
 
-	public void OpenDoor(){
-		touching_door.GetComponentInChildren<Door> ().SwitchState (is_holding_key);
+	public void OpenDoor()
+	{
+		nearestActionObject.GetComponentInChildren<Door> ().SwitchState (is_holding_key);
 	}
 	public void SwitchElevator(){
-		touching_elevator.GetComponentInChildren<Elevator> ().SwitchState (this.gameObject);
-		elevator_ready = touching_elevator.GetComponentInChildren<Elevator> ().open;
+		nearestActionObject.GetComponentInChildren<Elevator> ().SwitchState (this.gameObject);
+		elevator_ready = nearestActionObject.GetComponentInChildren<Elevator> ().open;
 
 	}
 	public void UseElevator(bool up){
 		
-		touching_elevator.GetComponentInChildren<Elevator> ().Use (up, this.gameObject);
+		nearestActionObject.GetComponentInChildren<Elevator> ().Use (up, this.gameObject);
 	}
 	public void KnockOut(){
 		is_knocked_out = true;
@@ -352,7 +346,7 @@ public class PlayerScript : MonoBehaviour {
         held_object.GetComponent<Item> ().held = true;
 		held_object.GetComponent<Item> ().enabled = true;
 
-		nearestActionObject.GetComponent<Item> ().SetHighlight (false);
+		nearestActionObject.GetComponent<SpriteGlow> ().enabled = false;
 		nearestActionObject = null;
 	}
 	public void TransformIntoItem(){
@@ -448,7 +442,7 @@ public class PlayerScript : MonoBehaviour {
 
 		if ((up || down) && is_touching_stairs && !cooldown) {
 			is_touching_stairs = false;
-			touching_stairs.GetComponent<Stairs> ().Use (this.gameObject);
+			nearestActionObject.GetComponent<Stairs> ().Use (this.gameObject);
 			cooldown = true;
 			Invoke ("ActionCooldown", action_cooldown);
 		}
@@ -528,40 +522,59 @@ public class PlayerScript : MonoBehaviour {
 			return;
 		}
 
-
 		if (is_in_box) {
 			ExitBox ();
 			return;
 		}
 
-		if (is_touching_box) {
-			EnterBox ();
-			return;
-		}
-		if (is_touching_door) {
-			OpenDoor ();
-			return;
-		}
-		if (is_touching_elevator) {
-			SwitchElevator ();
-			return;
-		}
-		if (is_touching_closet) {
-			UseCloset ();
-			return;
-		}
-		if (is_holding) {
+		if (nearestActionObject != null) {
+			if (nearestActionObject.tag == "Magical Box")
+				EnterBox ();
+			else if (nearestActionObject.tag == "Door")
+				OpenDoor ();
+			else if (nearestActionObject.tag == "Elevator")
+				SwitchElevator ();
+			else if (nearestActionObject.tag == "Closet")
+				UseCloset ();
+			else
+				PickUp ();
+		} else if (is_holding) {
 			Drop ();
-		} else {
-			PickUp ();
 		}
+//
+//
+//		if (is_holding)
+//			Drop ();
+//		else
+//
+//		if (is_touching_box) {
+//			EnterBox ();
+//			return;
+//		}
+//		if (is_touching_door) {
+//			OpenDoor ();
+//			return;
+//		}
+//		if (is_touching_elevator) {
+//			SwitchElevator ();
+//			return;
+//		}
+//		if (is_touching_closet) {
+//			UseCloset ();
+//			return;
+//		}
+//		if (is_holding) {
+//			Drop ();
+//		} else {
+//			PickUp ();
+//		}
 
 	}
 	public void ProcessAction2(){
 		actions [1] = false;
 		if (is_holding && !is_transformed) {
 			TransformIntoItem ();
-		} else if(is_touching_closet && touching_closet.GetComponent<Closet>().open){
+		} else if(is_touching_closet && nearestActionObject.GetComponent<Closet>().open){
 			DisappearBody ();
 			EnterCloset ();
 		} else if(is_in_closet){
@@ -570,8 +583,7 @@ public class PlayerScript : MonoBehaviour {
 			UseAbility ();
 		} else if (is_transformed) {
 			RevertBack ();
-		} 
-
+		}
 	}
 	public void ProcessAction3(){
 		actions [2] = false;
@@ -598,13 +610,6 @@ public class PlayerScript : MonoBehaviour {
 			if (coll.gameObject.GetComponent<Item> ().magical_key && player_num != 1) {
 				coll.gameObject.GetComponentInParent<KeyPlayerScript> ().players_touching_key.Add (this.gameObject);
 			}
-
-		} else if (coll.gameObject.tag == "Magical Box") {
-			print ("touching box");
-			TouchBox (coll.gameObject);
-		} else if (coll.gameObject.tag == "Door") {
-			is_touching_door = true;
-			touching_door = coll.gameObject;
 		} else if (coll.gameObject.tag == "Exit") {
 			if (is_holding_briefcase) {
 				print ("win!");
@@ -613,52 +618,38 @@ public class PlayerScript : MonoBehaviour {
 				Game.GameInstance.gold_bars += 1;
 				held_object.GetComponent<Item> ().gold_bar = false;
 			}
-		}  else if (coll.gameObject.tag == "Elevator") {
-			is_touching_elevator = true;
-			touching_elevator = coll.gameObject;
-			coll.gameObject.GetComponent<Elevator> ().GetIn (this.gameObject);
-		} else if (coll.gameObject.tag == "Stairs") {
-			is_touching_stairs = true;
-			touching_stairs = coll.gameObject;
-		} else if (coll.gameObject.tag == "Closet") {
-			is_touching_closet = true;
-			touching_closet = coll.gameObject;
 		}
-        else if (coll.gameObject.tag == "Desk Overlap")
-        {
-            is_touching_desk_overlap = true;
-            touching_desk_overlap = coll.gameObject;
-        }
         else if (coll.gameObject.tag == "Guard")
         {
             if(!is_knocked_out && !is_hiding && !coll.gameObject.GetComponent<StatePatternEnemy>().knockout && !is_ability)  KnockOut();
         }
     }
-	public void OnTriggerExit(Collider coll){
-		if (coll.gameObject.tag == "Item") {
-			if (coll.gameObject.GetComponent<Item> ().magical_key && player_num != 1) {
-				coll.gameObject.GetComponentInParent<KeyPlayerScript> ().players_touching_key.Remove (this.gameObject);
-			}
-		} else if (coll.gameObject.tag == "Magical Box") {
-			StopTouchBox (coll.gameObject);
-		} else if (coll.gameObject.tag == "Door") {
-			is_touching_door = false;
-			touching_door = null;
-		}  else if (coll.gameObject.tag == "Elevator") {
-			is_touching_elevator = false;
-			touching_elevator = null;
-			coll.gameObject.GetComponent<Elevator> ().GetOut (this.gameObject);
-		}  else if (coll.gameObject.tag == "Stairs") {
-			is_touching_stairs = false;
-			touching_stairs = null;
-		}  else if (coll.gameObject.tag == "Closet") {
-			is_touching_closet = false;
-			touching_closet = null;
-		}  else if (coll.gameObject.tag == "Desk Overlap") {
-			is_touching_desk_overlap = false;
-			touching_desk_overlap = null;
-		} 
-	}
+
+//	public void OnTriggerExit(Collider coll){
+//		if (coll.gameObject.tag == "Item") {
+//			if (coll.gameObject.GetComponent<Item> ().magical_key && player_num != 1) {
+//				coll.gameObject.GetComponentInParent<KeyPlayerScript> ().players_touching_key.Remove (this.gameObject);
+//			}
+//		} else if (coll.gameObject.tag == "Magical Box") {
+//			StopTouchBox (coll.gameObject);
+//		} else if (coll.gameObject.tag == "Door") {
+//			is_touching_door = false;
+//			touching_door = null;
+//		}  else if (coll.gameObject.tag == "Elevator") {
+//			is_touching_elevator = false;
+//			touching_elevator = null;
+//			coll.gameObject.GetComponent<Elevator> ().GetOut (this.gameObject);
+//		}  else if (coll.gameObject.tag == "Stairs") {
+//			is_touching_stairs = false;
+//			touching_stairs = null;
+//		}  else if (coll.gameObject.tag == "Closet") {
+//			is_touching_closet = false;
+//			touching_closet = null;
+//		}  else if (coll.gameObject.tag == "Desk Overlap") {
+//			is_touching_desk_overlap = false;
+//			touching_desk_overlap = null;
+//		} 
+//	}
 		
 	public void DisappearBody(){
 		body.SetActive (false);
@@ -673,22 +664,23 @@ public class PlayerScript : MonoBehaviour {
 		}
 	}
 	public void UseCloset(){
-		touching_closet.GetComponent<Closet> ().SwitchStates ();
+		nearestActionObject.GetComponent<Closet> ().SwitchStates ();
 	}
 	public void EnterCloset(){
 		is_in_closet = true;
-		touching_closet.GetComponent<Closet> ().EnterCloset (this.gameObject);
+		nearestActionObject.GetComponent<Closet> ().EnterCloset (this.gameObject);
 	}
 	public void ExitCloset(){
 		is_in_closet = false;
 		is_touching_closet = false;
-		touching_closet = null;
+		nearestActionObject = null;
 		ReappearBody ();
 	}
 
 	private void FindNearestItem() {
-		if (is_holding)
-			return;
+		if (nearestActionObject != null)
+			nearestActionObject.GetComponent<SpriteGlow> ().enabled = false;
+		nearestActionObject = null;
 
 		float boxWidth = 0.5f;
 		float sign = 1.0f;
@@ -699,32 +691,19 @@ public class PlayerScript : MonoBehaviour {
 		Collider[] colliders = Physics.OverlapBox (this.transform.position + new Vector3(boxWidth / 2f * sign, 0f, 0f), new Vector3 (boxWidth, 1.0f, 1.0f));
 
 		if (colliders.Length == 0)
-		{
-			if (nearestActionObject != null)
-				nearestActionObject.GetComponent<Item> ().SetHighlight (false);
-			
-			nearestActionObject = null;
 			return;
-		}
 
 		List<Collider> taggedColliders = new List<Collider> ();
 
 		for (int i = 0; i < colliders.Length; ++i) {
-			if ((colliders [i].tag == "Item" //||
-//				 colliders[i].tag == "Door" ||
-//				 colliders[i].tag == "Eleavtor"
-				) && !colliders[i].transform.IsChildOf(this.transform))
+			if (colliders[i].GetComponent<SpriteGlow>() != null &&
+				!colliders[i].transform.IsChildOf(this.transform) &&
+				!(colliders[i].tag == "Item" && is_holding))
 				taggedColliders.Add (colliders [i]);
 		}
 
 		if (taggedColliders.Count == 0)
-		{
-			if (nearestActionObject != null)
-				nearestActionObject.GetComponent<Item> ().SetHighlight (false);
-			
-			nearestActionObject = null;
 			return;
-		}
 
 		Collider closest = taggedColliders [0];
 		float zeroDistance = Vector3.Distance (taggedColliders [0].ClosestPointOnBounds (this.transform.position), this.transform.position);
@@ -737,11 +716,10 @@ public class PlayerScript : MonoBehaviour {
 			}
 		}
 
-		if (closest.gameObject != nearestActionObject && nearestActionObject != null)
-			nearestActionObject.GetComponent<Item> ().SetHighlight (false);
-
-		nearestActionObject = closest.gameObject;
-		nearestActionObject.GetComponent<Item> ().SetHighlight (true);
+		if (closest.gameObject.GetComponent<SpriteGlow> () != null) {
+			nearestActionObject = closest.gameObject;
+			nearestActionObject.GetComponent<SpriteGlow> ().enabled = true;
+		}
 	}
 
 	void FixedUpdate() {
