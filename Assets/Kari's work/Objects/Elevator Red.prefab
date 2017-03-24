@@ -22,6 +22,8 @@ GameObject:
   - component: {fileID: 212916892442168478}
   - component: {fileID: 65723073755698706}
   - component: {fileID: 114543979188391638}
+  - component: {fileID: 114091816040611180}
+  - component: {fileID: 114238963479732904}
   m_Layer: 0
   m_Name: Elevator Red
   m_TagString: Elevator
@@ -38,6 +40,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4906159374103110}
   - component: {fileID: 212587181265068456}
+  - component: {fileID: 114212969516894934}
+  - component: {fileID: 114295468014314204}
   m_Layer: 0
   m_Name: Elevator Red Open
   m_TagString: Untagged
@@ -84,6 +88,58 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.7, y: 2.43, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114091816040611180
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1818557982847570}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85309204d424945cc8326458e180b2fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlowColor: {r: 5, g: 3.0882354, b: 0, a: 1}
+  OutlineWidth: 1
+--- !u!114 &114212969516894934
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1856976585770738}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85309204d424945cc8326458e180b2fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlowColor: {r: 5, g: 3.0882354, b: 0, a: 1}
+  OutlineWidth: 1
+--- !u!114 &114238963479732904
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1818557982847570}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85309204d424945cc8326458e180b2fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlowColor: {r: 5, g: 3.0882354, b: 0, a: 1}
+  OutlineWidth: 1
+--- !u!114 &114295468014314204
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1856976585770738}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85309204d424945cc8326458e180b2fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlowColor: {r: 5, g: 3.0882354, b: 0, a: 1}
+  OutlineWidth: 1
 --- !u!114 &114543979188391638
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -95,13 +151,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc5c748507c174262b0f9c58f18a6e14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  locked: 0
   open: 0
-  door_open: {fileID: 1856976585770738}
   players_in: []
   players_moving: []
   has_players: 0
   up_connection: {fileID: 0}
   down_connection: {fileID: 0}
+  sprites:
+  - {fileID: 21300000, guid: 292100aabb52d4146b12aa643d53fd78, type: 3}
+  - {fileID: 21300000, guid: ee24aacb39ce64813b559d8651ce3574, type: 3}
 --- !u!212 &212587181265068456
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -115,7 +174,7 @@ SpriteRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: c85c5c4dfb5ec492fbd6a250a0240377, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -150,7 +209,7 @@ SpriteRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: c85c5c4dfb5ec492fbd6a250a0240377, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

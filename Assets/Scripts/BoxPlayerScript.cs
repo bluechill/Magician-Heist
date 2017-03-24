@@ -7,7 +7,7 @@ public class BoxPlayerScript : PlayerScript {
 
 	public List<GameObject> players_in_box;
 
-
+	public GameObject box_prefab;
 	// Update is called once per frame
 	void Update () {
 		age = Time.time - birthtime;
@@ -19,26 +19,35 @@ public class BoxPlayerScript : PlayerScript {
 		ProcessActions ();
 		ProcessHold ();
 		ProcessTransformed ();
+		ProcessBox ();
+	}
+	void ProcessBox(){
+		if (is_ability) {
+			ability.transform.position = transform.position;
+		}
 	}
 	public override void UseAbility(){
 		is_ability = !is_ability;
 
 		if (is_ability) {
 			body.SetActive (false);
-			ability.SetActive (true);
-			animator.SetBool ("box ability", true);
+			ability = MonoBehaviour.Instantiate (box_prefab);
+			ability.transform.position = transform.position;
 			animator.SetBool ("ability", true);
-			capsule.center = new Vector3 (0,0,0);
+			ability.transform.parent = transform;
+			capsule.center = new Vector3(0f,0.4f, 0f);
+
 			Hide ();
 		} else {
 			body.SetActive (true);
-			ability.SetActive (false);
-			animator.SetBool ("box ability", false);
 			animator.SetBool ("ability", false);
 			capsule.center = new Vector3(0f,-0.175f, 0f);
 			is_touching_box = false;
 			RemoveAllFromBox ();
 			Reveal ();
+			transform.parent = null;
+			Destroy (ability.gameObject);
+			ability = null;
 		}
 
 	}
@@ -51,7 +60,5 @@ public class BoxPlayerScript : PlayerScript {
 			player.GetComponent<PlayerScript> ().ExitBox ();
 		}
 	}
-
-
 
 }

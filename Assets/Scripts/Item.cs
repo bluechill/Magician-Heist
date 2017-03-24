@@ -26,9 +26,9 @@ public class Item : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if ((tree && held) || flash_light) {
-			transform.rotation = Quaternion.Euler (new Vector3 (0f, 0f, 90f));
+			transform.rotation = Quaternion.Euler (new Vector3 (transform.rotation.x, transform.rotation.y, 90f));
 		} else {
-			transform.rotation = Quaternion.Euler (new Vector3 (0f, 0f, 0f));
+			transform.rotation = Quaternion.Euler (new Vector3 (transform.rotation.x, transform.rotation.y, 0f));
 		}
 		if (enabled) {
 			GetComponent<Rigidbody> ().isKinematic = false;

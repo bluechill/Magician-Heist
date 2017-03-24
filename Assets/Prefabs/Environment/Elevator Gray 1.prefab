@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4122912195791036}
   - component: {fileID: 212900948980141000}
+  - component: {fileID: 114077342494022468}
   m_Layer: 0
   m_Name: Elevator Gray Open
   m_TagString: Untagged
@@ -38,6 +39,7 @@ GameObject:
   - component: {fileID: 212331718489088226}
   - component: {fileID: 65683457549683480}
   - component: {fileID: 114670232051241264}
+  - component: {fileID: 114635845227001666}
   m_Layer: 0
   m_Name: Elevator Gray 1
   m_TagString: Elevator
@@ -79,11 +81,37 @@ BoxCollider:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1344444715325090}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1.7, y: 2.43, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114077342494022468
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1228946324362662}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85309204d424945cc8326458e180b2fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlowColor: {r: 5, g: 3.0882354, b: 0, a: 1}
+  OutlineWidth: 1
+--- !u!114 &114635845227001666
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1344444715325090}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85309204d424945cc8326458e180b2fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlowColor: {r: 5, g: 3.0882354, b: 0, a: 1}
+  OutlineWidth: 1
 --- !u!114 &114670232051241264
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -95,13 +123,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc5c748507c174262b0f9c58f18a6e14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  locked: 0
   open: 0
-  door_open: {fileID: 1228946324362662}
   players_in: []
   players_moving: []
   has_players: 0
   up_connection: {fileID: 0}
   down_connection: {fileID: 0}
+  sprites:
+  - {fileID: 21300000, guid: 3e7bfd280f0c94813b98882044a01298, type: 3}
+  - {fileID: 21300000, guid: 9988838c4bc204746a6bd37545eda7e8, type: 3}
 --- !u!212 &212331718489088226
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -115,7 +146,7 @@ SpriteRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: c85c5c4dfb5ec492fbd6a250a0240377, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -150,7 +181,7 @@ SpriteRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: c85c5c4dfb5ec492fbd6a250a0240377, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
