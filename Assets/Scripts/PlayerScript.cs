@@ -139,6 +139,7 @@ public class PlayerScript : MonoBehaviour {
 
 	public void TransformDrop(){
 		is_holding = false;
+		held_object.GetComponent<Item> ().held = false;
 	}
 	public bool IsGrounded(){
 		RaycastHit hit, hit2;
@@ -353,6 +354,8 @@ public class PlayerScript : MonoBehaviour {
 		
 		held_object = nearestActionObject;
 		is_holding = true;
+		if (!held_object)
+			return;
 		if (held_object.GetComponent<Item> ().briefcase) {
 			is_holding_briefcase = true;
 		}
@@ -383,6 +386,7 @@ public class PlayerScript : MonoBehaviour {
 		is_transformed = true;
 		Hide ();
 		held_object.GetComponent<Item> ().SetPlayer (this.gameObject, player_num);
+
 		TransformDrop ();
 	}
 	public void RevertBack(){
