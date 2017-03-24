@@ -26,8 +26,9 @@ public class Item : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if ((tree && held) || flash_light) {
+			print (Time.time);
 			transform.rotation = Quaternion.Euler (new Vector3 (transform.rotation.x, transform.rotation.y, 90f));
-		} else {
+		} else{
 			transform.rotation = Quaternion.Euler (new Vector3 (transform.rotation.x, transform.rotation.y, 0f));
 		}
 		if (enabled) {
