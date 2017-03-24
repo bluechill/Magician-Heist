@@ -30,6 +30,8 @@ public class BoxPlayerScript : PlayerScript {
 		is_ability = !is_ability;
 
 		if (is_ability) {
+			this.transform.rotation = Quaternion.Euler (new Vector3 (0f, 0f, 0f));
+
 			body.SetActive (false);
 			ability = MonoBehaviour.Instantiate (box_prefab);
 			ability.transform.position = transform.position;
