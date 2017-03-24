@@ -74,7 +74,7 @@ public class StatePatternEnemy : MonoBehaviour {
             agent.velocity = Vector3.zero;
             return;
         }
-        print(currentState);
+        //print(currentState);
         currentState.UpdateState();
         if (agent.velocity.magnitude > 0f && idling) {
             animator.Play("Guard Walking");

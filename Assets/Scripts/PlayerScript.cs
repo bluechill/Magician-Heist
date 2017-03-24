@@ -88,7 +88,7 @@ public class PlayerScript : MonoBehaviour {
         if (held_object.GetComponent<Item>().magical_key)
         {
             is_holding_key = false;
-            held_object.GetComponentInParent<KeyPlayerScript>().DropMe();
+            held_object.GetComponentInChildren<KeyPlayerScript>().DropMe();
         }
         if (held_object.GetComponent<Item>().key_card)
         {
@@ -113,6 +113,7 @@ public class PlayerScript : MonoBehaviour {
             held_object.GetComponent<Rigidbody>().isKinematic = false;
             held_object.GetComponent<Rigidbody>().velocity = ((Vector3.left + (Vector3.up * 0.5f)) * 10f);
         }
+		held_object.transform.position = new Vector3(held_object.transform.position.x, held_object.transform.position.y, 0f );
         held_object = null;
 		is_holding = false;
 
@@ -151,6 +152,27 @@ public class PlayerScript : MonoBehaviour {
 
 		Physics.Raycast(posLeft, -Vector3.up, out hit, 1.1f, layer);
 		Physics.Raycast(posRight, -Vector3.up, out hit2, 1.1f, layer);
+
+		if (hit.collider != null || hit2.collider != null) {
+			//ray hit an environment object
+
+			//float distance = Mathf.Abs(hit.point.y - transform.position.y);
+			return true;
+		}
+		return false;
+	}
+	public bool IsBoxGrounded(){
+		RaycastHit hit, hit2;
+
+		Vector3 extents = ability.GetComponentInChildren<Collider> ().bounds.extents;
+
+		Vector3 posLeft = transform.position - new Vector3(extents.x, 0f,0f);
+		Vector3 posRight = transform.position + new Vector3(extents.x, 0f,0f);
+
+		int layer = 1 << LayerMask.NameToLayer ("Default");
+
+		Physics.Raycast(posLeft, -Vector3.up, out hit, 0.5f, layer);
+		Physics.Raycast(posRight, -Vector3.up, out hit2, 0.5f, layer);
 
 		if (hit.collider != null || hit2.collider != null) {
 			//ray hit an environment object
@@ -207,12 +229,11 @@ public class PlayerScript : MonoBehaviour {
 	}
 	public void SwitchElevator(){
 		nearestActionObject.GetComponentInChildren<Elevator> ().SwitchState (this.gameObject);
-		elevator_ready = nearestActionObject.GetComponentInChildren<Elevator> ().open;
+		elevator_ready = is_in_elevator && !nearestActionObject.GetComponentInChildren<Elevator> ().open;
 
 	}
-	public void UseElevator(bool up){
-		
-		nearestActionObject.GetComponentInChildren<Elevator> ().Use (up, this.gameObject);
+	public void UseElevator(){
+		nearestActionObject.GetComponentInChildren<Elevator> ().Use ();
 	}
 	public void KnockOut(){
 		is_knocked_out = true;
@@ -270,18 +291,13 @@ public class PlayerScript : MonoBehaviour {
 			right = false;
 			left = false;
 		}
-
-		if (controller.LeftStickY < 0) {
+		if (controller.DPadDown) {
 			down = true;
-			up = false;
-		}
-		else if (controller.LeftStickY > 0) {
+		} else if (controller.DPadUp) {
 			up = true;
+		} else {
 			down = false;
-		}
-		else {
 			up = false;
-			down = false;
 		}
 
 
@@ -319,6 +335,16 @@ public class PlayerScript : MonoBehaviour {
 		animator.SetBool ("idle", true);
 
 	}
+	public void AbilityAnimate(){
+
+		ability.GetComponentInChildren<Animator>().SetBool ("idle", false);
+
+	}
+	public void AbilityIdle(){
+
+		ability.GetComponentInChildren<Animator>().SetBool ("idle", true);
+
+	}
 
 	public void PickUp()
 	{
@@ -336,7 +362,7 @@ public class PlayerScript : MonoBehaviour {
 		}
 		if (held_object.GetComponent<Item> ().magical_key) {
 			is_holding_key = true;
-			held_object.GetComponentInParent<KeyPlayerScript> ().PickMeUp (this.gameObject);
+			held_object.GetComponentInChildren<KeyPlayerScript> ().PickMeUp (this.gameObject);
 		}
         if (held_object.GetComponent<Item>().key_card)
         {
@@ -426,20 +452,6 @@ public class PlayerScript : MonoBehaviour {
 			return;
 		}
 
-		if (up) {
-			if (elevator_ready) {
-				UseElevator (true);
-			}
-
-		}
-
-		if (down) {
-			if (elevator_ready) {
-				UseElevator (false);
-			}
-
-		}
-
 		if ((up || down) && is_touching_stairs && !cooldown) {
 			is_touching_stairs = false;
 			nearestActionObject.GetComponent<Stairs> ().Use (this.gameObject);
@@ -450,42 +462,42 @@ public class PlayerScript : MonoBehaviour {
 		if (left) {
 
 			rb.velocity = Vector3.left * vel;
-			if (is_ability) {
-				rb.velocity /= 3;
-				//Reveal ();
-			}
+
 			Animate ();
 		}
 		if (right) {
 			rb.velocity = Vector3.right * vel;
-			if (is_ability) {
-				rb.velocity /= 3;
-				//Reveal ();
-			}
+
 			Animate ();
 		}
 		if (right && left) {
 			rb.velocity = Vector3.zero;
-			if (is_ability) {
-				Hide ();
-			}
 			Idle ();
 		}
 		if (!right && !left) {
 			rb.velocity = Vector3.zero;
-			if (is_ability) {
-				Hide ();
-			}
 			Idle ();
 		}
 		if (is_in_elevator || is_in_closet) {
 			rb.velocity = Vector3.zero;
 			return;
 		}
-        grounded = IsGrounded();
+
+		if (is_ability && player_num == 0)
+			grounded = IsBoxGrounded ();
+		else grounded = IsGrounded();
+
 		if (!grounded) {
 			rb.velocity = Vector3.down * vel;
-			return;
+		}
+		else if (is_ability && player_num == 0) {	
+			if (rb.velocity.magnitude > 0f) {
+				//box is moving
+				AbilityAnimate();
+			} else {
+				AbilityIdle ();
+			}
+			rb.velocity /= 3;
 		}
 
 	}
@@ -495,11 +507,15 @@ public class PlayerScript : MonoBehaviour {
 			this.transform.rotation = Quaternion.Euler (new Vector3 (0f, 180f, 0f));
 			if (is_holding && held_object.GetComponent<Item>().flash_light) {
 				held_object.transform.rotation = Quaternion.Euler (new Vector3 (0f, 180f, 270f));
+			}else if(is_holding && held_object){
+
 			}
 		} else if (rb.velocity.x > 0.05f) {
 			this.transform.rotation = Quaternion.Euler (new Vector3 (0f, 0f, 0f));
 			if (is_holding && held_object.GetComponent<Item>().flash_light) {
 				held_object.transform.rotation = Quaternion.Euler (new Vector3 (0f, 0f, 270f));
+			} else if(is_holding && held_object){
+
 			}
 		}
 
@@ -577,6 +593,14 @@ public class PlayerScript : MonoBehaviour {
 		} else if(is_touching_closet && nearestActionObject.GetComponent<Closet>().open){
 			DisappearBody ();
 			EnterCloset ();
+		} else if(nearestActionObject && nearestActionObject.tag == "Elevator" && !is_in_elevator && nearestActionObject.GetComponent<Elevator>().open){
+			DisappearBody ();
+			EnterElevator ();
+		}  else if(is_in_elevator && nearestActionObject.GetComponent<Elevator>().open){
+			ReappearBody ();
+			ExitElevator ();
+		}   else if(is_in_elevator && !nearestActionObject.GetComponent<Elevator>().open && elevator_ready){
+			UseElevator ();
 		} else if(is_in_closet){
 			return;
 		} else if (!is_transformed) {
@@ -607,9 +631,7 @@ public class PlayerScript : MonoBehaviour {
 
 	public void OnTriggerEnter(Collider coll){
 		if (coll.gameObject.tag == "Item") {
-			if (coll.gameObject.GetComponent<Item> ().magical_key && player_num != 1) {
-				coll.gameObject.GetComponentInParent<KeyPlayerScript> ().players_touching_key.Add (this.gameObject);
-			}
+
 		} else if (coll.gameObject.tag == "Exit") {
 			if (is_holding_briefcase) {
 				print ("win!");
@@ -663,6 +685,17 @@ public class PlayerScript : MonoBehaviour {
 			held_object.SetActive (true);
 		}
 	}
+
+	public void EnterElevator(){
+		is_in_elevator = true;
+		nearestActionObject.GetComponent<Elevator> ().GetIn (this.gameObject);
+	}
+
+	public void ExitElevator(){
+		is_in_elevator = false;
+		nearestActionObject.GetComponent<Elevator> ().GetOut (this.gameObject);
+	}
+
 	public void UseCloset(){
 		nearestActionObject.GetComponent<Closet> ().SwitchStates ();
 	}

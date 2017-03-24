@@ -4,6 +4,7 @@ using UnityEngine;
 using InControl;
 public class KeyPlayerScript : PlayerScript {
 
+	public GameObject key_prefab;
 	public List<GameObject> players_touching_key;
 	public bool player_holding_me = false;
 	public GameObject player_holding_key;
@@ -29,15 +30,19 @@ public class KeyPlayerScript : PlayerScript {
 
 		if (is_ability) {
 			body.SetActive (false);
-			ability.SetActive (true);
+			ability = MonoBehaviour.Instantiate (key_prefab);
+
 			animator.SetBool ("key ability", true);
 			animator.SetBool ("ability", true);
-			ability.transform.position = new Vector3 (transform.position.x, transform.position.y, 0f);
+			ability.transform.position = transform.position;
+			transform.parent = ability.transform;
+			ability.GetComponent<Item> ().current_player = this.gameObject;
 
 			Hide ();
 		} else {
 			body.SetActive (true);
 			ability.SetActive (false);
+
 			animator.SetBool ("key ability", false);
 			animator.SetBool ("ability", false);
             ability.GetComponent<Item>().enabled = true;
@@ -48,6 +53,10 @@ public class KeyPlayerScript : PlayerScript {
 			}
 			RemoveTouchingPlayers ();
 			Reveal ();
+			transform.parent = null;
+			Destroy (ability.gameObject);
+			ability = null;
+
 		}
 
 	}
