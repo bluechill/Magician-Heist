@@ -26,6 +26,7 @@ public class KeyPlayerScript : PlayerScript {
 	}
 
 	public override void UseAbility(){
+
 		is_ability = !is_ability;
 
 		if (is_ability) {
@@ -40,6 +41,15 @@ public class KeyPlayerScript : PlayerScript {
 
 			Hide ();
 		} else {
+
+			if (nearestActionObject && nearestActionObject.tag == "Door") {
+				nearestActionObject.GetComponent<Door> ().Unlock ();
+				nearestActionObject.GetComponent<Door> ().SwitchState ();
+				is_ability = true;
+				return;
+			}
+
+
 			body.SetActive (true);
 			ability.SetActive (false);
 

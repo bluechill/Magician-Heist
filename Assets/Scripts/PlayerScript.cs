@@ -226,11 +226,17 @@ public class PlayerScript : MonoBehaviour {
 
 	public void OpenDoor()
 	{
-		nearestActionObject.GetComponentInChildren<Door> ().SwitchState (is_holding_key);
+		nearestActionObject.GetComponent<Door> ().SwitchState ();
 	}
 	public void SwitchElevator(){
 		nearestActionObject.GetComponentInChildren<Elevator> ().SwitchState (this.gameObject);
-		elevator_ready = is_in_elevator && !nearestActionObject.GetComponentInChildren<Elevator> ().open;
+		if (is_in_elevator && !nearestActionObject.GetComponentInChildren<Elevator> ().open) {
+			elevator_ready = true;
+			Hide ();
+		} else {
+			elevator_ready = false;
+			Reveal ();
+		}
 
 	}
 	public void UseElevator(){
@@ -509,18 +515,20 @@ public class PlayerScript : MonoBehaviour {
 
 		if (rb.velocity.x < -0.05f) {
 			this.transform.rotation = Quaternion.Euler (new Vector3 (0f, 180f, 0f));
-			if (is_holding && held_object.GetComponent<Item>().flash_light) {
+			if (is_holding && held_object.GetComponent<Item> ().flash_light) {
 				held_object.transform.rotation = Quaternion.Euler (new Vector3 (0f, 180f, 270f));
-			}else if(is_holding && held_object){
+			} else if (is_holding && held_object) {
 
 			}
 		} else if (rb.velocity.x > 0.05f) {
 			this.transform.rotation = Quaternion.Euler (new Vector3 (0f, 0f, 0f));
-			if (is_holding && held_object.GetComponent<Item>().flash_light) {
+			if (is_holding && held_object.GetComponent<Item> ().flash_light) {
 				held_object.transform.rotation = Quaternion.Euler (new Vector3 (0f, 0f, 270f));
-			} else if(is_holding && held_object){
+			} else if (is_holding && held_object) {
 
 			}
+		} else if(is_ability) {
+
 		}
 
 	}
@@ -594,14 +602,15 @@ public class PlayerScript : MonoBehaviour {
 		actions [1] = false;
 		if (is_holding && !is_transformed) {
 			TransformIntoItem ();
-		} else if(is_touching_closet && nearestActionObject.GetComponent<Closet>().open){
-			DisappearBody ();
-			EnterCloset ();
-		} else if(nearestActionObject && nearestActionObject.tag == "Elevator" && !is_in_elevator && nearestActionObject.GetComponent<Elevator>().open){
-			DisappearBody ();
+		} else if(nearestActionObject && nearestActionObject.tag == "Closet" && nearestActionObject.GetComponent<Closet>().open){
+			if (!is_in_closet)
+				EnterCloset ();
+			else
+				ExitCloset ();
+			
+		} else if(!is_ability && nearestActionObject && nearestActionObject.tag == "Elevator" && !is_in_elevator && nearestActionObject.GetComponent<Elevator>().open){
 			EnterElevator ();
 		}  else if(is_in_elevator && nearestActionObject.GetComponent<Elevator>().open){
-			ReappearBody ();
 			ExitElevator ();
 		}   else if(is_in_elevator && !nearestActionObject.GetComponent<Elevator>().open && elevator_ready){
 			UseElevator ();
@@ -702,16 +711,20 @@ public class PlayerScript : MonoBehaviour {
 
 	public void UseCloset(){
 		nearestActionObject.GetComponent<Closet> ().SwitchStates ();
+		if (!nearestActionObject.GetComponent<Closet> ().open && is_in_closet) {
+			Hide ();
+		} else {
+			Reveal ();
+		}
 	}
 	public void EnterCloset(){
 		is_in_closet = true;
-		nearestActionObject.GetComponent<Closet> ().EnterCloset (this.gameObject);
+		nearestActionObject.GetComponent<Closet> ().GetIn (this.gameObject);
 	}
 	public void ExitCloset(){
 		is_in_closet = false;
-		is_touching_closet = false;
+		nearestActionObject.GetComponent<Closet> ().GetOut (this.gameObject);
 		nearestActionObject = null;
-		ReappearBody ();
 	}
 
 	private void FindNearestItem() {
