@@ -12,9 +12,15 @@ public class Game : MonoBehaviour {
     public GameObject tutorial;
     public int tut = 0;
 	public Text timer_text;
+	public Text win_text;
 	public Text win_score;
 	public GameObject win_menu;
 	public GameObject lose_menu;
+
+	public PlayerScript player1;
+	public PlayerScript player2;
+	public PlayerScript player3;
+	public PlayerScript player4;
 
 	public int gold_bars = 0;
 	public float time_limit;
@@ -43,6 +49,10 @@ public class Game : MonoBehaviour {
         {
             RestartNoTut();
         }
+		if (Input.GetKeyDown(KeyCode.F2))
+		{
+			Win ();
+		}
         if (tut < tutorials.Length)
         {
             return;
@@ -80,7 +90,26 @@ public class Game : MonoBehaviour {
     }
     public void Win(){
 		win_menu.SetActive (true);
-		win_score.text = gold_bars.ToString();
+
+		PlayerScript winner = player1;
+		if (player2.points > winner.points)
+			winner = player2;
+		if (player3 != null && player3.points > winner.points)
+			winner = player3;
+		if (player4 != null && player4.points > winner.points)
+			winner = player4;
+
+		win_score.text = winner.pointsText.text;
+
+		if (winner == player1)
+			win_text.text = "Player 1 Wins!";
+		else if (winner == player2)
+			win_text.text = "Player 2 Wins!";
+		else if (player3 != null && winner == player3)
+			win_text.text = "Player 3 Wins!";
+		else if (player4 != null && winner == player4)
+			win_text.text = "Player 4 Wins!";
+
 		Invoke ("RestartNoTut", 5f);
 	}
 	public void Lose(){
