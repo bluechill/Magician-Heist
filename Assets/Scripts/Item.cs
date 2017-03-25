@@ -26,21 +26,21 @@ public class Item : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if ((tree && held) || flash_light) {
-			print (Time.time);
 			transform.rotation = Quaternion.Euler (new Vector3 (transform.rotation.x, transform.rotation.y, 90f));
-		} else{
+		} else {
 			transform.rotation = Quaternion.Euler (new Vector3 (transform.rotation.x, transform.rotation.y, 0f));
 		}
+
 		if (enabled) {
 			GetComponent<Rigidbody> ().isKinematic = false;
 			GetComponent<SpriteRenderer> ().sortingOrder = 30;
 		} else {
 			GetComponent<Rigidbody> ().isKinematic = true;
 		}
-        if(GetComponent<Rigidbody>().velocity.magnitude <= 0.1f)
-        {
 
-        
+        if (GetComponent<Rigidbody>().velocity.magnitude <= 0.1f)
+        {
+			thrown = false;
         }
 	}
 
@@ -55,13 +55,16 @@ public class Item : MonoBehaviour {
 		player_num = -1;
 	}
     public void OnTriggerEnter(Collider other)
-    {
-        if(other.gameObject.tag == "Guard" && !other.gameObject.GetComponent<StatePatternEnemy>().knockout && thrown)
+	{
+		if(other.gameObject.tag == "Player" && other.gameObject.transform.parent != null)
         {
-            other.gameObject.GetComponent<StatePatternEnemy>().Knockout();
-            thrown = false;
-            GetComponent<Rigidbody>().velocity = Vector3.zero;
+			PlayerScript p = other.gameObject.transform.parent.GetComponent<PlayerScript>();
 
+			if (p != null && !p.is_knocked_out && thrown && current_player != p.gameObject) {
+				p.KnockOut ();
+				thrown = false;
+				GetComponent<Rigidbody> ().velocity = Vector3.zero;
+			}
         }
     }
 }
