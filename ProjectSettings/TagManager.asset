@@ -27,6 +27,7 @@ TagManager:
   - Extra Loot
   - Briefcase
   - ForceField
+  - Gold Trigger
   layers:
   - Default
   - TransparentFX
@@ -51,7 +52,7 @@ TagManager:
   - Hiding
   - NULL
   - ForceField
-  - 
+  - Player Edge
   - 
   - 
   - 
