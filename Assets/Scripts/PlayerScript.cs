@@ -17,6 +17,12 @@ public class PlayerScript : MonoBehaviour {
 	public GameObject nearestActionObject = null;
 	public GameObject transformed_object;
 	public GameObject right_hand;
+	public GameObject forceField;
+
+	public float forceFieldCoolDown = 0.0f;
+	public float forceFieldLength = 0.0f;
+	public float defaultForceFieldCoolDown = 5.0f;
+	public float defaultForceFieldLength = 2.0f;
 
 	public bool keyboard_user;
 	public InputDevice controller;
@@ -269,6 +275,17 @@ public class PlayerScript : MonoBehaviour {
 
 	public virtual void UseAbility(){
 
+		if (!forceField.activeSelf && forceFieldCoolDown <= 0f) {
+			forceField.SetActive (true);
+			forceFieldCoolDown = defaultForceFieldCoolDown;
+			forceFieldLength = defaultForceFieldLength;
+		} else if (forceField.activeSelf) {
+
+			if (forceFieldLength > 0f)
+				forceFieldCoolDown -= forceFieldLength;
+			
+			forceField.SetActive (false);
+		}
 	}
 
 
@@ -742,7 +759,8 @@ public class PlayerScript : MonoBehaviour {
 		for (int i = 0; i < colliders.Length; ++i) {
 			if (colliders[i].GetComponent<SpriteGlow>() != null &&
 				!colliders[i].transform.IsChildOf(this.transform) &&
-				!(colliders[i].tag == "Item" && is_holding))
+				!(colliders[i].tag == "Item" && is_holding) &&
+				colliders[i].tag != "ForceField")
 				taggedColliders.Add (colliders [i]);
 		}
 
@@ -766,7 +784,17 @@ public class PlayerScript : MonoBehaviour {
 		}
 	}
 
-	void FixedUpdate() {
+	public void FixedUpdate() {
 		FindNearestItem ();
+	}
+
+	public void Update() {
+		if (forceFieldCoolDown > 0f)
+			forceFieldCoolDown -= Time.fixedDeltaTime;
+
+		if (forceFieldLength > 0f)
+			forceFieldLength -= Time.fixedDeltaTime;
+		else if (forceFieldLength <= 0f && forceField.activeSelf)
+			forceField.SetActive (false);
 	}
 }
