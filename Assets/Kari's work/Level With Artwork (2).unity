@@ -3143,6 +3143,47 @@ SpriteRenderer:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
+--- !u!1 &197199176
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 197199178}
+  - component: {fileID: 197199177}
+  m_Layer: 0
+  m_Name: Gold Trigger (3)
+  m_TagString: Gold Trigger
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &197199177
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 197199176}
+  m_Material: {fileID: 13400000, guid: 4768f4d548ebf40b7ae5615b299bced9, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 100, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &197199178
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 197199176}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7372774, w: 0.67559016}
+  m_LocalPosition: {x: -60.3, y: 26.6, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 24
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 95}
 --- !u!1001 &200018789
 Prefab:
   m_ObjectHideFlags: 0
@@ -12458,6 +12499,14 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1230101703288364, guid: 37573ab9b10af4bee8fdd58d3d7e3a25, type: 2}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1230101703288364, guid: 37573ab9b10af4bee8fdd58d3d7e3a25, type: 2}
+      propertyPath: m_Layer
+      value: 23
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 37573ab9b10af4bee8fdd58d3d7e3a25, type: 2}
   m_IsPrefabParent: 0
@@ -16063,7 +16112,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1137564044}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -62.5, y: -3.3, z: 0}
+  m_LocalPosition: {x: -62.79, y: -4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 574916629}
@@ -21497,7 +21546,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1313535168}
   - component: {fileID: 1313535169}
-  m_Layer: 0
+  m_Layer: 23
   m_Name: Wall (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23410,6 +23459,47 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GlowColor: {r: 0, g: 0.8088231, b: 5, a: 1}
   OutlineWidth: 1
+--- !u!1 &1443366897
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1443366899}
+  - component: {fileID: 1443366898}
+  m_Layer: 0
+  m_Name: Gold Trigger (2)
+  m_TagString: Gold Trigger
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &1443366898
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1443366897}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 100, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &1443366899
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1443366897}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -13.6, y: 80.7, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 23
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1447726196
 Prefab:
   m_ObjectHideFlags: 0
@@ -24758,7 +24848,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1504134489}
   - component: {fileID: 1504134490}
-  m_Layer: 0
+  m_Layer: 23
   m_Name: Wall (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29452,7 +29542,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1782372052}
   - component: {fileID: 1782372053}
-  m_Layer: 0
+  m_Layer: 23
   m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30057,6 +30147,11 @@ Prefab:
         type: 2}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 65718592092798284, guid: 37573ab9b10af4bee8fdd58d3d7e3a25,
+        type: 2}
+      propertyPath: m_Material
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 37573ab9b10af4bee8fdd58d3d7e3a25, type: 2}
@@ -33529,7 +33624,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2096267709}
   - component: {fileID: 2096267710}
-  m_Layer: 0
+  m_Layer: 23
   m_Name: Wall (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
