@@ -26,6 +26,7 @@ TagManager:
   - Table
   - Extra Loot
   - Briefcase
+  - ForceField
   layers:
   - Default
   - TransparentFX
@@ -49,7 +50,7 @@ TagManager:
   - KO'd Player
   - Hiding
   - NULL
-  - 
+  - ForceField
   - 
   - 
   - 
