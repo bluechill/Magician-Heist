@@ -15,7 +15,6 @@ public class Game : MonoBehaviour {
 	public Text win_text;
 	public Text win_score;
 	public GameObject win_menu;
-	public GameObject lose_menu;
 
 	public PlayerScript player1;
 	public PlayerScript player2;
@@ -60,7 +59,7 @@ public class Game : MonoBehaviour {
 
         run_time = Time.time - start_time;
 		if (run_time >= time_limit) {
-			Lose ();
+			Win ();
 		}
 
 		timer_text.text = "Time Remaining: " + ((time_limit - run_time)).ToString("0.00");
@@ -112,10 +111,7 @@ public class Game : MonoBehaviour {
 
 		Invoke ("RestartNoTut", 5f);
 	}
-	public void Lose(){
-		lose_menu.SetActive (true);
-		Invoke ("RestartNoTut", 5f);
-	}
+
     public void Restart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
