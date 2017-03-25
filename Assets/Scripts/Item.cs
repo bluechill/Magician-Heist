@@ -16,6 +16,7 @@ public class Item : MonoBehaviour {
 	public int player_num = -1;
 	public bool enabled = false;
 	public GameObject current_player;
+	public GameObject plus50_prefab;
 	private MaterialPropertyBlock propertyBlock;
 	private SpriteRenderer srend;
 	// Use this for initialization
@@ -62,6 +63,9 @@ public class Item : MonoBehaviour {
 
 			if (p != null && !p.is_knocked_out && thrown && current_player != p.gameObject) {
 				p.KnockOut ();
+				current_player.GetComponent<PlayerScript> ().points += 50;
+				var plus50 = Instantiate (plus50_prefab);
+				plus50.transform.position = p.transform.position + Vector3.up * 0.5f;
 				thrown = false;
 				GetComponent<Rigidbody> ().velocity = Vector3.zero;
 			}
