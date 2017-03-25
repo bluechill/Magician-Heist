@@ -99,25 +99,17 @@ public class PlayerScript : MonoBehaviour {
 			held_object.transform.position = new Vector3(touching_desk_overlap.transform.position.x, touching_desk_overlap.transform.position.y + 0.5f, 0f);
 		}
 		held_object.GetComponent<Item> ().held = false;
-        if (rb.velocity.x > 0f)
+		if (rb.velocity.x > 0.1f || rb.velocity.x < -0.1f)
         {
-            print("throw");
-            held_object.GetComponent<Item>().thrown = true;
+			held_object.GetComponent<Item> ().SetPlayer (this.gameObject, -1);
             held_object.GetComponent<Rigidbody>().isKinematic = false;
-            held_object.GetComponent<Rigidbody>().velocity = ((Vector3.right + (Vector3.up*0.5f)) * 10f);
+			held_object.GetComponent<Rigidbody>().velocity = ((Vector3.right * Mathf.Sign(rb.velocity.x) + Vector3.up * 5f) + rb.velocity);
+			held_object.GetComponent<Item>().thrown = true;
+        }
 
-        }
-        else if (rb.velocity.x < 0f)
-        {
-            held_object.GetComponent<Item>().thrown = true;
-            held_object.GetComponent<Rigidbody>().isKinematic = false;
-            held_object.GetComponent<Rigidbody>().velocity = ((Vector3.left + (Vector3.up * 0.5f)) * 10f);
-        }
 		held_object.transform.position = new Vector3(held_object.transform.position.x, held_object.transform.position.y, 0f );
-        held_object = null;
+		held_object = null;
 		is_holding = false;
-
-
 	}
 
 
@@ -237,8 +229,12 @@ public class PlayerScript : MonoBehaviour {
 			elevator_ready = false;
 			Reveal ();
 		}
-
 	}
+
+	public void UseStairs() {
+		nearestActionObject.GetComponent<Stairs> ().Use (this.gameObject);
+	}
+
 	public void UseElevator(){
 		nearestActionObject.GetComponentInChildren<Elevator> ().Use ();
 	}
@@ -564,6 +560,8 @@ public class PlayerScript : MonoBehaviour {
 				SwitchElevator ();
 			else if (nearestActionObject.tag == "Closet")
 				UseCloset ();
+			else if (nearestActionObject.tag == "Stairs")
+				UseStairs ();
 			else
 				PickUp ();
 		} else if (is_holding) {
@@ -654,10 +652,6 @@ public class PlayerScript : MonoBehaviour {
 				held_object.GetComponent<Item> ().gold_bar = false;
 			}
 		}
-        else if (coll.gameObject.tag == "Guard")
-        {
-            if(!is_knocked_out && !is_hiding && !coll.gameObject.GetComponent<StatePatternEnemy>().knockout && !is_ability)  KnockOut();
-        }
     }
 
 //	public void OnTriggerExit(Collider coll){
