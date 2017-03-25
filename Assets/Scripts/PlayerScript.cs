@@ -251,6 +251,7 @@ public class PlayerScript : MonoBehaviour {
 		right = false;
 		left = false;
 		Hide ();
+		Drop ();
 		Invoke ("WakeupAnimation", 4f);
 		Invoke ("Wakeup", 5f);
 	}

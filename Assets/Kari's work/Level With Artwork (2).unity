@@ -2005,8 +2005,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 85307246}
-  - {fileID: 1173780769}
   - {fileID: 200093660}
+  - {fileID: 1173780769}
   - {fileID: 2105228072}
   - {fileID: 466773314}
   - {fileID: 767284841}
@@ -3181,7 +3181,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 124093033}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &200093661
 BoxCollider:
@@ -22216,6 +22216,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targets:
   - {fileID: 964887889}
+  - {fileID: 633394391}
   damping: 0
   lookAheadFactor: 0
   lookAheadReturnSpeed: 0.5
