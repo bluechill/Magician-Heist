@@ -15,6 +15,7 @@ public class Camera2DFollowMultiple : MonoBehaviour
     private Vector3 m_LookAheadPos;
 
 	private Camera cam;
+	public UnityStandardAssets.ImageEffects.TiltShift tilt;
 
 	private Vector3 averageTargetPosition()
 	{
@@ -28,10 +29,26 @@ public class Camera2DFollowMultiple : MonoBehaviour
 		return average;
 	}
 
+	private float maxTargetYDistance()
+	{
+		float m = 0.0f;
+
+		foreach (Transform target in targets) {
+			foreach (Transform target2 in targets) {
+				float y = Mathf.Abs(target.transform.position.y - target2.transform.position.y);
+
+				m = Mathf.Max (m, y);
+			}
+		}
+
+		return m;
+	}
+
     // Use this for initialization
     private void Start()
     {
 		cam = GetComponent<Camera> ();
+		tilt = GetComponent<UnityStandardAssets.ImageEffects.TiltShift> ();
 
 		m_LastTargetPosition = averageTargetPosition();
 		m_OffsetZ = (transform.position - averageTargetPosition()).z;
@@ -72,6 +89,15 @@ public class Camera2DFollowMultiple : MonoBehaviour
     private void Update()
     {
 		cam.orthographicSize = orthoSize ();
+		float y = maxTargetYDistance ();
+		tilt.blurArea = y * -9.4f / 7f + 15f;
+
+		if (y > 1.0f) {
+			float camBlur = cam.orthographicSize * 15f / 4.3f - 24f;
+			tilt.blurArea = Mathf.Min (camBlur, tilt.blurArea);
+		}
+
+		tilt.blurArea = Mathf.Max (tilt.blurArea, 0f);
 
         // only update lookahead pos if accelerating or changed direction
 		float xMoveDelta = (averageTargetPosition() - m_LastTargetPosition).x;
