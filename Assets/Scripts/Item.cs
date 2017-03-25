@@ -19,6 +19,8 @@ public class Item : MonoBehaviour {
 	public GameObject plus50_prefab;
 	private MaterialPropertyBlock propertyBlock;
 	private SpriteRenderer srend;
+
+	private bool canGetMorePoints = true;
 	// Use this for initialization
 	void Start () {
 		srend = GetComponent<SpriteRenderer>();
@@ -57,9 +59,8 @@ public class Item : MonoBehaviour {
 	}
     public void OnTriggerEnter(Collider other)
 	{
-		if(other.gameObject.tag == "Player" && other.gameObject.transform.parent != null)
-        {
-			PlayerScript p = other.gameObject.transform.parent.GetComponent<PlayerScript>();
+		if (other.gameObject.tag == "Player" && other.gameObject.transform.parent != null) {
+			PlayerScript p = other.gameObject.transform.parent.GetComponent<PlayerScript> ();
 
 			if (p != null && !p.is_knocked_out && thrown && current_player != p.gameObject) {
 				p.KnockOut ();
@@ -69,6 +70,11 @@ public class Item : MonoBehaviour {
 				thrown = false;
 				GetComponent<Rigidbody> ().velocity = Vector3.zero;
 			}
-        }
+		} else if (other.gameObject.tag == "Gold Trigger" && current_player != null && canGetMorePoints) {
+			current_player.GetComponent<PlayerScript> ().points += 50;
+			var plus50 = Instantiate (plus50_prefab);
+			plus50.transform.position = this.transform.position + Vector3.up * 0.1f;
+			canGetMorePoints = false;
+		}
     }
 }

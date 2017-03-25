@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33259222370546250}
   - component: {fileID: 65718592092798284}
   - component: {fileID: 23101977060497914}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Invisible Nav Mesh Enabler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
