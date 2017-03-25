@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using InControl;
 
@@ -23,6 +24,9 @@ public class PlayerScript : MonoBehaviour {
 	public float forceFieldLength = 0.0f;
 	public float defaultForceFieldCoolDown = 5.0f;
 	public float defaultForceFieldLength = 2.0f;
+
+	public int points = 0;
+	public Text pointsText;
 
 	public bool keyboard_user;
 	public InputDevice controller;
@@ -797,5 +801,7 @@ public class PlayerScript : MonoBehaviour {
 			forceFieldLength -= Time.fixedDeltaTime;
 		else if (forceFieldLength <= 0f && forceField.activeSelf)
 			forceField.SetActive (false);
+
+		pointsText.text = points.ToString();
 	}
 }
