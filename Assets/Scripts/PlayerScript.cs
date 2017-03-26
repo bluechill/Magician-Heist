@@ -120,6 +120,8 @@ public class PlayerScript : MonoBehaviour {
             held_object.GetComponent<Rigidbody>().isKinematic = false;
 			held_object.GetComponent<Rigidbody>().velocity = ((Vector3.right * Mathf.Sign(rb.velocity.x) + Vector3.up * 5f) + rb.velocity);
 			held_object.GetComponent<Item>().thrown = true;
+			//held_object.GetChild(0).gameObject.layer = 24;
+			held_object.gameObject.transform.GetChild (0).gameObject.layer = 24;
         }
 
 		held_object.transform.position = new Vector3(held_object.transform.position.x, held_object.transform.position.y, 0f );
@@ -435,6 +437,13 @@ public class PlayerScript : MonoBehaviour {
             is_holding_key_card = true;
         }
         held_object.GetComponent<Item>().thrown = false;
+		if (held_object.GetComponent<Item> ().gold_bar) {
+			held_object.gameObject.transform.GetChild (0).gameObject.layer = 17;
+
+		} else {
+			held_object.gameObject.transform.GetChild (0).gameObject.layer = 10;
+
+		}
         held_object.GetComponent<Item> ().held = true;
 		held_object.GetComponent<Item> ().enabled = true;
 
