@@ -44,6 +44,13 @@ public class Item : MonoBehaviour {
         if (GetComponent<Rigidbody>().velocity.magnitude <= 0.1f)
         {
 			thrown = false;
+			if (gold_bar) {
+				gameObject.transform.GetChild (0).gameObject.layer = 17;
+
+			} else {
+				gameObject.transform.GetChild (0).gameObject.layer = 10;
+
+			}
         }
 	}
 
@@ -68,6 +75,13 @@ public class Item : MonoBehaviour {
 				var plus50 = Instantiate (plus50_prefab);
 				plus50.transform.position = p.transform.position + Vector3.up * 0.5f;
 				thrown = false;
+				if (gold_bar) {
+					gameObject.transform.GetChild (0).gameObject.layer = 17;
+
+				} else {
+					gameObject.transform.GetChild (0).gameObject.layer = 10;
+
+				}
 				GetComponent<Rigidbody> ().velocity = Vector3.zero;
 			}
 		} else if (other.gameObject.tag == "Gold Trigger" && current_player != null && canGetMorePoints) {
