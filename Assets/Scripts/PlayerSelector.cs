@@ -52,6 +52,7 @@ public class PlayerSelector : MonoBehaviour {
 				controllers [i] = InputManager.Devices [i];
 			}
 		}
+
 	}
 	void TakeInput(){
 		for (int i = 0; i < num_players; i++) {

@@ -9,7 +9,7 @@ public class Blink : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		rend = GetComponent<SpriteRenderer> ();
-		InvokeRepeating ("BlinkSprite", 0f, 0.5f);
+		Invoke ("BlinkSprite",0.5f);
 	}
 	
 	// Update is called once per frame
@@ -19,5 +19,6 @@ public class Blink : MonoBehaviour {
 	void BlinkSprite(){
 		rend.sprite = sprites [idx % sprites.Length];
 		idx++;
+		Invoke ("BlinkSprite",0.5f);
 	}
 }
