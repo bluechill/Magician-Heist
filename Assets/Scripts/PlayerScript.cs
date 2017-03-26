@@ -118,6 +118,24 @@ public class PlayerScript : MonoBehaviour {
         {
 			held_object.GetComponent<Item> ().SetPlayer (this.gameObject, -1);
             held_object.GetComponent<Rigidbody>().isKinematic = false;
+
+			float x_diff = held_object.transform.position.x - transform.position.x;
+
+			float x_off = 0f;
+			if (rb.velocity.x > 0) {
+				if (x_diff > 0) {
+					
+				} else {
+					x_off = 0.6f;
+				}
+			} else {
+				if (x_diff < 0) {
+
+				} else {
+					x_off = -0.6f;
+				}
+			}
+			held_object.transform.position = new Vector3 ( held_object.transform.position.x + x_off, held_object.transform.position.y, 0f);
 			held_object.GetComponent<Rigidbody>().velocity = ((Vector3.right * Mathf.Sign(rb.velocity.x) + Vector3.up * 5f) + rb.velocity);
 			held_object.GetComponent<Item>().thrown = true;
 			//held_object.GetChild(0).gameObject.layer = 24;
