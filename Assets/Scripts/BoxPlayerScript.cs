@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using InControl;
 public class BoxPlayerScript : PlayerScript {
 
@@ -8,11 +9,14 @@ public class BoxPlayerScript : PlayerScript {
 	public List<GameObject> players_in_box;
 
 	public GameObject box_prefab;
+
 	// Update is called once per frame
 	void Update () {
 		age = Time.time - birthtime;
-
-		TryInitializeController ();
+		if (!started) {
+			started = true;
+			pointsText = GameObject.FindGameObjectWithTag ("Points Text 1").GetComponent<Text> ();
+		}
 
 		ProcessMovement ();
 		ProcessRotation ();
