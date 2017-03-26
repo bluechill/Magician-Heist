@@ -7,6 +7,9 @@ using InControl;
 
 public class PlayerScript : MonoBehaviour {
 
+	public bool started = false;
+	public GameObject PickUpPromptPrefab;
+	GameObject pickupPrompt = null;
 	public float action_cooldown = 0.5f;
 	public bool cooldown = false;
 
@@ -296,10 +299,16 @@ public class PlayerScript : MonoBehaviour {
 
 	//initialize a controller to this magician
 	public void TryInitializeController(){
-		if (InputManager.Devices.Count > player_num) {
+		if (!controller_set) {
 			controller = InputManager.Devices [player_num];
 			controller_set = true;
 		}
+	}
+	public void InitializeController(InputDevice cont){
+		if (controller_set)
+			return;
+		controller_set = true;
+		controller = cont;
 	}
 	//uses InControl as InputManager
 	public void ProcessInputController(){
@@ -432,40 +441,6 @@ public class PlayerScript : MonoBehaviour {
 			Idle ();
 			return;
 		}
-
-		if (Input.GetKeyDown(key_mappings[player_num][0])) {
-			left = true;
-		}
-		if (Input.GetKeyUp(key_mappings[player_num][0])) {
-			left = false;
-		}
-		if (Input.GetKeyDown(key_mappings[player_num][1])) {
-			right = true;
-		} 		
-		if (Input.GetKeyUp(key_mappings[player_num][1])) {
-			right = false;
-		}
-		if (Input.GetKeyDown(key_mappings[player_num][2])) {
-			up = true;
-		}
-		if (Input.GetKeyUp(key_mappings[player_num][2])) {
-			up = false;
-		}
-		if (Input.GetKeyDown(key_mappings[player_num][3])) {
-			down = true;
-		} 		
-		if (Input.GetKeyUp(key_mappings[player_num][3])) {
-			down = false;
-		}
-
-
-		if (Input.GetKeyDown(key_mappings[player_num][4])) {
-			actions [0] = true;
-		}
-		if (Input.GetKeyDown(key_mappings[player_num][5])) {
-			actions [1] = true;
-		}
-
 
 
 		if (is_in_box) {
@@ -787,6 +762,19 @@ public class PlayerScript : MonoBehaviour {
 			nearestActionObject = closest.gameObject;
 			nearestActionObject.GetComponent<SpriteGlow> ().enabled = true;
 		}
+
+		if (!is_knocked_out && nearestActionObject && nearestActionObject.tag == "Item" && !nearestActionObject.GetComponent<Item>().thrown) {
+			if (pickupPrompt) {
+				Destroy(pickupPrompt.gameObject);
+				pickupPrompt = null;
+			}
+			pickupPrompt = MonoBehaviour.Instantiate (PickUpPromptPrefab);
+			pickupPrompt.transform.position = new Vector3( nearestActionObject.transform.position.x + 0.25f, nearestActionObject.transform.position.y + 0.5f, 0f);
+			pickupPrompt.GetComponent<PickupPrompt> ().parentObject = nearestActionObject;
+			pickupPrompt.GetComponent<PickupPrompt> ().parentPlayer = this.gameObject;
+			pickupPrompt.GetComponent<PickupPrompt> ().itemPickup.GetComponent<SpriteRenderer>().sprite = nearestActionObject.GetComponent<SpriteRenderer> ().sprite;
+		}
+
 	}
 
 	public void FixedUpdate() {
@@ -803,5 +791,11 @@ public class PlayerScript : MonoBehaviour {
 			forceField.SetActive (false);
 
 		pointsText.text = points.ToString();
+
+		if (is_knocked_out && pickupPrompt) {
+			Destroy(pickupPrompt.gameObject);
+			pickupPrompt = null;
+		}
+		TryInitializeController ();
 	}
 }
