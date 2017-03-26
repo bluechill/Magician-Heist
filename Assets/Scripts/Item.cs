@@ -69,7 +69,7 @@ public class Item : MonoBehaviour {
 		if (other.gameObject.tag == "Player" && other.gameObject.transform.parent != null) {
 			PlayerScript p = other.gameObject.transform.parent.GetComponent<PlayerScript> ();
 
-			if (p != null && !p.is_knocked_out && thrown && current_player != p.gameObject) {
+			if (p != null && !p.is_knocked_out && thrown && current_player != p.gameObject && !p.forceField.activeSelf) {
 				p.KnockOut ();
 				current_player.GetComponent<PlayerScript> ().points += 50;
 				var plus50 = Instantiate (plus50_prefab);

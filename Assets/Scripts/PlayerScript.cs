@@ -7,6 +7,7 @@ using InControl;
 
 public class PlayerScript : MonoBehaviour {
 
+	public bool knockout_forcefield = false;
 	public bool started = false;
 	public GameObject PickUpPromptPrefab;
 	public GameObject StairsPromptPrefab;
@@ -28,7 +29,9 @@ public class PlayerScript : MonoBehaviour {
 	public float forceFieldCoolDown = 0.0f;
 	public float forceFieldLength = 0.0f;
 	public float defaultForceFieldCoolDown = 5.0f;
+	public float knockoutForceFieldCoolDown = 5.0f;
 	public float defaultForceFieldLength = 2.0f;
+	public float knockoutForceFieldLength = 2.5f;
 
 	public int points = 0;
 	public Text pointsText;
@@ -307,6 +310,8 @@ public class PlayerScript : MonoBehaviour {
 		animator.SetBool ("knockout", false);
 	}
 	public void Wakeup(){
+		knockout_forcefield = true;
+		UseAbility ();
 		is_knocked_out = false;
 		Reveal ();
 	}
@@ -323,6 +328,14 @@ public class PlayerScript : MonoBehaviour {
 	}
 
 	public virtual void UseAbility(){
+
+		if (knockout_forcefield) {
+			knockout_forcefield = false;
+			forceField.SetActive (true);
+			forceFieldCoolDown = 0f;
+			forceFieldLength = knockoutForceFieldLength;
+			return;
+		}
 
 		if (!forceField.activeSelf && forceFieldCoolDown <= 0f) {
 			forceField.SetActive (true);
