@@ -28,6 +28,10 @@ TagManager:
   - Briefcase
   - ForceField
   - Gold Trigger
+  - Points Text 2
+  - Points Text 1
+  - Points Text 3
+  - Points Text 4
   layers:
   - Default
   - TransparentFX

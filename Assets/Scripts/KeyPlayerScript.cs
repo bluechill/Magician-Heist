@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using InControl;
 public class KeyPlayerScript : PlayerScript {
 
@@ -8,12 +9,14 @@ public class KeyPlayerScript : PlayerScript {
 	public List<GameObject> players_touching_key;
 	public bool player_holding_me = false;
 	public GameObject player_holding_key;
+
 	// Update is called once per frame
 	void Update () {
 		age = Time.time - birthtime;
-
-		TryInitializeController ();
-
+		if (!started) {
+			started = true;
+			pointsText = GameObject.FindGameObjectWithTag ("Points Text 2").GetComponent<Text> ();
+		}
 		ProcessMovement ();
 		ProcessRotation ();
 		ProcessActions ();
