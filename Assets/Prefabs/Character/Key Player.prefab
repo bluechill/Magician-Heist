@@ -574,6 +574,8 @@ MonoBehaviour:
   started: 0
   PickUpPromptPrefab: {fileID: 1570406408022172, guid: ccd1002398d3044b1a4ffe9e7faeb639,
     type: 2}
+  StairsPromptPrefab: {fileID: 1175637456942130, guid: 5ab5be712362b4752a5cf6c9b4cedaa1,
+    type: 2}
   action_cooldown: 0.5
   cooldown: 0
   vel: 10

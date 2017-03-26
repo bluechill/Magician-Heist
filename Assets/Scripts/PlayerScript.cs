@@ -9,7 +9,9 @@ public class PlayerScript : MonoBehaviour {
 
 	public bool started = false;
 	public GameObject PickUpPromptPrefab;
+	public GameObject StairsPromptPrefab;
 	GameObject pickupPrompt = null;
+	GameObject stairsPrompt = null;
 	public float action_cooldown = 0.5f;
 	public bool cooldown = false;
 
@@ -190,10 +192,11 @@ public class PlayerScript : MonoBehaviour {
 	}
 
 	void InitKeys(){
-		key_mappings = new KeyCode[3][];
-		key_mappings [0] = new KeyCode[6];
-		key_mappings [1] = new KeyCode[6];
-		key_mappings [2] = new KeyCode[6];
+		key_mappings = new KeyCode[4][];
+		key_mappings [0] = new KeyCode[7];
+		key_mappings [1] = new KeyCode[7];
+		key_mappings [2] = new KeyCode[7];
+		key_mappings [3] = new KeyCode[7];
 
 		key_mappings [0][0] = KeyCode.A;
 		key_mappings [0][1] = KeyCode.D;
@@ -201,13 +204,31 @@ public class PlayerScript : MonoBehaviour {
 		key_mappings [0][3] = KeyCode.S;
 		key_mappings [0][4] = KeyCode.E;
 		key_mappings [0][5] = KeyCode.R;
+		key_mappings [0][6] = KeyCode.Q;
 
-		key_mappings [1][0] = KeyCode.H;
-		key_mappings [1][1] = KeyCode.K;
-		key_mappings [1][2] = KeyCode.U;
-		key_mappings [1][3] = KeyCode.J;
-		key_mappings [1][4] = KeyCode.I;
-		key_mappings [1][5] = KeyCode.O;
+		key_mappings [1][0] = KeyCode.G;
+		key_mappings [1][1] = KeyCode.J;
+		key_mappings [1][2] = KeyCode.Y;
+		key_mappings [1][3] = KeyCode.H;
+		key_mappings [1][4] = KeyCode.U;
+		key_mappings [1][5] = KeyCode.I;
+		key_mappings [1][6] = KeyCode.T;
+
+		key_mappings [2][0] = KeyCode.L;
+		key_mappings [2][1] = KeyCode.Quote;
+		key_mappings [2][2] = KeyCode.P;
+		key_mappings [2][3] = KeyCode.Semicolon;
+		key_mappings [2][4] = KeyCode.LeftBracket;
+		key_mappings [2][5] = KeyCode.RightBracket;
+		key_mappings [2][6] = KeyCode.O;
+
+		key_mappings [3][0] = KeyCode.L;
+		key_mappings [3][1] = KeyCode.Quote;
+		key_mappings [3][2] = KeyCode.P;
+		key_mappings [3][3] = KeyCode.Semicolon;
+		key_mappings [3][4] = KeyCode.LeftBracket;
+		key_mappings [3][5] = KeyCode.RightBracket;
+		key_mappings [3][6] = KeyCode.O;
 
 	}
 
@@ -299,7 +320,7 @@ public class PlayerScript : MonoBehaviour {
 
 	//initialize a controller to this magician
 	public void TryInitializeController(){
-		if (!controller_set) {
+		if (InputManager.Devices.Count > player_num) {
 			controller = InputManager.Devices [player_num];
 			controller_set = true;
 		}
@@ -352,6 +373,14 @@ public class PlayerScript : MonoBehaviour {
 			}
 			return;
 		}
+		if (controller.Action4) {
+			if (!cooldown) {
+				actions [2] = true;
+				cooldown = true;
+				Invoke ("ActionCooldown", action_cooldown);
+			}
+			return;
+		}
 
 	}
 	public void Animate(){
@@ -384,7 +413,8 @@ public class PlayerScript : MonoBehaviour {
 	{
 		if (nearestActionObject == null)
 			return;
-		
+		if (nearestActionObject.tag == "Stairs")
+			return;
 		held_object = nearestActionObject;
 		is_holding = true;
 		if (!held_object)
@@ -440,6 +470,43 @@ public class PlayerScript : MonoBehaviour {
 			//print (player_num + "knockout idle");
 			Idle ();
 			return;
+		}
+
+
+		if (Input.GetKeyDown(key_mappings[player_num][0])) {
+			left = true;
+		}
+		if (Input.GetKeyUp(key_mappings[player_num][0])) {
+			left = false;
+		}
+		if (Input.GetKeyDown(key_mappings[player_num][1])) {
+			right = true;
+		} 		
+		if (Input.GetKeyUp(key_mappings[player_num][1])) {
+			right = false;
+		}
+		if (Input.GetKeyDown(key_mappings[player_num][2])) {
+			up = true;
+		}
+		if (Input.GetKeyUp(key_mappings[player_num][2])) {
+			up = false;
+		}
+		if (Input.GetKeyDown(key_mappings[player_num][3])) {
+			down = true;
+		} 		
+		if (Input.GetKeyUp(key_mappings[player_num][3])) {
+			down = false;
+		}
+
+
+		if (Input.GetKeyDown(key_mappings[player_num][4])) {
+			actions [0] = true;
+		}
+		if (Input.GetKeyDown(key_mappings[player_num][5])) {
+			actions [1] = true;
+		}
+		if (Input.GetKeyDown(key_mappings[player_num][6])) {
+			actions [2] = true;
 		}
 
 
@@ -557,8 +624,6 @@ public class PlayerScript : MonoBehaviour {
 				SwitchElevator ();
 			else if (nearestActionObject.tag == "Closet")
 				UseCloset ();
-			else if (nearestActionObject.tag == "Stairs")
-				UseStairs ();
 			else
 				PickUp ();
 		} else if (is_holding) {
@@ -616,9 +681,15 @@ public class PlayerScript : MonoBehaviour {
 		} else if (is_transformed) {
 			RevertBack ();
 		}
+
 	}
 	public void ProcessAction3(){
 		actions [2] = false;
+
+		if (nearestActionObject != null) {
+			if (nearestActionObject.tag == "Stairs")
+				UseStairs ();
+		} 
 	}
 
 
@@ -774,6 +845,16 @@ public class PlayerScript : MonoBehaviour {
 			pickupPrompt.GetComponent<PickupPrompt> ().parentPlayer = this.gameObject;
 			pickupPrompt.GetComponent<PickupPrompt> ().itemPickup.GetComponent<SpriteRenderer>().sprite = nearestActionObject.GetComponent<SpriteRenderer> ().sprite;
 		}
+		if (!is_knocked_out && nearestActionObject && nearestActionObject.tag == "Stairs") {
+			if (stairsPrompt) {
+				Destroy(stairsPrompt.gameObject);
+				stairsPrompt = null;
+			}
+			stairsPrompt = MonoBehaviour.Instantiate (StairsPromptPrefab);
+			stairsPrompt.transform.position = new Vector3( nearestActionObject.transform.position.x + 0.5f, nearestActionObject.transform.position.y + 0.5f, 0f);
+			stairsPrompt.GetComponent<PickupPrompt> ().parentObject = nearestActionObject;
+			stairsPrompt.GetComponent<PickupPrompt> ().parentPlayer = this.gameObject;
+		}
 
 	}
 
@@ -796,6 +877,6 @@ public class PlayerScript : MonoBehaviour {
 			Destroy(pickupPrompt.gameObject);
 			pickupPrompt = null;
 		}
-		TryInitializeController ();
+		if(!Game.GameInstance.skip_select)TryInitializeController ();
 	}
 }
