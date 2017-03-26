@@ -756,11 +756,13 @@ MonoBehaviour:
   KODuration: 10
   patrolSpeed: 2
   searchSpeed: 3.5
+  cooldown: 0
+  cooldown_invoke: 0
+  Players:
+  - {fileID: 0}
+  - {fileID: 0}
   fov: {fileID: 114145459600514790}
   patrolPoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   aiPointsOfInterst: {fileID: 0}
@@ -768,6 +770,7 @@ MonoBehaviour:
   guardWalk: {fileID: 0}
   agent: {fileID: 0}
   chaseTarget: {fileID: 0}
+  knockout: 0
 --- !u!136 &136020881131953016
 CapsuleCollider:
   m_ObjectHideFlags: 1
