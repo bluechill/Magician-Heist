@@ -46,7 +46,7 @@ public class Item : MonoBehaviour {
 
         }
 		if (GetComponent<Rigidbody> ().velocity.magnitude <= 0.01f) {
-			//thrown = false;
+			thrown = false;
 			if (gold_bar) {
 				gameObject.transform.GetChild (0).gameObject.layer = 17;
 
