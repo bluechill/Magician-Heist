@@ -872,6 +872,8 @@ public class PlayerScript : MonoBehaviour {
 			return;
 
 		Collider closest = taggedColliders [0];
+		Collider secondClosest = taggedColliders [0];
+		int changes = 0;
 		float zeroDistance = Vector3.Distance (taggedColliders [0].ClosestPointOnBounds (this.transform.position), this.transform.position);
 
 		for (int i = 1; i < taggedColliders.Count; ++i) {

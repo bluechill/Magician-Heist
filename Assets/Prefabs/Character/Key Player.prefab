@@ -571,6 +571,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62c219536b2bf421b83ff01dc78ea7ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  knockout_forcefield: 0
   started: 0
   PickUpPromptPrefab: {fileID: 1570406408022172, guid: ccd1002398d3044b1a4ffe9e7faeb639,
     type: 2}
@@ -578,8 +579,13 @@ MonoBehaviour:
     type: 2}
   action_cooldown: 0.5
   cooldown: 0
-  vel: 10
+  vel: 7.5
   player_num: 1
+  is_grabbed: 0
+  grabbed_time_initial: 0
+  grabbed_time_current: 0
+  grabbed_time_limit: 5
+  grabbed_by: {fileID: 0}
   is_touching: 0
   num_touching: 0
   nearestActionObject: {fileID: 0}
@@ -589,7 +595,9 @@ MonoBehaviour:
   forceFieldCoolDown: 0
   forceFieldLength: 0
   defaultForceFieldCoolDown: 5
+  knockoutForceFieldCoolDown: 5
   defaultForceFieldLength: 2
+  knockoutForceFieldLength: 2.5
   points: 0
   pointsText: {fileID: 0}
   keyboard_user: 1
@@ -632,6 +640,7 @@ MonoBehaviour:
   grounded: 0
   is_touching_desk_overlap: 0
   touching_desk_overlap: {fileID: 0}
+  original_position: {x: 0, y: 0, z: 0}
   key_prefab: {fileID: 1646671152686234, guid: f9b978ad38e7f49fcb4123b3e20df20d, type: 2}
   players_touching_key: []
   player_holding_me: 0

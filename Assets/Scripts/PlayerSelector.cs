@@ -59,12 +59,12 @@ public class PlayerSelector : MonoBehaviour {
 			if (init[i]) {
 				bool cd = false;
 
-				if (!cooldowns [i] && controllers [i].MenuWasPressed && ValidChoices ()) {
+				if (controllers [i].MenuWasPressed && ValidChoices ()) {
 					print ("selected characters");
 					SceneManager.LoadScene ("AfterControllerSetup");
 				}
 
-				if (!cooldowns[i] && controllers [i].DPadLeft) {
+				if (!cooldowns[i] && controllers [i].LeftStickX < 0f) {
 					cd = true;
 
 					if (choices [i] == -1) {
@@ -77,7 +77,7 @@ public class PlayerSelector : MonoBehaviour {
 					}
 				}
 
-				if (!cooldowns[i] && controllers [i].DPadRight) {
+				if (!cooldowns[i] && controllers [i].LeftStickX > 0f) {
 					cd = true;
 					if (choices [i] == -1) {
 						choices [i] = 2;
