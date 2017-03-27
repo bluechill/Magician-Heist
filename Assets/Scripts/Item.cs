@@ -43,7 +43,10 @@ public class Item : MonoBehaviour {
 
         if (GetComponent<Rigidbody>().velocity.magnitude <= 0.1f)
         {
-			thrown = false;
+
+        }
+		if (GetComponent<Rigidbody> ().velocity.magnitude <= 0.01f) {
+			//thrown = false;
 			if (gold_bar) {
 				gameObject.transform.GetChild (0).gameObject.layer = 17;
 
@@ -51,7 +54,7 @@ public class Item : MonoBehaviour {
 				gameObject.transform.GetChild (0).gameObject.layer = 10;
 
 			}
-        }
+		}
 	}
 
 	public void SetPlayer(GameObject obj, int n){
@@ -67,13 +70,22 @@ public class Item : MonoBehaviour {
     public void OnTriggerEnter(Collider other)
 	{
 		if (other.gameObject.tag == "Player" && other.gameObject.transform.parent != null) {
+			print ("BUMP");
+			print (other);
+
 			PlayerScript p = other.gameObject.transform.parent.GetComponent<PlayerScript> ();
+			print (!p.is_knocked_out);
+			print (thrown);
+			print (current_player != p.gameObject);
+			print (!p.forceField.activeSelf);
+			print (GetComponent<Rigidbody> ().velocity);
 
 			if (p != null && !p.is_knocked_out && thrown && current_player != p.gameObject && !p.forceField.activeSelf) {
 				p.KnockOut ();
 				current_player.GetComponent<PlayerScript> ().points += 50;
 				var plus50 = Instantiate (plus50_prefab);
 				plus50.transform.position = p.transform.position + Vector3.up * 0.5f;
+				print ("In if statement ");
 				thrown = false;
 				if (gold_bar) {
 					gameObject.transform.GetChild (0).gameObject.layer = 17;
