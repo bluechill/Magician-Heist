@@ -7,6 +7,7 @@ using InControl;
 
 public class PlayerScript : MonoBehaviour {
 
+	float original_velocity;
 	public bool knockout_forcefield = false;
 	public bool started = false;
 	public GameObject PickUpPromptPrefab;
@@ -19,6 +20,11 @@ public class PlayerScript : MonoBehaviour {
 	public float vel;
 	public int player_num;
 
+	public bool is_grabbed = false;
+	public float grabbed_time_initial;
+	public float grabbed_time_current;
+	public float grabbed_time_limit = 5f;
+	public GameObject grabbed_by;
 	public bool is_touching = false;
 	public int num_touching = 0;
 	public GameObject nearestActionObject = null;
@@ -84,7 +90,10 @@ public class PlayerScript : MonoBehaviour {
 	public bool is_touching_desk_overlap = false;
 	public GameObject touching_desk_overlap;
 
+	public Vector3 original_position;
 	public void Start(){
+		original_position = this.transform.position;
+		original_velocity = vel;
 		birthtime = Time.time;
 		rb = GetComponent<Rigidbody> ();
 		animator = GetComponent<Animator> ();
@@ -758,7 +767,11 @@ public class PlayerScript : MonoBehaviour {
 			} else if(held_object && held_object.GetComponent<Item>().gold_bar){
 				Game.GameInstance.gold_bars += 1;
 				held_object.GetComponent<Item> ().gold_bar = false;
-			}
+			} 
+		} else if(coll.gameObject.tag == "Guard"){
+			grabbed_time_initial = Time.time;
+			is_grabbed = true;
+			//coll.gameObject.transform.parent = this.transform;
 		}
     }
 
@@ -918,5 +931,16 @@ public class PlayerScript : MonoBehaviour {
 			pickupPrompt = null;
 		}
 		if(!Game.GameInstance.skip_select)TryInitializeController ();
+		if (is_grabbed) {
+			grabbed_time_current = Time.time - grabbed_time_initial;
+			if (grabbed_time_current > grabbed_time_limit) {
+				transform.position = original_position;
+				is_grabbed = false;
+			}
+			vel = original_velocity / 2f;
+			//grabbed_by.transform.position = transform.position;
+		} else {
+			vel = original_velocity;
+		}
 	}
 }
