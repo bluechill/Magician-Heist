@@ -1,13 +1,15 @@
 fileFormatVersion: 2
-guid: fb7939e5adfc443aa8726c3965bcad9c
-timeCreated: 1490493385
+guid: dcfc3a6eb16534ab9a10657f733d5be5
+timeCreated: 1490661699
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: Xbox Buttons Separate_0
-    21300002: Xbox Buttons Separate_1
-    21300004: Xbox Buttons Separate_2
-    21300006: Xbox Buttons Separate_3
+    21300000: xbox icons 2_0
+    21300002: xbox icons 2_1
+    21300004: xbox icons 2_2
+    21300006: xbox icons 2_3
+    21300008: xbox icons 2_4
+    21300010: xbox icons 2_5
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -98,54 +100,80 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Xbox Buttons Separate_0
+      name: xbox icons 2_0
       rect:
         serializedVersion: 2
-        x: 9
-        y: 152
-        width: 96
-        height: 96
+        x: 85
+        y: 50
+        width: 70
+        height: 70
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Xbox Buttons Separate_1
+      name: xbox icons 2_1
       rect:
         serializedVersion: 2
-        x: 143
-        y: 144
-        width: 96
-        height: 93
+        x: 165
+        y: 50
+        width: 70
+        height: 70
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Xbox Buttons Separate_2
+      name: xbox icons 2_2
       rect:
         serializedVersion: 2
-        x: 15
-        y: 18
-        width: 96
-        height: 92
+        x: 248
+        y: 50
+        width: 70
+        height: 70
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Xbox Buttons Separate_3
+      name: xbox icons 2_3
       rect:
         serializedVersion: 2
-        x: 141
-        y: 30
-        width: 96
-        height: 96
+        x: 328
+        y: 50
+        width: 70
+        height: 70
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: xbox icons 2_4
+      rect:
+        serializedVersion: 2
+        x: 41
+        y: 191
+        width: 70
+        height: 70
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: xbox icons 2_5
+      rect:
+        serializedVersion: 2
+        x: 122
+        y: 191
+        width: 70
+        height: 70
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0

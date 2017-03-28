@@ -366,7 +366,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1668405712364156}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -60, y: -4.258814, z: 0}
+  m_LocalPosition: {x: -58.529205, y: -3.9225273, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4879489068850648}
@@ -584,12 +584,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff0e49333a4e64ea69bea1de6336f0bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  knockout_forcefield: 0
   started: 0
-  PickUpPromptPrefab: {fileID: 0}
+  PickUpPromptPrefab: {fileID: 1570406408022172, guid: ccd1002398d3044b1a4ffe9e7faeb639,
+    type: 2}
+  StairsPromptPrefab: {fileID: 1175637456942130, guid: 5ab5be712362b4752a5cf6c9b4cedaa1,
+    type: 2}
   action_cooldown: 0.5
   cooldown: 0
-  vel: 5
+  vel: 7.5
   player_num: 2
+  is_grabbed: 0
+  grabbed_time_initial: 0
+  grabbed_time_current: 0
+  grabbed_time_limit: 5
+  grabbed_by: {fileID: 0}
   is_touching: 0
   num_touching: 0
   nearestActionObject: {fileID: 0}
@@ -599,7 +608,9 @@ MonoBehaviour:
   forceFieldCoolDown: 0
   forceFieldLength: 0
   defaultForceFieldCoolDown: 5
+  knockoutForceFieldCoolDown: 5
   defaultForceFieldLength: 2
+  knockoutForceFieldLength: 2.5
   points: 0
   pointsText: {fileID: 0}
   keyboard_user: 0
@@ -642,6 +653,7 @@ MonoBehaviour:
   grounded: 0
   is_touching_desk_overlap: 0
   touching_desk_overlap: {fileID: 0}
+  original_position: {x: 0, y: 0, z: 0}
 --- !u!136 &136104598852044352
 CapsuleCollider:
   m_ObjectHideFlags: 1

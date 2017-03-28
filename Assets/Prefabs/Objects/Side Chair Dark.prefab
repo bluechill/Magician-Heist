@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4997497529920456}
   - component: {fileID: 212596029252332828}
   - component: {fileID: 65305870776735546}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Side Chair Dark
   m_TagString: Untagged
   m_Icon: {fileID: 0}
