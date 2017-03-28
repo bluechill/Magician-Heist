@@ -70,6 +70,7 @@ public class PlayerScript : MonoBehaviour {
 	public bool is_touching_door = false;
 	public bool is_touching_elevator = false;
 	public bool is_touching_stairs = false;
+	public GameObject touching_stairs;
 	public bool is_in_elevator = false;
 	public bool elevator_ready = false;
 	public bool is_holding_briefcase = false;
@@ -298,7 +299,7 @@ public class PlayerScript : MonoBehaviour {
 	}
 
 	public void UseStairs() {
-		nearestActionObject.GetComponent<Stairs> ().Use (this.gameObject);
+		touching_stairs.GetComponent<Stairs> ().Use (this.gameObject);
 	}
 
 	public void UseElevator(){
@@ -388,6 +389,7 @@ public class PlayerScript : MonoBehaviour {
 			right = false;
 			left = false;
 		}
+			
 		if (controller.DPadDown) {
 			down = true;
 		} else if (controller.DPadUp) {
@@ -417,6 +419,7 @@ public class PlayerScript : MonoBehaviour {
 		}
 		if (controller.Action4) {
 			if (!cooldown) {
+				print ("Y BUTTON");
 				actions [2] = true;
 				cooldown = true;
 				Invoke ("ActionCooldown", action_cooldown);
@@ -571,12 +574,7 @@ public class PlayerScript : MonoBehaviour {
 			return;
 		}
 
-		if ((up || down) && is_touching_stairs && !cooldown) {
-			is_touching_stairs = false;
-			nearestActionObject.GetComponent<Stairs> ().Use (this.gameObject);
-			cooldown = true;
-			Invoke ("ActionCooldown", action_cooldown);
-		}
+
 
 		if (left) {
 
@@ -734,11 +732,13 @@ public class PlayerScript : MonoBehaviour {
 	}
 	public void ProcessAction3(){
 		actions [2] = false;
-
-		if (nearestActionObject != null) {
-			if (nearestActionObject.tag == "Stairs")
-				UseStairs ();
-		} 
+		print ("Trying Stairs");
+		print (is_touching_stairs);
+		print (!cooldown);
+		if (is_touching_stairs) {
+			UseStairs ();
+			cooldown = true;
+		}
 	}
 
 
@@ -764,43 +764,44 @@ public class PlayerScript : MonoBehaviour {
 			if (is_holding_briefcase) {
 				print ("win!");
 				Game.GameInstance.Win ();
-			} else if(held_object && held_object.GetComponent<Item>().gold_bar){
+			} else if (held_object && held_object.GetComponent<Item> ().gold_bar) {
 				Game.GameInstance.gold_bars += 1;
 				held_object.GetComponent<Item> ().gold_bar = false;
 			} 
-		} else if(coll.gameObject.tag == "Guard"){
+		} else if (coll.gameObject.tag == "Guard") {
 			grabbed_time_initial = Time.time;
 			is_grabbed = true;
 			//coll.gameObject.transform.parent = this.transform;
+		} else if (coll.gameObject.tag == "Stairs") {
+			TouchStairs (coll.gameObject);
+		} else if (coll.gameObject.tag == "Security Cam") {
+			coll.gameObject.GetComponent<SecurityCam> ().Use (player_num);
 		}
     }
 
-//	public void OnTriggerExit(Collider coll){
-//		if (coll.gameObject.tag == "Item") {
-//			if (coll.gameObject.GetComponent<Item> ().magical_key && player_num != 1) {
-//				coll.gameObject.GetComponentInParent<KeyPlayerScript> ().players_touching_key.Remove (this.gameObject);
-//			}
-//		} else if (coll.gameObject.tag == "Magical Box") {
-//			StopTouchBox (coll.gameObject);
-//		} else if (coll.gameObject.tag == "Door") {
-//			is_touching_door = false;
-//			touching_door = null;
-//		}  else if (coll.gameObject.tag == "Elevator") {
-//			is_touching_elevator = false;
-//			touching_elevator = null;
-//			coll.gameObject.GetComponent<Elevator> ().GetOut (this.gameObject);
-//		}  else if (coll.gameObject.tag == "Stairs") {
-//			is_touching_stairs = false;
-//			touching_stairs = null;
-//		}  else if (coll.gameObject.tag == "Closet") {
-//			is_touching_closet = false;
-//			touching_closet = null;
-//		}  else if (coll.gameObject.tag == "Desk Overlap") {
-//			is_touching_desk_overlap = false;
-//			touching_desk_overlap = null;
-//		} 
-//	}
-		
+	public void OnTriggerExit(Collider coll){
+		if (coll.gameObject.tag == "Stairs") {
+			StopTouchingStairs ();
+		}
+	}
+	public void TouchStairs(GameObject stairs){
+		if (stairsPrompt) {
+			Destroy(stairsPrompt.gameObject);
+			stairsPrompt = null;
+		}
+		stairsPrompt = MonoBehaviour.Instantiate (StairsPromptPrefab);
+		stairsPrompt.transform.position = new Vector3( stairs.transform.position.x + 0.5f, stairs.transform.position.y + 0.5f, 0f);
+		is_touching_stairs = true;
+		touching_stairs = stairs;
+	}
+	public void StopTouchingStairs(){
+		if (stairsPrompt) {
+			Destroy(stairsPrompt.gameObject);
+			stairsPrompt = null;
+		}
+		is_touching_stairs = false;
+		touching_stairs = null;
+	}
 	public void DisappearBody(){
 		body.SetActive (false);
 		if (is_holding) {
@@ -901,14 +902,7 @@ public class PlayerScript : MonoBehaviour {
 			pickupPrompt.GetComponent<PickupPrompt> ().itemPickup.GetComponent<SpriteRenderer>().sprite = nearestActionObject.GetComponent<SpriteRenderer> ().sprite;
 		}
 		if (!is_knocked_out && nearestActionObject && nearestActionObject.tag == "Stairs") {
-			if (stairsPrompt) {
-				Destroy(stairsPrompt.gameObject);
-				stairsPrompt = null;
-			}
-			stairsPrompt = MonoBehaviour.Instantiate (StairsPromptPrefab);
-			stairsPrompt.transform.position = new Vector3( nearestActionObject.transform.position.x + 0.5f, nearestActionObject.transform.position.y + 0.5f, 0f);
-			stairsPrompt.GetComponent<PickupPrompt> ().parentObject = nearestActionObject;
-			stairsPrompt.GetComponent<PickupPrompt> ().parentPlayer = this.gameObject;
+
 		}
 
 	}

@@ -8,16 +8,11 @@ public class StairsPrompt : MonoBehaviour {
 	public GameObject parentPlayer;
 	// Use this for initialization
 	void Start () {
-		
+
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
-		if (!parentPlayer.GetComponent<PlayerScript> ().nearestActionObject) {
-			Destroy (this.gameObject);
-		}
-		if (parentPlayer.GetComponent<PlayerScript> ().nearestActionObject != parentObject) {
-			Destroy (this.gameObject);
-		}
+
 	}
 }
