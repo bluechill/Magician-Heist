@@ -61,6 +61,11 @@ public class PlayerSelector : MonoBehaviour {
 
 				if (controllers [i].MenuWasPressed && ValidChoices ()) {
 					print ("selected characters");
+					Game.GameInstance.playerChoices = new int[4];
+					for (int k = 0; k < 4; k++) {
+						Game.GameInstance.playerChoices [k] = choices [k];
+
+					}
 					SceneManager.LoadScene ("AfterControllerSetup");
 				}
 
@@ -149,18 +154,22 @@ public class PlayerSelector : MonoBehaviour {
 	bool ValidChoices(){
 
 
-		if (num_players <= 1)
+		if (num_players < 4)
 			return false;
-		
-		if (num_players == 2 && (choices[0] == -1 || choices[1] == -1))
-			return false;
-		
+
 		for (int i = 0; i < num_players; i++) {
 			for (int j = 0; j < num_players; j++) {
 				if (i != j) {
-					if (( choices [i]!= -1) && (choices [j] != -1) && (choices[i] == choices[j])) {
+
+					if (choices [i] == -1 || choices [j] == -1) {
 						return false;
+					} if (i != j) {
+						if (choices [i] == choices [j]) {
+							return false;
+						}
 					}
+
+
 				}
 			}
 		}

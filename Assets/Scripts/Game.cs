@@ -26,6 +26,7 @@ public class Game : MonoBehaviour {
 	public PlayerScript player4;
 
 	public GameObject[] playerPrefabs;
+	public int[] playerChoices;
 
 	public int gold_bars = 0;
 	public float time_limit;
@@ -50,19 +51,10 @@ public class Game : MonoBehaviour {
 		if (!skip_select) {
 			num_players = PlayerSelector.instance.num_players;
 
-			players = new PlayerScript[num_players];
-
 			for (int i = 0; i < num_players; i++) {
-				GameObject player;
-				player = MonoBehaviour.Instantiate (playerPrefabs [PlayerSelector.instance.choices [i]]);
-				players [i] = player.GetComponent<PlayerScript> ();
-				player.GetComponent<PlayerScript> ().player_num = i;
-				if (i <= 1) {
-					camera.GetComponent<Camera2DFollowMultiple> ().targets [i] = player.transform;
-				}
+				players[i].GetComponent<PlayerScript> ().player_num = playerChoices[i];
 			}
 		}
-
 	}
     // Update is called once per frame
     void Update () {
