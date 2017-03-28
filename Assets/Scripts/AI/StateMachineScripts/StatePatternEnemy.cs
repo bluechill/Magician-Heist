@@ -12,6 +12,7 @@ public class StatePatternEnemy : MonoBehaviour {
     public float searchSpeed = 3.5f;
     public bool cooldown = false;
     public bool cooldown_invoke = false;
+    public GameObject[] Players;
 
     public FieldOfView fov;
 
@@ -122,6 +123,9 @@ public class StatePatternEnemy : MonoBehaviour {
 
     private void OnTriggerEnter(Collider coll) {
         currentState.OnTriggerEnter(coll);
+        if (patrolState.blowUp) {
+            Destroy(this.gameObject);
+        }
     }
     public void Knockout()
     {

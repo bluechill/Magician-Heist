@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 65149008285334946}
   - component: {fileID: 114680367191710340}
   - component: {fileID: 54666871587748034}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Mug Left
   m_TagString: Item
   m_Icon: {fileID: 0}
@@ -135,6 +135,7 @@ MonoBehaviour:
   player_num: -1
   enabled: 0
   current_player: {fileID: 0}
+  plus50_prefab: {fileID: 0}
 --- !u!212 &212913464577832678
 SpriteRenderer:
   m_ObjectHideFlags: 1
