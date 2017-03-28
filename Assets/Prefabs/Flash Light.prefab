@@ -235,9 +235,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   briefcase: 0
   flash_light: 1
+  magical_key: 0
   is_player: 0
+  gold_bar: 0
+  tree: 0
+  key_card: 0
+  held: 0
+  thrown: 0
   player_num: -1
+  enabled: 0
   current_player: {fileID: 0}
+  plus50_prefab: {fileID: 0}
 --- !u!212 &212457437849884668
 SpriteRenderer:
   m_ObjectHideFlags: 1

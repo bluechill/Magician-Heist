@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 212744579503242302}
   - component: {fileID: 65918212917074762}
   - component: {fileID: 114131930715117878}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Radio
   m_TagString: Item
   m_Icon: {fileID: 0}
@@ -119,6 +119,7 @@ MonoBehaviour:
   player_num: -1
   enabled: 0
   current_player: {fileID: 0}
+  plus50_prefab: {fileID: 0}
 --- !u!212 &212744579503242302
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -23,7 +23,8 @@ GameObject:
   - component: {fileID: 65514929606649256}
   - component: {fileID: 114665720284584058}
   - component: {fileID: 54747196185901602}
-  m_Layer: 0
+  - component: {fileID: 114536988268051578}
+  m_Layer: 10
   m_Name: Frying Pan
   m_TagString: Item
   m_Icon: {fileID: 0}
@@ -84,10 +85,10 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 120
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!65 &65514929606649256
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -98,7 +99,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.58, y: 0.81, z: 0.2}
+  m_Size: {x: 1, y: 1.25, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &65630932898869136
 BoxCollider:
@@ -112,6 +113,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.6, y: 0.8, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114536988268051578
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1616250695701582}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85309204d424945cc8326458e180b2fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlowColor: {r: 0.5147058, g: 5, b: 0, a: 1}
+  OutlineWidth: 1
 --- !u!114 &114665720284584058
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -135,6 +149,8 @@ MonoBehaviour:
   player_num: -1
   enabled: 0
   current_player: {fileID: 0}
+  plus50_prefab: {fileID: 1133873725776970, guid: 0448f09fe724f45198700a6ac536dfed,
+    type: 2}
 --- !u!212 &212042214256926784
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -148,7 +164,7 @@ SpriteRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: c85c5c4dfb5ec492fbd6a250a0240377, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -28,6 +28,11 @@ TagManager:
   - Briefcase
   - ForceField
   - Gold Trigger
+  - Points Text 2
+  - Points Text 1
+  - Points Text 3
+  - Points Text 4
+  - Security Cam
   layers:
   - Default
   - TransparentFX
@@ -53,7 +58,7 @@ TagManager:
   - NULL
   - ForceField
   - Player Edge
-  - 
+  - Thrown Item
   - 
   - 
   - 
