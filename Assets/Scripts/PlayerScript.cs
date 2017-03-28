@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 using InControl;
 
 public class PlayerScript : MonoBehaviour {
-
+	public GameObject cam;
 	float original_velocity;
 	public bool knockout_forcefield = false;
 	public bool started = false;
@@ -366,6 +366,8 @@ public class PlayerScript : MonoBehaviour {
 		if (InputManager.Devices.Count > player_num) {
 			controller = InputManager.Devices [player_num];
 			controller_set = true;
+		} else {
+			controller_set = false;
 		}
 	}
 	public void InitializeController(InputDevice cont){
@@ -622,6 +624,7 @@ public class PlayerScript : MonoBehaviour {
 
 		if (rb.velocity.x < -0.05f) {
 			this.transform.rotation = Quaternion.Euler (new Vector3 (0f, 180f, 0f));
+
 			if (is_holding && held_object.GetComponent<Item> ().flash_light) {
 				held_object.transform.rotation = Quaternion.Euler (new Vector3 (0f, 180f, 270f));
 			} else if (is_holding && held_object) {
@@ -776,7 +779,7 @@ public class PlayerScript : MonoBehaviour {
 			TouchStairs (coll.gameObject);
 		} else if (coll.gameObject.tag == "Security Cam") {
 			coll.gameObject.GetComponent<SecurityCam> ().Use (player_num);
-		}
+		} 
     }
 
 	public void OnTriggerExit(Collider coll){
@@ -793,6 +796,7 @@ public class PlayerScript : MonoBehaviour {
 		stairsPrompt.transform.position = new Vector3( stairs.transform.position.x + 0.5f, stairs.transform.position.y + 0.5f, 0f);
 		is_touching_stairs = true;
 		touching_stairs = stairs;
+		cam.GetComponent<Camera2DFollowMultiple> ().targets [1] = touching_stairs.GetComponent<Stairs>().destination.transform;
 	}
 	public void StopTouchingStairs(){
 		if (stairsPrompt) {
@@ -801,6 +805,8 @@ public class PlayerScript : MonoBehaviour {
 		}
 		is_touching_stairs = false;
 		touching_stairs = null;
+		cam.GetComponent<Camera2DFollowMultiple> ().targets [1] = this.gameObject.transform;
+
 	}
 	public void DisappearBody(){
 		body.SetActive (false);
@@ -927,6 +933,7 @@ public class PlayerScript : MonoBehaviour {
 			pickupPrompt = null;
 		}
 		if(!Game.GameInstance.skip_select)TryInitializeController ();
+		else TryInitializeController ();
 		if (is_grabbed) {
 			grabbed_time_current = Time.time - grabbed_time_initial;
 			if (grabbed_time_current > grabbed_time_limit) {
@@ -939,4 +946,5 @@ public class PlayerScript : MonoBehaviour {
 			vel = original_velocity;
 		}
 	}
+
 }
