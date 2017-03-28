@@ -1,13 +1,13 @@
 fileFormatVersion: 2
-guid: fc8440a9ddb6343f4b67a24c0dbc40f0
-timeCreated: 1490493952
+guid: 979225fa19b5647baa445405afa97a3b
+timeCreated: 1490662059
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: XboxButtons Separate PUSHED_0
-    21300002: XboxButtons Separate PUSHED_1
-    21300004: XboxButtons Separate PUSHED_2
-    21300006: XboxButtons Separate PUSHED_3
+    21300000: Xbox Buttons Separate (1)_0
+    21300002: Xbox Buttons Separate (1)_1
+    21300004: Xbox Buttons Separate (1)_2
+    21300006: Xbox Buttons Separate (1)_3
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -98,11 +98,24 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: XboxButtons Separate PUSHED_0
+      name: Xbox Buttons Separate (1)_0
       rect:
         serializedVersion: 2
-        x: 13
-        y: 163
+        x: 9
+        y: 152
+        width: 96
+        height: 96
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Xbox Buttons Separate (1)_1
+      rect:
+        serializedVersion: 2
+        x: 143
+        y: 144
         width: 96
         height: 93
       alignment: 0
@@ -111,24 +124,11 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: XboxButtons Separate PUSHED_1
-      rect:
-        serializedVersion: 2
-        x: 148
-        y: 163
-        width: 96
-        height: 93
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: XboxButtons Separate PUSHED_2
+      name: Xbox Buttons Separate (1)_2
       rect:
         serializedVersion: 2
         x: 15
-        y: 36
+        y: 18
         width: 96
         height: 92
       alignment: 0
@@ -137,11 +137,11 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: XboxButtons Separate PUSHED_3
+      name: Xbox Buttons Separate (1)_3
       rect:
         serializedVersion: 2
-        x: 144
-        y: 32
+        x: 141
+        y: 30
         width: 96
         height: 96
       alignment: 0

@@ -21,9 +21,10 @@ GameObject:
   - component: {fileID: 4008988390089600}
   - component: {fileID: 212401413588699112}
   - component: {fileID: 65843363138281510}
+  - component: {fileID: 114417442375945846}
   m_Layer: 0
   m_Name: CCTV Camera
-  m_TagString: Untagged
+  m_TagString: Security Cam
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -48,11 +49,28 @@ BoxCollider:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1260184172823186}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3.97, y: 3.04, z: 0.2}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1.75, y: 1.5, z: 0.2}
+  m_Center: {x: -0.5, y: 0, z: 0}
+--- !u!114 &114417442375945846
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1260184172823186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b665eef8bc774c819696edd6d7b6963, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  activated: 
+  screen_flash: {fileID: 0}
+  turning_red: 0
+  red: 0
+  turning_clear: 0
+  in_use: 0
 --- !u!212 &212401413588699112
 SpriteRenderer:
   m_ObjectHideFlags: 1

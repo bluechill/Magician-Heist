@@ -32,6 +32,7 @@ TagManager:
   - Points Text 1
   - Points Text 3
   - Points Text 4
+  - Security Cam
   layers:
   - Default
   - TransparentFX

@@ -19,7 +19,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4285234502185556}
-  - component: {fileID: 114317760019742778}
   m_Layer: 0
   m_Name: Use Stairs Prompt
   m_TagString: Untagged
@@ -143,22 +142,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sprites:
-  - {fileID: 21300006, guid: fb7939e5adfc443aa8726c3965bcad9c, type: 3}
-  - {fileID: 21300006, guid: fc8440a9ddb6343f4b67a24c0dbc40f0, type: 3}
---- !u!114 &114317760019742778
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1175637456942130}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2096127ad824488489c92d340304c9a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  parentObject: {fileID: 0}
-  parentPlayer: {fileID: 0}
-  itemPickup: {fileID: 0}
+  - {fileID: 21300006, guid: d2f3bcbc32fe844919a66c123c3bf0d8, type: 3}
+  - {fileID: 21300006, guid: 979225fa19b5647baa445405afa97a3b, type: 3}
 --- !u!212 &212086986242329250
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -190,7 +175,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 31
-  m_Sprite: {fileID: 21300006, guid: fb7939e5adfc443aa8726c3965bcad9c, type: 3}
+  m_Sprite: {fileID: 21300006, guid: 979225fa19b5647baa445405afa97a3b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
