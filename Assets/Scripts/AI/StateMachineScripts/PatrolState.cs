@@ -6,24 +6,29 @@ public class PatrolState : IEnemyState {
     private readonly StatePatternEnemy enemy;
     private int nextWayPoint;
     private GameObject interactWith;
+    public bool blowUp = false;
 
     public PatrolState(StatePatternEnemy statePatternEnemy) {
         enemy = statePatternEnemy;
     }
 
     public void UpdateState() {
-        int RNG = Random.Range(0, 15);
-        if (RNG > 14) {
-            ItemInteraction(interactWith);
-        }
-        Look();
+        //int RNG = Random.Range(0, 15);
+        //if (RNG > 14) {
+        //    ItemInteraction(interactWith);
+        //}
+        //Look();
         Patrol();
     }
     public void OnTriggerEnter(Collider coll) {
-        if (coll.gameObject.layer == 19)
-            ToAttackState();
-        else if (coll.gameObject.CompareTag("Item"))
-            interactWith = coll.gameObject;
+        if (coll.gameObject.layer == 9)
+            coll.gameObject.GetComponent<PlayerScript>().points -= 100;
+        else if (coll.gameObject.CompareTag("Item")) {
+            if (coll.gameObject.GetComponent<Item>().thrown) { 
+                coll.gameObject.GetComponent<Item>().current_player.GetComponent<PlayerScript>().points += 100;
+                blowUp = true;
+            }
+        }
     }
 
     public void ToPatrolState() {

@@ -6,27 +6,40 @@ using UnityEngine.SceneManagement;
 using InControl;
 
 public class PlayerScript : MonoBehaviour {
-
+	public GameObject cam;
+	float original_velocity;
+	public bool knockout_forcefield = false;
 	public bool started = false;
 	public GameObject PickUpPromptPrefab;
+	public GameObject StairsPromptPrefab;
 	GameObject pickupPrompt = null;
+	GameObject stairsPrompt = null;
 	public float action_cooldown = 0.5f;
 	public bool cooldown = false;
 
 	public float vel;
 	public int player_num;
+    public bool red_team;
 
+	public bool is_grabbed = false;
+	public float grabbed_time_initial;
+	public float grabbed_time_current;
+	public float grabbed_time_limit = 5f;
+	public GameObject grabbed_by;
 	public bool is_touching = false;
 	public int num_touching = 0;
 	public GameObject nearestActionObject = null;
 	public GameObject transformed_object;
 	public GameObject right_hand;
 	public GameObject forceField;
+    public Game gameScript;
 
 	public float forceFieldCoolDown = 0.0f;
 	public float forceFieldLength = 0.0f;
 	public float defaultForceFieldCoolDown = 5.0f;
+	public float knockoutForceFieldCoolDown = 5.0f;
 	public float defaultForceFieldLength = 2.0f;
+	public float knockoutForceFieldLength = 2.5f;
 
 	public int points = 0;
 	public Text pointsText;
@@ -59,6 +72,7 @@ public class PlayerScript : MonoBehaviour {
 	public bool is_touching_door = false;
 	public bool is_touching_elevator = false;
 	public bool is_touching_stairs = false;
+	public GameObject touching_stairs;
 	public bool is_in_elevator = false;
 	public bool elevator_ready = false;
 	public bool is_holding_briefcase = false;
@@ -79,7 +93,10 @@ public class PlayerScript : MonoBehaviour {
 	public bool is_touching_desk_overlap = false;
 	public GameObject touching_desk_overlap;
 
+	public Vector3 original_position;
 	public void Start(){
+		original_position = this.transform.position;
+		original_velocity = vel;
 		birthtime = Time.time;
 		rb = GetComponent<Rigidbody> ();
 		animator = GetComponent<Animator> ();
@@ -89,7 +106,6 @@ public class PlayerScript : MonoBehaviour {
 		for (int i = 0; i < num_actions; i++) {
 			actions[i] = false;
 		}
-
 	}
 
 	public void Drop(){
@@ -116,8 +132,28 @@ public class PlayerScript : MonoBehaviour {
         {
 			held_object.GetComponent<Item> ().SetPlayer (this.gameObject, -1);
             held_object.GetComponent<Rigidbody>().isKinematic = false;
+
+			float x_diff = held_object.transform.position.x - transform.position.x;
+
+			float x_off = 0f;
+			if (rb.velocity.x > 0) {
+				if (x_diff > 0) {
+					
+				} else {
+					x_off = 0.6f;
+				}
+			} else {
+				if (x_diff < 0) {
+
+				} else {
+					x_off = -0.6f;
+				}
+			}
+			held_object.transform.position = new Vector3 ( held_object.transform.position.x + x_off, held_object.transform.position.y, 0f);
 			held_object.GetComponent<Rigidbody>().velocity = ((Vector3.right * Mathf.Sign(rb.velocity.x) + Vector3.up * 5f) + rb.velocity);
 			held_object.GetComponent<Item>().thrown = true;
+			//held_object.GetChild(0).gameObject.layer = 24;
+			held_object.gameObject.transform.GetChild (0).gameObject.layer = 24;
         }
 
 		held_object.transform.position = new Vector3(held_object.transform.position.x, held_object.transform.position.y, 0f );
@@ -190,10 +226,11 @@ public class PlayerScript : MonoBehaviour {
 	}
 
 	void InitKeys(){
-		key_mappings = new KeyCode[3][];
-		key_mappings [0] = new KeyCode[6];
-		key_mappings [1] = new KeyCode[6];
-		key_mappings [2] = new KeyCode[6];
+		key_mappings = new KeyCode[4][];
+		key_mappings [0] = new KeyCode[7];
+		key_mappings [1] = new KeyCode[7];
+		key_mappings [2] = new KeyCode[7];
+		key_mappings [3] = new KeyCode[7];
 
 		key_mappings [0][0] = KeyCode.A;
 		key_mappings [0][1] = KeyCode.D;
@@ -201,13 +238,31 @@ public class PlayerScript : MonoBehaviour {
 		key_mappings [0][3] = KeyCode.S;
 		key_mappings [0][4] = KeyCode.E;
 		key_mappings [0][5] = KeyCode.R;
+		key_mappings [0][6] = KeyCode.Q;
 
-		key_mappings [1][0] = KeyCode.H;
-		key_mappings [1][1] = KeyCode.K;
-		key_mappings [1][2] = KeyCode.U;
-		key_mappings [1][3] = KeyCode.J;
-		key_mappings [1][4] = KeyCode.I;
-		key_mappings [1][5] = KeyCode.O;
+		key_mappings [1][0] = KeyCode.G;
+		key_mappings [1][1] = KeyCode.J;
+		key_mappings [1][2] = KeyCode.Y;
+		key_mappings [1][3] = KeyCode.H;
+		key_mappings [1][4] = KeyCode.U;
+		key_mappings [1][5] = KeyCode.I;
+		key_mappings [1][6] = KeyCode.T;
+
+		key_mappings [2][0] = KeyCode.L;
+		key_mappings [2][1] = KeyCode.Quote;
+		key_mappings [2][2] = KeyCode.P;
+		key_mappings [2][3] = KeyCode.Semicolon;
+		key_mappings [2][4] = KeyCode.LeftBracket;
+		key_mappings [2][5] = KeyCode.RightBracket;
+		key_mappings [2][6] = KeyCode.O;
+
+		key_mappings [3][0] = KeyCode.L;
+		key_mappings [3][1] = KeyCode.Quote;
+		key_mappings [3][2] = KeyCode.P;
+		key_mappings [3][3] = KeyCode.Semicolon;
+		key_mappings [3][4] = KeyCode.LeftBracket;
+		key_mappings [3][5] = KeyCode.RightBracket;
+		key_mappings [3][6] = KeyCode.O;
 
 	}
 
@@ -245,7 +300,7 @@ public class PlayerScript : MonoBehaviour {
 	}
 
 	public void UseStairs() {
-		nearestActionObject.GetComponent<Stairs> ().Use (this.gameObject);
+		touching_stairs.GetComponent<Stairs> ().Use (this.gameObject);
 	}
 
 	public void UseElevator(){
@@ -266,6 +321,8 @@ public class PlayerScript : MonoBehaviour {
 		animator.SetBool ("knockout", false);
 	}
 	public void Wakeup(){
+		knockout_forcefield = true;
+		UseAbility ();
 		is_knocked_out = false;
 		Reveal ();
 	}
@@ -283,6 +340,14 @@ public class PlayerScript : MonoBehaviour {
 
 	public virtual void UseAbility(){
 
+		if (knockout_forcefield) {
+			knockout_forcefield = false;
+			forceField.SetActive (true);
+			forceFieldCoolDown = 0f;
+			forceFieldLength = knockoutForceFieldLength;
+			return;
+		}
+
 		if (!forceField.activeSelf && forceFieldCoolDown <= 0f) {
 			forceField.SetActive (true);
 			forceFieldCoolDown = defaultForceFieldCoolDown;
@@ -299,9 +364,11 @@ public class PlayerScript : MonoBehaviour {
 
 	//initialize a controller to this magician
 	public void TryInitializeController(){
-		if (!controller_set) {
+		if (InputManager.Devices.Count > player_num) {
 			controller = InputManager.Devices [player_num];
 			controller_set = true;
+		} else {
+			controller_set = false;
 		}
 	}
 	public void InitializeController(InputDevice cont){
@@ -325,6 +392,7 @@ public class PlayerScript : MonoBehaviour {
 			right = false;
 			left = false;
 		}
+			
 		if (controller.DPadDown) {
 			down = true;
 		} else if (controller.DPadUp) {
@@ -347,6 +415,15 @@ public class PlayerScript : MonoBehaviour {
 		if (controller.Action2) {
 			if (!cooldown) {
 				actions [1] = true;
+				cooldown = true;
+				Invoke ("ActionCooldown", action_cooldown);
+			}
+			return;
+		}
+		if (controller.Action4) {
+			if (!cooldown) {
+				print ("Y BUTTON");
+				actions [2] = true;
 				cooldown = true;
 				Invoke ("ActionCooldown", action_cooldown);
 			}
@@ -384,7 +461,8 @@ public class PlayerScript : MonoBehaviour {
 	{
 		if (nearestActionObject == null)
 			return;
-		
+		if (nearestActionObject.tag == "Stairs")
+			return;
 		held_object = nearestActionObject;
 		is_holding = true;
 		if (!held_object)
@@ -405,6 +483,13 @@ public class PlayerScript : MonoBehaviour {
             is_holding_key_card = true;
         }
         held_object.GetComponent<Item>().thrown = false;
+		if (held_object.GetComponent<Item> ().gold_bar) {
+			held_object.gameObject.transform.GetChild (0).gameObject.layer = 17;
+
+		} else {
+			held_object.gameObject.transform.GetChild (0).gameObject.layer = 10;
+
+		}
         held_object.GetComponent<Item> ().held = true;
 		held_object.GetComponent<Item> ().enabled = true;
 
@@ -443,6 +528,43 @@ public class PlayerScript : MonoBehaviour {
 		}
 
 
+		if (Input.GetKeyDown(key_mappings[player_num][0])) {
+			left = true;
+		}
+		if (Input.GetKeyUp(key_mappings[player_num][0])) {
+			left = false;
+		}
+		if (Input.GetKeyDown(key_mappings[player_num][1])) {
+			right = true;
+		} 		
+		if (Input.GetKeyUp(key_mappings[player_num][1])) {
+			right = false;
+		}
+		if (Input.GetKeyDown(key_mappings[player_num][2])) {
+			up = true;
+		}
+		if (Input.GetKeyUp(key_mappings[player_num][2])) {
+			up = false;
+		}
+		if (Input.GetKeyDown(key_mappings[player_num][3])) {
+			down = true;
+		} 		
+		if (Input.GetKeyUp(key_mappings[player_num][3])) {
+			down = false;
+		}
+
+
+		if (Input.GetKeyDown(key_mappings[player_num][4])) {
+			actions [0] = true;
+		}
+		if (Input.GetKeyDown(key_mappings[player_num][5])) {
+			actions [1] = true;
+		}
+		if (Input.GetKeyDown(key_mappings[player_num][6])) {
+			actions [2] = true;
+		}
+
+
 		if (is_in_box) {
 			rb.velocity = Vector3.zero;
 			transform.position = inside_box.transform.position;
@@ -455,12 +577,7 @@ public class PlayerScript : MonoBehaviour {
 			return;
 		}
 
-		if ((up || down) && is_touching_stairs && !cooldown) {
-			is_touching_stairs = false;
-			nearestActionObject.GetComponent<Stairs> ().Use (this.gameObject);
-			cooldown = true;
-			Invoke ("ActionCooldown", action_cooldown);
-		}
+
 
 		if (left) {
 
@@ -508,6 +625,7 @@ public class PlayerScript : MonoBehaviour {
 
 		if (rb.velocity.x < -0.05f) {
 			this.transform.rotation = Quaternion.Euler (new Vector3 (0f, 180f, 0f));
+
 			if (is_holding && held_object.GetComponent<Item> ().flash_light) {
 				held_object.transform.rotation = Quaternion.Euler (new Vector3 (0f, 180f, 270f));
 			} else if (is_holding && held_object) {
@@ -557,8 +675,6 @@ public class PlayerScript : MonoBehaviour {
 				SwitchElevator ();
 			else if (nearestActionObject.tag == "Closet")
 				UseCloset ();
-			else if (nearestActionObject.tag == "Stairs")
-				UseStairs ();
 			else
 				PickUp ();
 		} else if (is_holding) {
@@ -616,9 +732,17 @@ public class PlayerScript : MonoBehaviour {
 		} else if (is_transformed) {
 			RevertBack ();
 		}
+
 	}
 	public void ProcessAction3(){
 		actions [2] = false;
+		print ("Trying Stairs");
+		print (is_touching_stairs);
+		print (!cooldown);
+		if (is_touching_stairs) {
+			UseStairs ();
+			cooldown = true;
+		}
 	}
 
 
@@ -644,39 +768,47 @@ public class PlayerScript : MonoBehaviour {
 			if (is_holding_briefcase) {
 				print ("win!");
 				Game.GameInstance.Win ();
-			} else if(held_object && held_object.GetComponent<Item>().gold_bar){
+			} else if (held_object && held_object.GetComponent<Item> ().gold_bar) {
 				Game.GameInstance.gold_bars += 1;
 				held_object.GetComponent<Item> ().gold_bar = false;
-			}
-		}
+			} 
+		} else if (coll.gameObject.tag == "Guard") {
+			grabbed_time_initial = Time.time;
+			is_grabbed = true;
+			//coll.gameObject.transform.parent = this.transform;
+		} else if (coll.gameObject.tag == "Stairs") {
+			TouchStairs (coll.gameObject);
+		} else if (coll.gameObject.tag == "Security Cam") {
+			coll.gameObject.GetComponent<SecurityCam> ().Use (player_num);
+		} 
     }
 
-//	public void OnTriggerExit(Collider coll){
-//		if (coll.gameObject.tag == "Item") {
-//			if (coll.gameObject.GetComponent<Item> ().magical_key && player_num != 1) {
-//				coll.gameObject.GetComponentInParent<KeyPlayerScript> ().players_touching_key.Remove (this.gameObject);
-//			}
-//		} else if (coll.gameObject.tag == "Magical Box") {
-//			StopTouchBox (coll.gameObject);
-//		} else if (coll.gameObject.tag == "Door") {
-//			is_touching_door = false;
-//			touching_door = null;
-//		}  else if (coll.gameObject.tag == "Elevator") {
-//			is_touching_elevator = false;
-//			touching_elevator = null;
-//			coll.gameObject.GetComponent<Elevator> ().GetOut (this.gameObject);
-//		}  else if (coll.gameObject.tag == "Stairs") {
-//			is_touching_stairs = false;
-//			touching_stairs = null;
-//		}  else if (coll.gameObject.tag == "Closet") {
-//			is_touching_closet = false;
-//			touching_closet = null;
-//		}  else if (coll.gameObject.tag == "Desk Overlap") {
-//			is_touching_desk_overlap = false;
-//			touching_desk_overlap = null;
-//		} 
-//	}
-		
+	public void OnTriggerExit(Collider coll){
+		if (coll.gameObject.tag == "Stairs") {
+			StopTouchingStairs ();
+		}
+	}
+	public void TouchStairs(GameObject stairs){
+		if (stairsPrompt) {
+			Destroy(stairsPrompt.gameObject);
+			stairsPrompt = null;
+		}
+		stairsPrompt = MonoBehaviour.Instantiate (StairsPromptPrefab);
+		stairsPrompt.transform.position = new Vector3( stairs.transform.position.x + 0.5f, stairs.transform.position.y + 0.5f, 0f);
+		is_touching_stairs = true;
+		touching_stairs = stairs;
+		cam.GetComponent<Camera2DFollowMultiple> ().targets [1] = touching_stairs.GetComponent<Stairs>().destination.transform;
+	}
+	public void StopTouchingStairs(){
+		if (stairsPrompt) {
+			Destroy(stairsPrompt.gameObject);
+			stairsPrompt = null;
+		}
+		is_touching_stairs = false;
+		touching_stairs = null;
+		cam.GetComponent<Camera2DFollowMultiple> ().targets [1] = this.gameObject.transform;
+
+	}
 	public void DisappearBody(){
 		body.SetActive (false);
 		if (is_holding) {
@@ -748,6 +880,8 @@ public class PlayerScript : MonoBehaviour {
 			return;
 
 		Collider closest = taggedColliders [0];
+		Collider secondClosest = taggedColliders [0];
+		int changes = 0;
 		float zeroDistance = Vector3.Distance (taggedColliders [0].ClosestPointOnBounds (this.transform.position), this.transform.position);
 
 		for (int i = 1; i < taggedColliders.Count; ++i) {
@@ -774,6 +908,9 @@ public class PlayerScript : MonoBehaviour {
 			pickupPrompt.GetComponent<PickupPrompt> ().parentPlayer = this.gameObject;
 			pickupPrompt.GetComponent<PickupPrompt> ().itemPickup.GetComponent<SpriteRenderer>().sprite = nearestActionObject.GetComponent<SpriteRenderer> ().sprite;
 		}
+		if (!is_knocked_out && nearestActionObject && nearestActionObject.tag == "Stairs") {
+
+		}
 
 	}
 
@@ -789,13 +926,31 @@ public class PlayerScript : MonoBehaviour {
 			forceFieldLength -= Time.fixedDeltaTime;
 		else if (forceFieldLength <= 0f && forceField.activeSelf)
 			forceField.SetActive (false);
+        if (red_team)
+            points = gameScript.red_team_score;
+        else if (!red_team)
+            points = gameScript.blue_team_score;
+        print("Team: " + red_team + points);
 
-		pointsText.text = points.ToString();
+        pointsText.text = points.ToString();
 
 		if (is_knocked_out && pickupPrompt) {
 			Destroy(pickupPrompt.gameObject);
 			pickupPrompt = null;
 		}
-		TryInitializeController ();
+		if(!Game.GameInstance.skip_select)TryInitializeController ();
+		else TryInitializeController ();
+		if (is_grabbed) {
+			grabbed_time_current = Time.time - grabbed_time_initial;
+			if (grabbed_time_current > grabbed_time_limit) {
+				transform.position = original_position;
+				is_grabbed = false;
+			}
+			vel = original_velocity / 2f;
+			//grabbed_by.transform.position = transform.position;
+		} else {
+			vel = original_velocity;
+		}
 	}
+
 }

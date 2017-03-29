@@ -17,6 +17,7 @@ public class Item : MonoBehaviour {
 	public bool enabled = false;
 	public GameObject current_player;
 	public GameObject plus50_prefab;
+    public Game gameScript;
 	private MaterialPropertyBlock propertyBlock;
 	private SpriteRenderer srend;
 
@@ -43,8 +44,18 @@ public class Item : MonoBehaviour {
 
         if (GetComponent<Rigidbody>().velocity.magnitude <= 0.1f)
         {
-			thrown = false;
+
         }
+		if (GetComponent<Rigidbody> ().velocity.magnitude <= 0.01f) {
+			thrown = false;
+			if (gold_bar) {
+				gameObject.transform.GetChild (0).gameObject.layer = 17;
+
+			} else {
+				gameObject.transform.GetChild (0).gameObject.layer = 10;
+
+			}
+		}
 	}
 
 	public void SetPlayer(GameObject obj, int n){
@@ -60,14 +71,35 @@ public class Item : MonoBehaviour {
     public void OnTriggerEnter(Collider other)
 	{
 		if (other.gameObject.tag == "Player" && other.gameObject.transform.parent != null) {
-			PlayerScript p = other.gameObject.transform.parent.GetComponent<PlayerScript> ();
+			//print ("BUMP");
+			//print (other);
 
-			if (p != null && !p.is_knocked_out && thrown && current_player != p.gameObject) {
+			PlayerScript p = other.gameObject.transform.parent.GetComponent<PlayerScript> ();
+			//print (!p.is_knocked_out);
+			//print (thrown);
+			//print (current_player != p.gameObject);
+			//print (!p.forceField.activeSelf);
+			//print (GetComponent<Rigidbody> ().velocity);
+
+			if (p != null && !p.is_knocked_out && thrown && current_player != p.gameObject && !p.forceField.activeSelf && (p.red_team != current_player.GetComponent<PlayerScript>().red_team)) {
 				p.KnockOut ();
 				current_player.GetComponent<PlayerScript> ().points += 50;
-				var plus50 = Instantiate (plus50_prefab);
+                print(current_player);
+                if (current_player.GetComponent<PlayerScript>().red_team)
+                    gameScript.blue_team_score -= 10;
+                else
+                    gameScript.red_team_score -= 10;
+                var plus50 = Instantiate (plus50_prefab);
 				plus50.transform.position = p.transform.position + Vector3.up * 0.5f;
+				//print ("In if statement ");
 				thrown = false;
+				if (gold_bar) {
+					gameObject.transform.GetChild (0).gameObject.layer = 17;
+
+				} else {
+					gameObject.transform.GetChild (0).gameObject.layer = 10;
+
+				}
 				GetComponent<Rigidbody> ().velocity = Vector3.zero;
 			}
 		} else if (other.gameObject.tag == "Gold Trigger" && current_player != null && canGetMorePoints) {
