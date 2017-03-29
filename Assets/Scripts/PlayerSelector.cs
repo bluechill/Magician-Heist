@@ -7,6 +7,7 @@ public class PlayerSelector : MonoBehaviour {
 
 	public static PlayerSelector instance;
 	public GameObject title_screen;
+	public GameObject selection_screen;
 	int max_players = 4;
 	public InputDevice[] controllers;
 	public GameObject[] controller_icons;
@@ -15,6 +16,8 @@ public class PlayerSelector : MonoBehaviour {
 	public int num_players;
 	public bool[] init;
 	public bool setting_up = false;
+	public bool grow = false;
+	public bool kill = false;
 	// Use this for initialization
 	void Start () {
 		init = new bool[4];
@@ -44,8 +47,7 @@ public class PlayerSelector : MonoBehaviour {
 		num_players = InputManager.Devices.Count;
 		if (setting_up) {
 			if (title_screen) {
-				title_screen.SetActive (false);
-				title_screen = null;
+				title_screen.GetComponent<TitleScreen> ().Kill ();
 			}
 			InitControllers ();
 			TakeInput ();
@@ -57,6 +59,14 @@ public class PlayerSelector : MonoBehaviour {
 
 				}
 			}
+		}
+
+
+		if (grow) {
+			GrowSelectionScreen ();
+		}
+		if (kill) {
+			DestroySelectionScreen ();
 		}
 
 	}
@@ -190,5 +200,22 @@ public class PlayerSelector : MonoBehaviour {
 		}
 		return true;
 	}
-
+	public void Grow(){
+		grow = true;
+	}
+	public void Kill(){
+		kill = true;
+	}
+	void DestroySelectionScreen(){
+		selection_screen.gameObject.transform.localScale = Vector3.Lerp (selection_screen.gameObject.transform.localScale, Vector3.zero, 0.1f);
+		if (selection_screen.gameObject.transform.localScale.magnitude <= 0.0001f) {
+			Destroy (this.gameObject);
+		}
+	}
+	void GrowSelectionScreen(){
+		selection_screen.gameObject.transform.localScale = Vector3.Lerp (selection_screen.gameObject.transform.localScale, new Vector3(0.75f, 0.75f, 1f), 0.1f);
+		if (selection_screen.gameObject.transform.localScale.x >= 0.74f) {
+			grow = false;
+		}
+	}
 }
