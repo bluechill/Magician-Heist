@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class Game : MonoBehaviour {
 
+
+	bool low_time = false;
 	public bool skip_select = false;
 	public GameObject camera;
 	public int num_players = 0;
@@ -78,11 +80,18 @@ public class Game : MonoBehaviour {
         }
 
         run_time = Time.time - start_time;
+		if (time_limit - run_time < 60f) {
+			low_time = true;
+
+		}
 		if (run_time >= time_limit) {
 			Win ();
 		}
 
 		timer_text.text = "Time Remaining: " + ((time_limit - run_time)).ToString("0.00");
+		if (low_time) {
+			FlashTimer ();
+		}
 	}
     void Tutorial()
     {
@@ -140,4 +149,7 @@ public class Game : MonoBehaviour {
     {
         SceneManager.LoadScene("play_test_no_tut");
     }
+	public void FlashTimer(){
+		GetComponent<TimerFlash> ().Use ();
+	}
 }
