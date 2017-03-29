@@ -29,6 +29,8 @@ public class Game : MonoBehaviour {
 	public int[] playerChoices;
 
 	public int gold_bars = 0;
+    public int red_team_score = 0;
+    public int blue_team_score = 0;
 	public float time_limit;
 	public float run_time = 0f;
 	public float start_time = 0f;

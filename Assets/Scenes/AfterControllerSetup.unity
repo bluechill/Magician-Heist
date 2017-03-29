@@ -902,6 +902,8 @@ MonoBehaviour:
   - {fileID: 1020049573495260, guid: 1cc24d72876fd4730a424f256b872230, type: 2}
   playerChoices: 
   gold_bars: 0
+  red_team_score: 0
+  blue_team_score: 0
   time_limit: 360
   run_time: 0
   start_time: 0
@@ -15975,6 +15977,56 @@ Prefab:
       propertyPath: lookAheadFactor
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114088944904178380, guid: d7dadb4266346414c8ff3812896e8714,
+        type: 2}
+      propertyPath: red_team
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114097355583977746, guid: d7dadb4266346414c8ff3812896e8714,
+        type: 2}
+      propertyPath: red_team
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114088944904178380, guid: d7dadb4266346414c8ff3812896e8714,
+        type: 2}
+      propertyPath: gameScript
+      value: 
+      objectReference: {fileID: 45636262}
+    - target: {fileID: 114097355583977746, guid: d7dadb4266346414c8ff3812896e8714,
+        type: 2}
+      propertyPath: gameScript
+      value: 
+      objectReference: {fileID: 45636262}
+    - target: {fileID: 114688931996513264, guid: d7dadb4266346414c8ff3812896e8714,
+        type: 2}
+      propertyPath: gameScript
+      value: 
+      objectReference: {fileID: 45636262}
+    - target: {fileID: 114898053104140770, guid: d7dadb4266346414c8ff3812896e8714,
+        type: 2}
+      propertyPath: gameScript
+      value: 
+      objectReference: {fileID: 45636262}
+    - target: {fileID: 114088944904178380, guid: d7dadb4266346414c8ff3812896e8714,
+        type: 2}
+      propertyPath: pointsText
+      value: 
+      objectReference: {fileID: 1518834268}
+    - target: {fileID: 114097355583977746, guid: d7dadb4266346414c8ff3812896e8714,
+        type: 2}
+      propertyPath: pointsText
+      value: 
+      objectReference: {fileID: 494216578}
+    - target: {fileID: 114688931996513264, guid: d7dadb4266346414c8ff3812896e8714,
+        type: 2}
+      propertyPath: pointsText
+      value: 
+      objectReference: {fileID: 1170225224}
+    - target: {fileID: 114898053104140770, guid: d7dadb4266346414c8ff3812896e8714,
+        type: 2}
+      propertyPath: pointsText
+      value: 
+      objectReference: {fileID: 1058703198}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d7dadb4266346414c8ff3812896e8714, type: 2}
   m_IsPrefabParent: 0
@@ -24545,6 +24597,81 @@ Prefab:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 114387215638869926, guid: 0154caf70d69847c8b6e47cf30932e4b,
+        type: 2}
+      propertyPath: gameScript
+      value: 
+      objectReference: {fileID: 45636262}
+    - target: {fileID: 114199774177160638, guid: 0154caf70d69847c8b6e47cf30932e4b,
+        type: 2}
+      propertyPath: gameScript
+      value: 
+      objectReference: {fileID: 45636262}
+    - target: {fileID: 114875554144834938, guid: 0154caf70d69847c8b6e47cf30932e4b,
+        type: 2}
+      propertyPath: gameScript
+      value: 
+      objectReference: {fileID: 45636262}
+    - target: {fileID: 114671643404586700, guid: 0154caf70d69847c8b6e47cf30932e4b,
+        type: 2}
+      propertyPath: gameScript
+      value: 
+      objectReference: {fileID: 45636262}
+    - target: {fileID: 114765383093426882, guid: 0154caf70d69847c8b6e47cf30932e4b,
+        type: 2}
+      propertyPath: gameScript
+      value: 
+      objectReference: {fileID: 45636262}
+    - target: {fileID: 114991756798804390, guid: 0154caf70d69847c8b6e47cf30932e4b,
+        type: 2}
+      propertyPath: gameScript
+      value: 
+      objectReference: {fileID: 45636262}
+    - target: {fileID: 114591857052801190, guid: 0154caf70d69847c8b6e47cf30932e4b,
+        type: 2}
+      propertyPath: gameScript
+      value: 
+      objectReference: {fileID: 45636262}
+    - target: {fileID: 114390555510534440, guid: 0154caf70d69847c8b6e47cf30932e4b,
+        type: 2}
+      propertyPath: gameScript
+      value: 
+      objectReference: {fileID: 45636262}
+    - target: {fileID: 114758423553089124, guid: 0154caf70d69847c8b6e47cf30932e4b,
+        type: 2}
+      propertyPath: gameScript
+      value: 
+      objectReference: {fileID: 45636262}
+    - target: {fileID: 114477105268826800, guid: 0154caf70d69847c8b6e47cf30932e4b,
+        type: 2}
+      propertyPath: gameScript
+      value: 
+      objectReference: {fileID: 45636262}
+    - target: {fileID: 114264723758821558, guid: 0154caf70d69847c8b6e47cf30932e4b,
+        type: 2}
+      propertyPath: gameScript
+      value: 
+      objectReference: {fileID: 45636262}
+    - target: {fileID: 114486796803541048, guid: 0154caf70d69847c8b6e47cf30932e4b,
+        type: 2}
+      propertyPath: gameScript
+      value: 
+      objectReference: {fileID: 45636262}
+    - target: {fileID: 114293132535028372, guid: 0154caf70d69847c8b6e47cf30932e4b,
+        type: 2}
+      propertyPath: gameScript
+      value: 
+      objectReference: {fileID: 45636262}
+    - target: {fileID: 114512854569155252, guid: 0154caf70d69847c8b6e47cf30932e4b,
+        type: 2}
+      propertyPath: gameScript
+      value: 
+      objectReference: {fileID: 45636262}
+    - target: {fileID: 114355979017883338, guid: 0154caf70d69847c8b6e47cf30932e4b,
+        type: 2}
+      propertyPath: gameScript
+      value: 
+      objectReference: {fileID: 45636262}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0154caf70d69847c8b6e47cf30932e4b, type: 2}
   m_IsPrefabParent: 0

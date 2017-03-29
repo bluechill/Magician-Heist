@@ -13,10 +13,6 @@ public class KeyPlayerScript : PlayerScript {
 	// Update is called once per frame
 	void Update () {
 		age = Time.time - birthtime;
-		if (!started) {
-			started = true;
-			pointsText = GameObject.FindGameObjectWithTag ("Points Text 2").GetComponent<Text> ();
-		}
 		ProcessMovement ();
 		ProcessRotation ();
 		ProcessActions ();
