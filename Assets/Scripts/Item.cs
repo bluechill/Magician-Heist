@@ -22,6 +22,10 @@ public class Item : MonoBehaviour {
 	private SpriteRenderer srend;
 
 	private bool canGetMorePoints = true;
+	float lifespan = 0f;
+	public bool kill = false;
+	float age = 0f; 
+	float kill_time = 0f; 
 	// Use this for initialization
 	void Start () {
 		srend = GetComponent<SpriteRenderer>();
@@ -29,6 +33,13 @@ public class Item : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (kill) {
+			age = Time.time - kill_time;
+			if (age > lifespan){
+				//DestroyThis ();
+			}
+		}
+
 		if ((tree && held) || flash_light) {
 			transform.rotation = Quaternion.Euler (new Vector3 (transform.rotation.x, transform.rotation.y, 90f));
 		} else {
@@ -107,6 +118,15 @@ public class Item : MonoBehaviour {
 			var plus50 = Instantiate (plus50_prefab);
 			plus50.transform.position = this.transform.position + Vector3.up * 0.1f;
 			canGetMorePoints = false;
+			lifespan = 1f;
+			kill_time = Time.time;
+			kill = true;
 		}
     }
+	void DestroyThis(){
+		transform.localScale = Vector3.Lerp (transform.localScale, Vector3.zero, 0.1f);
+		if (transform.localScale.magnitude <= 0.0001f) {
+			Destroy (this.gameObject);
+		}
+	}
 }
