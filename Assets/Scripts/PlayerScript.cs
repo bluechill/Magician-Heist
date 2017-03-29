@@ -19,6 +19,7 @@ public class PlayerScript : MonoBehaviour {
 
 	public float vel;
 	public int player_num;
+    public bool red_team;
 
 	public bool is_grabbed = false;
 	public float grabbed_time_initial;
@@ -31,6 +32,7 @@ public class PlayerScript : MonoBehaviour {
 	public GameObject transformed_object;
 	public GameObject right_hand;
 	public GameObject forceField;
+    public Game gameScript;
 
 	public float forceFieldCoolDown = 0.0f;
 	public float forceFieldLength = 0.0f;
@@ -104,7 +106,6 @@ public class PlayerScript : MonoBehaviour {
 		for (int i = 0; i < num_actions; i++) {
 			actions[i] = false;
 		}
-
 	}
 
 	public void Drop(){
@@ -925,8 +926,13 @@ public class PlayerScript : MonoBehaviour {
 			forceFieldLength -= Time.fixedDeltaTime;
 		else if (forceFieldLength <= 0f && forceField.activeSelf)
 			forceField.SetActive (false);
+        if (red_team)
+            points = gameScript.red_team_score;
+        else if (!red_team)
+            points = gameScript.blue_team_score;
+        print("Team: " + red_team + points);
 
-		pointsText.text = points.ToString();
+        pointsText.text = points.ToString();
 
 		if (is_knocked_out && pickupPrompt) {
 			Destroy(pickupPrompt.gameObject);
