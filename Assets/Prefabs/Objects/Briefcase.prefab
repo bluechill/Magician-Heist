@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 65504694567605252}
   - component: {fileID: 114122035930558164}
   - component: {fileID: 54337650278600986}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Briefcase
   m_TagString: Item
   m_Icon: {fileID: 0}
@@ -129,10 +129,13 @@ MonoBehaviour:
   is_player: 0
   gold_bar: 0
   tree: 0
+  key_card: 0
   held: 0
+  thrown: 0
   player_num: -1
   enabled: 0
   current_player: {fileID: 0}
+  plus50_prefab: {fileID: 0}
 --- !u!212 &212224423133338640
 SpriteRenderer:
   m_ObjectHideFlags: 1
