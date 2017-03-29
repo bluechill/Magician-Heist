@@ -6,7 +6,7 @@ using InControl;
 public class PlayerSelector : MonoBehaviour {
 
 	public static PlayerSelector instance;
-
+	public GameObject title_screen;
 	int max_players = 4;
 	public InputDevice[] controllers;
 	public GameObject[] controller_icons;
@@ -14,6 +14,7 @@ public class PlayerSelector : MonoBehaviour {
 	public bool[] cooldowns;
 	public int num_players;
 	public bool[] init;
+	public bool setting_up = false;
 	// Use this for initialization
 	void Start () {
 		init = new bool[4];
@@ -41,9 +42,23 @@ public class PlayerSelector : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		num_players = InputManager.Devices.Count;
-		InitControllers ();
-		TakeInput ();
-		UpdateChoices ();
+		if (setting_up) {
+			if (title_screen) {
+				title_screen.SetActive (false);
+				title_screen = null;
+			}
+			InitControllers ();
+			TakeInput ();
+			UpdateChoices ();
+		} else {
+			for (int i = 0; i < InputManager.Devices.Count; i++) {
+				if (InputManager.Devices [i].Action1) {
+					setting_up = true;
+
+				}
+			}
+		}
+
 	}
 	void InitControllers(){
 		for (int i = 0; i < num_players; i++) {
