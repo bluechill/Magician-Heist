@@ -15,12 +15,18 @@ public class PickupPrompt : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (!parentPlayer.GetComponent<PlayerScript> ().nearestActionObject) {
-			Destroy (this.gameObject);
+			DestroyThis();
 		}
 		if (parentPlayer.GetComponent<PlayerScript> ().nearestActionObject != parentObject) {
-			Destroy (this.gameObject);
+			DestroyThis();
 		}
 		if (parentPlayer && parentPlayer.GetComponent<PlayerScript> ().is_transformed) {
+			DestroyThis();
+		}
+	}
+	void DestroyThis(){
+		transform.localScale = Vector3.Lerp (transform.localScale, Vector3.zero, 0.1f);
+		if (transform.localScale.magnitude <= 0.0001f) {
 			Destroy (this.gameObject);
 		}
 	}

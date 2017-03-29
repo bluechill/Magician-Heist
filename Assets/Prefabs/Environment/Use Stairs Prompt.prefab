@@ -19,6 +19,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4285234502185556}
+  - component: {fileID: 114621865903386236}
   m_Layer: 0
   m_Name: Use Stairs Prompt
   m_TagString: Untagged
@@ -144,6 +145,18 @@ MonoBehaviour:
   sprites:
   - {fileID: 21300006, guid: d2f3bcbc32fe844919a66c123c3bf0d8, type: 3}
   - {fileID: 21300006, guid: 979225fa19b5647baa445405afa97a3b, type: 3}
+--- !u!114 &114621865903386236
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1175637456942130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b33f68e3213c4fcea80a868c2a1bd5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  kill: 0
 --- !u!212 &212086986242329250
 SpriteRenderer:
   m_ObjectHideFlags: 1

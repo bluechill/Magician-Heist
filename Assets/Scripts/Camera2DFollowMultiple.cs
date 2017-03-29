@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class Camera2DFollowMultiple : MonoBehaviour
 {
+
+	public bool viewing_stairs = false;
+	public GameObject stairs;
     public Transform[] targets;
     public float damping = 1;
     public float lookAheadFactor = 3;
@@ -88,6 +91,12 @@ public class Camera2DFollowMultiple : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+		if (viewing_stairs) {
+			damping = 1f;
+		} else {
+			damping = 0f;
+		}
+
 		cam.orthographicSize = orthoSize ();
 		float y = maxTargetYDistance ();
 		tilt.blurArea = y * -9.4f / 7f + 15f;
