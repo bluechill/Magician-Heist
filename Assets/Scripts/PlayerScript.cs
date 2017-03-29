@@ -790,7 +790,7 @@ public class PlayerScript : MonoBehaviour {
 	}
 	public void TouchStairs(GameObject stairs){
 		if (stairsPrompt) {
-			Destroy(stairsPrompt.gameObject);
+			stairsPrompt.GetComponent<StairsPrompt> ().Kill ();
 			stairsPrompt = null;
 		}
 		stairsPrompt = MonoBehaviour.Instantiate (StairsPromptPrefab);
@@ -798,16 +798,18 @@ public class PlayerScript : MonoBehaviour {
 		is_touching_stairs = true;
 		touching_stairs = stairs;
 		cam.GetComponent<Camera2DFollowMultiple> ().targets [1] = touching_stairs.GetComponent<Stairs>().destination.transform;
+		cam.GetComponent<Camera2DFollowMultiple> ().viewing_stairs = true;
+
 	}
 	public void StopTouchingStairs(){
 		if (stairsPrompt) {
-			Destroy(stairsPrompt.gameObject);
+			stairsPrompt.GetComponent<StairsPrompt> ().Kill ();
 			stairsPrompt = null;
 		}
 		is_touching_stairs = false;
 		touching_stairs = null;
 		cam.GetComponent<Camera2DFollowMultiple> ().targets [1] = this.gameObject.transform;
-
+		cam.GetComponent<Camera2DFollowMultiple> ().viewing_stairs = false;
 	}
 	public void DisappearBody(){
 		body.SetActive (false);
