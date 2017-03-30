@@ -11,6 +11,7 @@ public class SoundsController : MonoBehaviour {
 	void Start () {
 		
 	}
+
 	void Awake ()   
 	{
 		if (instance == null)
@@ -23,16 +24,20 @@ public class SoundsController : MonoBehaviour {
 			Destroy (gameObject);
 		}
 	}
+
 	// Update is called once per frame
 	void Update () {
 		
 	}
+
 	public bool IsPlaying(string name){
 		return sound_objects [GetIndex (name)].GetComponent<AudioSource> ().isPlaying;
 	}
+
 	public void PlaySound(string name){
 		sound_objects [GetIndex (name)].GetComponent<AudioSource> ().Play ();
 	}
+
 	int GetIndex(string name){
 		switch (name) {
 		case "main":
