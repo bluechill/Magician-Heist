@@ -8,7 +8,6 @@ public class BlinkIMG : MonoBehaviour {
 	public Sprite[] sprites;
 	int idx = 0;
 	public float spriteChangeRate = 0.666f;
-	public float time = 0.0f;
 
 	// Use this for initialization
 	void Start () {
