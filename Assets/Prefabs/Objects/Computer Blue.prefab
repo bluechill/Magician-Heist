@@ -98,7 +98,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1588010519672022}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.65, y: -2.1429977, z: 0}
+  m_LocalPosition: {x: 23.118, y: 6.3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4809927979737698}
@@ -197,6 +197,10 @@ MonoBehaviour:
   current_player: {fileID: 0}
   plus50_prefab: {fileID: 1133873725776970, guid: 0448f09fe724f45198700a6ac536dfed,
     type: 2}
+  gameScript: {fileID: 0}
+  points: 150
+  size: 10
+  kill: 0
 --- !u!114 &114280825505086094
 MonoBehaviour:
   m_ObjectHideFlags: 1

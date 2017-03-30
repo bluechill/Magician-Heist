@@ -22,7 +22,7 @@ public class Item : MonoBehaviour {
 	private SpriteRenderer srend;
 	public int points;
     	public int size;
-
+	public bool counted = false;
 	private bool canGetMorePoints = true;
 	float lifespan = 0f;
 	public bool kill = false;
@@ -99,9 +99,9 @@ public class Item : MonoBehaviour {
 				current_player.GetComponent<PlayerScript> ().points += 50;
                 print(current_player);
                 if (current_player.GetComponent<PlayerScript>().red_team)
-                    gameScript.blue_team_score -= 10;
+					Game.GameInstance.blue_team_score -= 10;
                 else
-                    gameScript.red_team_score -= 10;
+					Game.GameInstance.red_team_score -= 10;
                 var plus50 = Instantiate (plus50_prefab);
 				plus50.transform.position = p.transform.position + Vector3.up * 0.5f;
 				//print ("In if statement ");
