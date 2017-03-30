@@ -5,7 +5,10 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class Game : MonoBehaviour {
-
+	private double nextMusicEventTime;
+	private int nextClip = 0;
+	private int flip = 0;
+	public AudioClip[] musicClips;
 
 	bool low_time = false;
 	public bool skip_select = false;
@@ -59,9 +62,29 @@ public class Game : MonoBehaviour {
 				players[i].GetComponent<PlayerScript> ().player_num = playerChoices[i];
 			}
 		}
+
+		SoundsController.instance.sound_objects [0].GetComponent<AudioSource> ().loop = false;
+		SoundsController.instance.sound_objects [1].GetComponent<AudioSource> ().loop = false;
+
+		if (musicClips.Length > nextClip) {
+			SoundsController.instance.sound_objects [flip].GetComponent<AudioSource> ().clip = musicClips [nextClip];
+			SoundsController.instance.sound_objects [flip].GetComponent<AudioSource> ().Play ();
+			nextMusicEventTime = AudioSettings.dspTime + musicClips [nextClip].length;
+			flip = 1 - flip;
+			++nextClip;
+		}
 	}
     // Update is called once per frame
     void Update () {
+		var time = AudioSettings.dspTime;
+		if (time + 1.0 > nextMusicEventTime && musicClips.Length > nextClip) {
+			SoundsController.instance.sound_objects [flip].GetComponent<AudioSource> ().clip = musicClips [nextClip];
+			SoundsController.instance.sound_objects [flip].GetComponent<AudioSource> ().PlayScheduled (nextMusicEventTime);
+			nextMusicEventTime = AudioSettings.dspTime + musicClips [nextClip].length;
+			++nextClip;
+			flip = flip - 1;
+		}
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Restart();
