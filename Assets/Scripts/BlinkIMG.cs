@@ -7,20 +7,19 @@ public class BlinkIMG : MonoBehaviour {
 	Image rend;
 	public Sprite[] sprites;
 	int idx = 0;
-	public float speed;
+	public float spriteChangeRate = 0.666f;
+	public float time = 0.0f;
+
 	// Use this for initialization
 	void Start () {
 		rend = GetComponent<Image> ();
-		Invoke ("BlinkSprite",speed);
+
+		InvokeRepeating ("BlinkSprite", spriteChangeRate, spriteChangeRate);
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
 	void BlinkSprite(){
-		rend.sprite = sprites [idx % sprites.Length];
-		idx++;
-		Invoke ("BlinkSprite",speed);
+		rend.sprite = sprites [idx];
+
+		idx = (idx + 1) % sprites.Length;
 	}
 }

@@ -3497,7 +3497,8 @@ MonoBehaviour:
   sprites:
   - {fileID: 21300000, guid: 979225fa19b5647baa445405afa97a3b, type: 3}
   - {fileID: 21300000, guid: d2f3bcbc32fe844919a66c123c3bf0d8, type: 3}
-  speed: 0.5
+  spriteChangeRate: 0.6
+  time: 0
 --- !u!1 &1864343210
 GameObject:
   m_ObjectHideFlags: 0
