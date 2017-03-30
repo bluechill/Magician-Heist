@@ -8,6 +8,7 @@ public class PlayerSelector : MonoBehaviour {
 	public static PlayerSelector instance;
 	public GameObject title_screen;
 	public GameObject selection_screen;
+	public GameObject kill_object;
 	int max_players = 4;
 	public InputDevice[] controllers;
 	public GameObject[] controller_icons;
@@ -89,9 +90,9 @@ public class PlayerSelector : MonoBehaviour {
 					Game.GameInstance.playerChoices = new int[4];
 					for (int k = 0; k < 4; k++) {
 						Game.GameInstance.playerChoices [k] = choices [k];
-
+						Kill ();
 					}
-					SceneManager.LoadScene ("AfterControllerSetup");
+
 				}
 
 				if (!cooldowns[i] && controllers [i].LeftStickX < 0f) {
@@ -178,7 +179,6 @@ public class PlayerSelector : MonoBehaviour {
 
 	bool ValidChoices(){
 
-
 		if (num_players < 4)
 			return false;
 
@@ -207,10 +207,21 @@ public class PlayerSelector : MonoBehaviour {
 		kill = true;
 	}
 	void DestroySelectionScreen(){
+
 		selection_screen.gameObject.transform.localScale = Vector3.Lerp (selection_screen.gameObject.transform.localScale, Vector3.zero, 0.1f);
 		if (selection_screen.gameObject.transform.localScale.magnitude <= 0.0001f) {
-			Destroy (this.gameObject);
+			Destroy (selection_screen.gameObject);
 		}
+
+
+		if(!selection_screen){
+			kill_object.gameObject.transform.localScale = Vector3.Lerp (kill_object.gameObject.transform.localScale, new Vector3(0f, kill_object.gameObject.transform.localScale.y, 0f), 0.15f);
+			if (kill_object.gameObject.transform.localScale.magnitude <= 0.0001f) {
+				SceneManager.LoadScene ("AfterControllerSetup");
+				Destroy (kill_object.gameObject);
+			}
+		}
+
 	}
 	void GrowSelectionScreen(){
 		selection_screen.gameObject.transform.localScale = Vector3.Lerp (selection_screen.gameObject.transform.localScale, new Vector3(0.75f, 0.75f, 1f), 0.1f);

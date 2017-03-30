@@ -12,8 +12,8 @@ public class BackgroundScroll : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		transform.localPosition = new Vector3 (transform.localPosition.x - scroll_speed, transform.localPosition.y, 0f);
-		if (transform.localPosition.x <= -775f) {
-			transform.localPosition = new Vector3 (2250f, transform.localPosition.y, 0f);
+		if (transform.localPosition.x <= -850f) {
+			transform.localPosition = new Vector3 (1394f, transform.localPosition.y, 0f);
 		}
 	}
 }
