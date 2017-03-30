@@ -711,27 +711,7 @@ public class PlayerScript : MonoBehaviour {
 	}
 	public void ProcessAction2(){
 		actions [1] = false;
-		if (is_holding && !is_transformed) {
-			TransformIntoItem ();
-		} else if(nearestActionObject && nearestActionObject.tag == "Closet" && nearestActionObject.GetComponent<Closet>().open){
-			if (!is_in_closet)
-				EnterCloset ();
-			else
-				ExitCloset ();
-			
-		} else if(!is_ability && nearestActionObject && nearestActionObject.tag == "Elevator" && !is_in_elevator && nearestActionObject.GetComponent<Elevator>().open){
-			EnterElevator ();
-		}  else if(is_in_elevator && nearestActionObject.GetComponent<Elevator>().open){
-			ExitElevator ();
-		}   else if(is_in_elevator && !nearestActionObject.GetComponent<Elevator>().open && elevator_ready){
-			UseElevator ();
-		} else if(is_in_closet){
-			return;
-		} else if (!is_transformed) {
-			UseAbility ();
-		} else if (is_transformed) {
-			RevertBack ();
-		}
+		UseAbility ();
 
 	}
 	public void ProcessAction3(){

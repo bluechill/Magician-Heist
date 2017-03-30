@@ -26,7 +26,7 @@ public class TitleScreen : MonoBehaviour {
 	}
 	void DestroyThis(){
 		transform.localScale = Vector3.Lerp (transform.localScale, new Vector3(0f, 1f, 1f), 0.1f);
-		if (transform.localScale.x <= 0.0001f) {
+		if (transform.localScale.x <= 0.001f) {
 			selector.GetComponent<PlayerSelector> ().Grow ();
 			Destroy (this.gameObject);
 		}
