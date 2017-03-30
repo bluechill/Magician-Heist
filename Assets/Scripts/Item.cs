@@ -20,6 +20,8 @@ public class Item : MonoBehaviour {
     public Game gameScript;
 	private MaterialPropertyBlock propertyBlock;
 	private SpriteRenderer srend;
+	public int points;
+    	public int size;
 
 	private bool canGetMorePoints = true;
 	float lifespan = 0f;
