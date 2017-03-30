@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 114520347199274454}
   - component: {fileID: 54761704820359954}
   - component: {fileID: 114359453308700300}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: Gold Bar
   m_TagString: Item
   m_Icon: {fileID: 0}
@@ -53,8 +53,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1206046408132592}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.76199996, y: 0.19899988, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 9.847779, y: 18.140982, z: 0}
   m_LocalScale: {x: 0.3, y: 0.3, z: 1}
   m_Children:
   - {fileID: 4801614552015504}
@@ -149,6 +149,12 @@ MonoBehaviour:
   player_num: -1
   enabled: 0
   current_player: {fileID: 0}
+  plus50_prefab: {fileID: 1133873725776970, guid: 0448f09fe724f45198700a6ac536dfed,
+    type: 2}
+  gameScript: {fileID: 0}
+  points: 0
+  size: 0
+  kill: 0
 --- !u!212 &212452618533445266
 SpriteRenderer:
   m_ObjectHideFlags: 1

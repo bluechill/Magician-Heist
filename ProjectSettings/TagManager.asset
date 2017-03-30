@@ -33,6 +33,8 @@ TagManager:
   - Points Text 3
   - Points Text 4
   - Security Cam
+  - Red Truck
+  - Blue Truck
   layers:
   - Default
   - TransparentFX
@@ -59,7 +61,7 @@ TagManager:
   - ForceField
   - Player Edge
   - Thrown Item
-  - 
+  - Capacity Limit
   - 
   - 
   - 

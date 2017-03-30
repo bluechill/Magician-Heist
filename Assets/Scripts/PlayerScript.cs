@@ -135,20 +135,11 @@ public class PlayerScript : MonoBehaviour {
 
 			float x_diff = held_object.transform.position.x - transform.position.x;
 
-			float x_off = 0f;
-			if (rb.velocity.x > 0) {
-				if (x_diff > 0) {
-					
-				} else {
-					x_off = 0.6f;
-				}
-			} else {
-				if (x_diff < 0) {
+			float x_off = 0.6f;
+			if (rb.velocity.x < 0) {
+				x_off *= -1f;
 
-				} else {
-					x_off = -0.6f;
-				}
-			}
+			} 
 			held_object.transform.position = new Vector3 ( held_object.transform.position.x + x_off, held_object.transform.position.y, 0f);
 			held_object.GetComponent<Rigidbody>().velocity = ((Vector3.right * Mathf.Sign(rb.velocity.x) + Vector3.up * 5f) + rb.velocity);
 			held_object.GetComponent<Item>().thrown = true;
@@ -909,10 +900,10 @@ public class PlayerScript : MonoBehaviour {
 		else if (forceFieldLength <= 0f && forceField.activeSelf)
 			forceField.SetActive (false);
         if (red_team)
-            points = gameScript.red_team_score;
+			points = Game.GameInstance.red_team_score;
         else if (!red_team)
-            points = gameScript.blue_team_score;
-        print("Team: " + red_team + points);
+			points = Game.GameInstance.blue_team_score;
+       // print("Team: " + red_team + points);
 
         pointsText.text = points.ToString();
 
