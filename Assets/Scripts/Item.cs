@@ -4,6 +4,7 @@ using UnityEngine;
 
 [ExecuteInEditMode]
 public class Item : MonoBehaviour {
+	public bool couch = false;
 	public bool briefcase = false;
 	public bool flash_light = false;
 	public bool magical_key = false;
@@ -59,7 +60,7 @@ public class Item : MonoBehaviour {
         {
 
         }
-		if (GetComponent<Rigidbody> ().velocity.magnitude <= 0.01f || GetComponent<Rigidbody> ().velocity.y <= 0.0001f) {
+		if (GetComponent<Rigidbody> ().velocity.magnitude <= 0.01f || (GetComponent<Rigidbody> ().velocity.y <= 0.0001f && GetComponent<Rigidbody> ().velocity.y >= -0.0001f)) {
 			thrown = false;
 			gameObject.transform.GetChild (0).gameObject.layer = 10;
 		}

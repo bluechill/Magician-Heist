@@ -11,6 +11,21 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1096769378379362}
   m_IsPrefabParent: 1
+--- !u!1 &1004837183002668
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4838352732868844}
+  m_Layer: 0
+  m_Name: Bed Center
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1053044684742510
 GameObject:
   m_ObjectHideFlags: 0
@@ -192,6 +207,7 @@ Transform:
   - {fileID: 4827064478185160}
   - {fileID: 4705173936326272}
   - {fileID: 4952693371791756}
+  - {fileID: 4838352732868844}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -288,6 +304,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4025515727806980}
   m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4838352732868844
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1004837183002668}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.01, y: -0.25, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4025515727806980}
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4952693371791756
 Transform:
@@ -575,7 +604,9 @@ MonoBehaviour:
   weight_used: 0
   room_text: {fileID: 1330147434282194}
   overStockItems: []
+  countedItems: []
   red_team: 1
+  bed_center_obj: {fileID: 1004837183002668}
 --- !u!136 &136356335247973132
 CapsuleCollider:
   m_ObjectHideFlags: 1
