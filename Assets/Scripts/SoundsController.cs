@@ -5,11 +5,12 @@ using UnityEngine;
 public class SoundsController : MonoBehaviour {
 	public static SoundsController instance;
 
-	public GameObject[] sound_objects;
+	private Dictionary<AudioSource, double> sound_objects = new Dictionary<AudioSource, double>();
+	private double nextEventTime = 0.0f;
 
 	// Use this for initialization
 	void Start () {
-		
+		nextEventTime = AudioSettings.dspTime;
 	}
 
 	void Awake ()   
@@ -18,7 +19,6 @@ public class SoundsController : MonoBehaviour {
 		{
 			DontDestroyOnLoad(gameObject);
 			instance = this;
-			PlaySound ("Title");
 		}
 		else if (instance != this)
 		{
@@ -28,34 +28,62 @@ public class SoundsController : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		
-	}
+		List<AudioSource> toDestroy = new List<AudioSource>();
 
-	public bool IsPlaying(string name){
-		return sound_objects [GetIndex (name)].GetComponent<AudioSource> ().isPlaying;
-	}
-
-	public void PlaySound(string name){
-		sound_objects [GetIndex (name)].GetComponent<AudioSource> ().Play ();
-	}
-	public void StopSound(string name){
-		sound_objects [GetIndex (name)].GetComponent<AudioSource> ().Stop ();
-	}
-
-	int GetIndex(string name){
-		switch (name) {
-		case "Title":
-			return 0;
-			break;
-		case "Main":
-			return 1;
-			break;
-		default:
-			break;
-
+		foreach (KeyValuePair<AudioSource, double> kv in sound_objects) {
+			if (AudioSettings.dspTime > (kv.Value + kv.Key.clip.length) && !kv.Key.isPlaying) {
+				toDestroy.Add (kv.Key);
+			}
 		}
-		print ("error finding this sound: " + name);
-		return -1;
+
+		foreach (AudioSource source in toDestroy) {
+			Destroy(source.gameObject);
+			sound_objects.Remove (source);
+		}
 	}
 
+	public bool IsPlaying(){
+		return	sound_objects.Count > 0;
+	}
+
+	public void DisableLooping() {
+		foreach (KeyValuePair<AudioSource, double> kv in sound_objects) {
+			kv.Key.loop = false;
+			break;
+		}
+	}
+
+	public void EnableLooping() {
+		foreach (KeyValuePair<AudioSource, double> kv in sound_objects) {
+			if (kv.Key.isPlaying || AudioSettings.dspTime < (kv.Value + kv.Key.clip.length))
+				kv.Key.loop = true;
+
+			break;
+		}
+	}
+
+	public void QueueClip(AudioClip clip) {
+		GameObject source = new GameObject ();
+		source.name = "Audio Source: " + clip.name;
+		source.AddComponent<AudioSource> ();
+		source.transform.parent = this.transform;
+		source.GetComponent<AudioSource>().playOnAwake = false;
+		source.GetComponent<AudioSource>().clip = clip;
+
+		if (nextEventTime < AudioSettings.dspTime)
+			nextEventTime = AudioSettings.dspTime;
+
+		source.GetComponent<AudioSource>().PlayScheduled (nextEventTime);
+		sound_objects [source.GetComponent<AudioSource>()] = nextEventTime;
+		nextEventTime = nextEventTime + clip.length;
+	}
+
+	public void StopPlaying() {
+		foreach (KeyValuePair<AudioSource, double> kv in sound_objects) {
+			kv.Key.Stop ();
+			Destroy (kv.Key.gameObject);
+		}
+
+		sound_objects.Clear ();
+	}
 }
