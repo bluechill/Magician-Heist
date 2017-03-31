@@ -396,6 +396,11 @@ public class PlayerScript : MonoBehaviour {
 
 
 		if (controller.Action1) {
+
+			if (Game.GameInstance.end) {
+				Game.GameInstance.RestartGame ();
+			}
+
 			if (!cooldown) {
 				actions [0] = true;
 				cooldown = true;
@@ -899,6 +904,8 @@ public class PlayerScript : MonoBehaviour {
 			forceFieldLength -= Time.fixedDeltaTime;
 		else if (forceFieldLength <= 0f && forceField.activeSelf)
 			forceField.SetActive (false);
+		/*
+
         if (red_team)
 			points = Game.GameInstance.red_team_score;
         else if (!red_team)
@@ -906,7 +913,7 @@ public class PlayerScript : MonoBehaviour {
        // print("Team: " + red_team + points);
 
         pointsText.text = points.ToString();
-
+		*/
 		if (is_knocked_out && pickupPrompt) {
 			Destroy(pickupPrompt.gameObject);
 			pickupPrompt = null;

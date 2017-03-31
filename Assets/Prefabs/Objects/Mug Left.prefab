@@ -111,7 +111,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.2, y: 0.2, z: 1}
+  m_Size: {x: 0.3, y: 0.25, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &114680367191710340
 MonoBehaviour:
@@ -124,6 +124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5fd71269d86a45639bb831136f554dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  couch: 0
   briefcase: 0
   flash_light: 0
   magical_key: 0
@@ -141,6 +142,7 @@ MonoBehaviour:
   gameScript: {fileID: 0}
   points: 5
   size: 2
+  counted: 0
   kill: 0
 --- !u!114 &114721621471861018
 MonoBehaviour:

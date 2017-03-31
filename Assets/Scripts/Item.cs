@@ -29,9 +29,11 @@ public class Item : MonoBehaviour {
 	public bool kill = false;
 	float age = 0f; 
 	float kill_time = 0f; 
+	int original_sortingOrder;
 	// Use this for initialization
 	void Start () {
 		srend = GetComponent<SpriteRenderer>();
+		original_sortingOrder = GetComponent<SpriteRenderer> ().sortingOrder;
 	}
 	
 	// Update is called once per frame
@@ -54,6 +56,7 @@ public class Item : MonoBehaviour {
 			GetComponent<SpriteRenderer> ().sortingOrder = 30;
 		} else {
 			GetComponent<Rigidbody> ().isKinematic = true;
+			GetComponent<SpriteRenderer> ().sortingOrder = original_sortingOrder;
 		}
 
         if (GetComponent<Rigidbody>().velocity.magnitude <= 0.1f)
@@ -62,6 +65,7 @@ public class Item : MonoBehaviour {
         }
 		if (GetComponent<Rigidbody> ().velocity.magnitude <= 0.01f || (GetComponent<Rigidbody> ().velocity.y <= 0.0001f && GetComponent<Rigidbody> ().velocity.y >= -0.0001f)) {
 			thrown = false;
+			GetComponent<SpriteRenderer> ().sortingOrder = original_sortingOrder;
 			gameObject.transform.GetChild (0).gameObject.layer = 10;
 		}
 	}

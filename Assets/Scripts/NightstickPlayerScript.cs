@@ -10,7 +10,7 @@ public class NightstickPlayerScript : PlayerScript {
 		age = Time.time - birthtime;
 		if (!started) {
 			started = true;
-			pointsText = GameObject.FindGameObjectWithTag ("Points Text 3").GetComponent<Text> ();
+			//pointsText = GameObject.FindGameObjectWithTag ("Points Text 3").GetComponent<Text> ();
 		}
 		ProcessMovement ();
 		ProcessRotation ();
