@@ -18,6 +18,7 @@ public class SoundsController : MonoBehaviour {
 		{
 			DontDestroyOnLoad(gameObject);
 			instance = this;
+			PlaySound ("Title");
 		}
 		else if (instance != this)
 		{

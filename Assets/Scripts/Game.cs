@@ -6,7 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class Game : MonoBehaviour {
 
-
+	public bool end = false;
+	public GameObject ui;
 	bool low_time = false;
 	public bool skip_select = false;
 	public GameObject camera;
@@ -20,6 +21,13 @@ public class Game : MonoBehaviour {
 	public Text win_text;
 	public Text win_score;
 	public GameObject win_menu;
+
+	public Text red_team_capacity;
+	public Text blue_team_capacity;
+	public Text red_team_score_obj;
+	public Text blue_team_score_obj;
+	public GameObject redTruck;
+	public GameObject blueTruck;
 
 	PlayerScript[] players;
 	public PlayerScript player1;
@@ -58,10 +66,12 @@ public class Game : MonoBehaviour {
 			for (int i = 0; i < num_players; i++) {
 				players[i].GetComponent<PlayerScript> ().player_num = playerChoices[i];
 			}
+
 		}
 		SoundsController.instance.StopSound ("Title");
+		SoundsController.instance.StopSound ("Main");
 
-		SoundsController.instance.PlaySound ("Main");
+		if(!SoundsController.instance.IsPlaying("Main")) SoundsController.instance.PlaySound ("Main");
 	}
     // Update is called once per frame
     void Update () {
@@ -95,6 +105,26 @@ public class Game : MonoBehaviour {
 		if (low_time) {
 			FlashTimer ();
 		}
+		UpdateUI ();
+		if (end)
+			GrowWinMenuX ();
+
+	}
+	void UpdateUI(){
+		
+		red_team_capacity.text = "";
+		red_team_capacity.text += redTruck.GetComponent<TruckScript>().weight_used.ToString();
+
+		blue_team_capacity.text = "";
+		blue_team_capacity.text += blueTruck.GetComponent<TruckScript>().weight_used.ToString();
+
+		red_team_score_obj.text = "";
+		red_team_score_obj.text += red_team_score.ToString();
+
+		blue_team_score_obj.text = "";
+		blue_team_score_obj.text += blue_team_score.ToString();
+
+
 	}
     void Tutorial()
     {
@@ -120,39 +150,51 @@ public class Game : MonoBehaviour {
         tutorial.SetActive(false);
     }
     public void Win(){
+		end = true;
 		win_menu.SetActive (true);
+		ui.SetActive (false);
+		bool red_winner = false;
 
-		PlayerScript winner = player1;
-		if (player2.points > winner.points)
-			winner = player2;
-		if (player3 != null && player3.points > winner.points)
-			winner = player3;
-		if (player4 != null && player4.points > winner.points)
-			winner = player4;
+		if (red_team_score > blue_team_score) {
+			red_winner = true;
+		} else if (red_team_score < blue_team_score) {
+			red_winner = false;
+		} else {
+			print ("tie");
+		}
 
-		win_score.text = winner.pointsText.text;
+		win_score.text = "";
+		win_text.text = "";
 
-		if (winner == player1)
-			win_text.text = "Player 1 Wins!";
-		else if (winner == player2)
-			win_text.text = "Player 2 Wins!";
-		else if (player3 != null && winner == player3)
-			win_text.text = "Player 3 Wins!";
-		else if (player4 != null && winner == player4)
-			win_text.text = "Player 4 Wins!";
+		if (red_winner) {
+			win_text.text += "RED TEAM WINS";
+			win_score.text += "profit: $" + red_team_score.ToString ();
+		} else {
+			win_text.text += "BLUE TEAM WINS";
+			win_score.text += "profit: $" + blue_team_score.ToString ();
 
-		Invoke ("RestartNoTut", 5f);
+		}
+
 	}
 
-    public void Restart()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
+	public void Restart()
+	{
+		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+	}
+
+	public void RestartGame()
+	{
+		SceneManager.LoadScene("ControllerSetup");
+	}
+
     public void RestartNoTut()
     {
         SceneManager.LoadScene("play_test_no_tut");
     }
 	public void FlashTimer(){
 		GetComponent<TimerFlash> ().Use ();
+	}
+	public void GrowWinMenuX(){
+		win_menu.transform.localScale = Vector3.Lerp (win_menu.transform.localScale, new Vector3(1f, win_menu.transform.localScale.y, 1f), 0.05f);
 	}
 }
