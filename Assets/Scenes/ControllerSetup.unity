@@ -1971,6 +1971,7 @@ MonoBehaviour:
   kill: 0
   grow: 1
   selector: {fileID: 1638806089}
+  mainLoop: {fileID: 8300000, guid: b03f97c5c079e4e70a23103c5fd757e0, type: 3}
 --- !u!1 &1090169754
 GameObject:
   m_ObjectHideFlags: 0
