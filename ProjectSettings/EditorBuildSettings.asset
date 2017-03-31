@@ -21,7 +21,9 @@ EditorBuildSettings:
     path: Assets/Scenes/ControllerSetup.unity
   - enabled: 0
     path: Assets/Kari's work/Level With Artwork (2).unity
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/AfterControllerSetup.unity
   - enabled: 0
     path: Assets/Scenes/SkipControllerSetup.unity
+  - enabled: 1
+    path: Assets/Scenes/Beta Level.unity

@@ -59,6 +59,9 @@ public class Game : MonoBehaviour {
 				players[i].GetComponent<PlayerScript> ().player_num = playerChoices[i];
 			}
 		}
+		SoundsController.instance.StopSound ("Title");
+
+		SoundsController.instance.PlaySound ("Main");
 	}
     // Update is called once per frame
     void Update () {
