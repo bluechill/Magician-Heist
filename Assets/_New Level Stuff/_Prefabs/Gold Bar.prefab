@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 54733704467439812}
   - component: {fileID: 114633751099782760}
   - component: {fileID: 114395454080385458}
-  m_Layer: 17
+  m_Layer: 10
   m_Name: Gold Bar
   m_TagString: Item
   m_Icon: {fileID: 0}
@@ -40,7 +40,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4689680519372244}
   - component: {fileID: 65045436947274152}
-  m_Layer: 17
+  m_Layer: 10
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -154,6 +154,7 @@ MonoBehaviour:
   gameScript: {fileID: 0}
   points: 200
   size: 5
+  counted: 0
   kill: 0
 --- !u!212 &212143041928173404
 SpriteRenderer:

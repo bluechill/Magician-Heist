@@ -59,15 +59,9 @@ public class Item : MonoBehaviour {
         {
 
         }
-		if (GetComponent<Rigidbody> ().velocity.magnitude <= 0.01f) {
+		if (GetComponent<Rigidbody> ().velocity.magnitude <= 0.01f || GetComponent<Rigidbody> ().velocity.y <= 0.0001f) {
 			thrown = false;
-			if (gold_bar) {
-				gameObject.transform.GetChild (0).gameObject.layer = 17;
-
-			} else {
-				gameObject.transform.GetChild (0).gameObject.layer = 10;
-
-			}
+			gameObject.transform.GetChild (0).gameObject.layer = 10;
 		}
 	}
 
@@ -99,20 +93,14 @@ public class Item : MonoBehaviour {
 				current_player.GetComponent<PlayerScript> ().points += 50;
                 print(current_player);
                 if (current_player.GetComponent<PlayerScript>().red_team)
-					Game.GameInstance.blue_team_score -= 10;
+					Game.GameInstance.red_team_score += 10;
                 else
-					Game.GameInstance.red_team_score -= 10;
+					Game.GameInstance.blue_team_score += 10;
                 var plus50 = Instantiate (plus50_prefab);
 				plus50.transform.position = p.transform.position + Vector3.up * 0.5f;
 				//print ("In if statement ");
 				thrown = false;
-				if (gold_bar) {
-					gameObject.transform.GetChild (0).gameObject.layer = 17;
-
-				} else {
-					gameObject.transform.GetChild (0).gameObject.layer = 10;
-
-				}
+				gameObject.transform.GetChild (0).gameObject.layer = 10;
 				GetComponent<Rigidbody> ().velocity = Vector3.zero;
 			}
 		} else if (other.gameObject.tag == "Gold Trigger" && current_player != null && canGetMorePoints) {

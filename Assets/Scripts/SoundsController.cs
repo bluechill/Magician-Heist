@@ -37,11 +37,17 @@ public class SoundsController : MonoBehaviour {
 	public void PlaySound(string name){
 		sound_objects [GetIndex (name)].GetComponent<AudioSource> ().Play ();
 	}
+	public void StopSound(string name){
+		sound_objects [GetIndex (name)].GetComponent<AudioSource> ().Stop ();
+	}
 
 	int GetIndex(string name){
 		switch (name) {
-		case "main":
+		case "Title":
 			return 0;
+			break;
+		case "Main":
+			return 1;
 			break;
 		default:
 			break;

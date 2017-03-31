@@ -37,6 +37,7 @@ public class PlayerSelector : MonoBehaviour {
 		{
 			DontDestroyOnLoad(gameObject);
 			instance = this;
+			SoundsController.instance.PlaySound ("Title");
 		}
 		else if (instance != this)
 		{
@@ -87,11 +88,16 @@ public class PlayerSelector : MonoBehaviour {
 
 				if (controllers [i].MenuWasPressed && ValidChoices ()) {
 					print ("selected characters");
-					Game.GameInstance.playerChoices = new int[4];
-					for (int k = 0; k < 4; k++) {
-						Game.GameInstance.playerChoices [k] = choices [k];
+					if (true) {
 						Kill ();
+					} else {
+						Game.GameInstance.playerChoices = new int[4];
+						for (int k = 0; k < num_players; k++) {
+							Game.GameInstance.playerChoices [k] = choices [k];
+							Kill ();
+						}
 					}
+
 
 				}
 
@@ -142,7 +148,10 @@ public class PlayerSelector : MonoBehaviour {
 	void UpdateChoices(){
 		int i = 0;
 		for (; i < num_players; i++) {
-			controller_icons [i].SetActive (true);
+			if (controller_icons [i])
+				controller_icons [i].SetActive (true);
+			else
+				continue;
 
 			if (choices [i] == -1) {
 				controller_icons [i].transform.localPosition = new Vector3 (0f, controller_icons [i].transform.localPosition.y, 0f);
@@ -161,7 +170,7 @@ public class PlayerSelector : MonoBehaviour {
 			}
 		}
 		for (; i < max_players; i++) {
-			controller_icons [i].SetActive (false);
+			if(controller_icons[i]) controller_icons [i].SetActive (false);
 		}
 	}
 	void Cooldown1(){
@@ -178,7 +187,7 @@ public class PlayerSelector : MonoBehaviour {
 	}
 
 	bool ValidChoices(){
-
+		return true;
 		if (num_players < 4)
 			return false;
 
@@ -207,17 +216,18 @@ public class PlayerSelector : MonoBehaviour {
 		kill = true;
 	}
 	void DestroySelectionScreen(){
+		if (selection_screen) {
+			selection_screen.gameObject.transform.localScale = Vector3.Lerp (selection_screen.gameObject.transform.localScale, Vector3.zero, 0.1f);
+			if (selection_screen.gameObject.transform.localScale.magnitude <= 0.0001f) {
+				Destroy (selection_screen.gameObject);
+			}
 
-		selection_screen.gameObject.transform.localScale = Vector3.Lerp (selection_screen.gameObject.transform.localScale, Vector3.zero, 0.1f);
-		if (selection_screen.gameObject.transform.localScale.magnitude <= 0.0001f) {
-			Destroy (selection_screen.gameObject);
 		}
-
 
 		if(!selection_screen){
 			kill_object.gameObject.transform.localScale = Vector3.Lerp (kill_object.gameObject.transform.localScale, new Vector3(0f, kill_object.gameObject.transform.localScale.y, 0f), 0.15f);
-			if (kill_object.gameObject.transform.localScale.magnitude <= 0.0001f) {
-				SceneManager.LoadScene ("AfterControllerSetup");
+			if (kill_object.gameObject.transform.localScale.x <= 0.0001f) {
+				SceneManager.LoadScene ("Beta Level");
 				Destroy (kill_object.gameObject);
 			}
 		}
