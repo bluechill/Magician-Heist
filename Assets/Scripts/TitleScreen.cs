@@ -6,8 +6,12 @@ public class TitleScreen : MonoBehaviour {
 	public bool kill = false;
 	public bool grow = true;
 	public GameObject selector;
+	public AudioClip mainLoop;
+
 	// Use this for initialization
 	void Start () {
+		SoundsController.instance.QueueClip (mainLoop);
+		SoundsController.instance.EnableLooping ();
 	}
 	
 	// Update is called once per frame
