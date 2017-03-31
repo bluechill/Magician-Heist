@@ -6,6 +6,9 @@ using UnityEngine.SceneManagement;
 
 public class Game : MonoBehaviour {
 
+	public AudioClip mainLoop;
+	public AudioClip endGame;
+
 	public bool end = false;
 	public GameObject ui;
 	bool low_time = false;
@@ -66,13 +69,15 @@ public class Game : MonoBehaviour {
 			for (int i = 0; i < num_players; i++) {
 				players[i].GetComponent<PlayerScript> ().player_num = playerChoices[i];
 			}
-
 		}
-		SoundsController.instance.StopSound ("Title");
-		SoundsController.instance.StopSound ("Main");
 
-		if(!SoundsController.instance.IsPlaying("Main")) SoundsController.instance.PlaySound ("Main");
+		SoundsController.instance.StopPlaying ();
+
+		SoundsController.instance.QueueClip (mainLoop);
+		SoundsController.instance.QueueClip (mainLoop);
+		SoundsController.instance.QueueClip (endGame);
 	}
+
     // Update is called once per frame
     void Update () {
         if (Input.GetKeyDown(KeyCode.Escape))

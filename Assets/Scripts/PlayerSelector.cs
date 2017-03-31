@@ -37,7 +37,6 @@ public class PlayerSelector : MonoBehaviour {
 		{
 			DontDestroyOnLoad(gameObject);
 			instance = this;
-			SoundsController.instance.PlaySound ("Title");
 		}
 		else if (instance != this)
 		{
