@@ -30,6 +30,7 @@ public class Item : MonoBehaviour {
 	float age = 0f; 
 	float kill_time = 0f; 
 	int original_sortingOrder;
+	public int money_grade = 1;
 	// Use this for initialization
 	void Start () {
 		srend = GetComponent<SpriteRenderer>();
@@ -93,15 +94,15 @@ public class Item : MonoBehaviour {
 			//print (!p.forceField.activeSelf);
 			//print (GetComponent<Rigidbody> ().velocity);
 
-			if (p != null && !p.is_knocked_out && thrown && current_player != p.gameObject && !p.forceField.activeSelf && (p.red_team != current_player.GetComponent<PlayerScript>().red_team)) {
+			if (p != null && !p.is_knocked_out && thrown && current_player != p.gameObject && !p.forceField.activeSelf && (p.red_team != current_player.GetComponent<PlayerScript> ().red_team)) {
 				p.KnockOut ();
 				current_player.GetComponent<PlayerScript> ().points += 50;
-                print(current_player);
-                if (current_player.GetComponent<PlayerScript>().red_team)
+				print (current_player);
+				if (current_player.GetComponent<PlayerScript> ().red_team)
 					Game.GameInstance.red_team_score += 10;
-                else
+				else
 					Game.GameInstance.blue_team_score += 10;
-                var plus50 = Instantiate (plus50_prefab);
+				var plus50 = Instantiate (plus50_prefab);
 				plus50.transform.position = p.transform.position + Vector3.up * 0.5f;
 				//print ("In if statement ");
 				thrown = false;
@@ -116,6 +117,16 @@ public class Item : MonoBehaviour {
 			lifespan = 1f;
 			kill_time = Time.time;
 			kill = true;
+		} else if (other.gameObject.tag == "Item Wall") {
+			GameObject truck = other.gameObject.transform.parent.transform.parent.transform.parent.gameObject;
+			if (truck.GetComponent<TruckScript> ().weight_used + size > truck.GetComponent<TruckScript> ().capacity) {
+				GetComponent<Rigidbody> ().velocity = Vector3.zero;
+				if (held) {
+					current_player.GetComponent<PlayerScript> ().Drop ();
+					gameObject.transform.GetChild (0).gameObject.layer = 10;
+					thrown = false;
+				}
+			}
 		}
     }
 	void DestroyThis(){
