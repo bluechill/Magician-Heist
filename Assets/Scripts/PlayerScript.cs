@@ -61,6 +61,8 @@ public class PlayerScript : MonoBehaviour {
 
 	public KeyCode[][] key_mappings;
 
+	public GameObject truck;
+
 	public bool right,left, up, down;
 	public bool is_hiding = false;
 	public bool is_in_box = false;
@@ -106,6 +108,10 @@ public class PlayerScript : MonoBehaviour {
 		for (int i = 0; i < num_actions; i++) {
 			actions[i] = false;
 		}
+		if (red_team)
+			truck = Game.GameInstance.redTruck;
+		else 
+			truck = Game.GameInstance.blueTruck;
 	}
 
 	public void Drop(){
@@ -452,7 +458,9 @@ public class PlayerScript : MonoBehaviour {
 		ability.GetComponentInChildren<Animator>().SetBool ("idle", true);
 
 	}
+	public void OnTriggerStay(){
 
+	}
 	public void PickUp()
 	{
 		if (nearestActionObject == null)
@@ -466,7 +474,6 @@ public class PlayerScript : MonoBehaviour {
 		if (held_object.GetComponent<Item> ().briefcase) {
 			is_holding_briefcase = true;
 		}
-
 		if (held_object.GetComponent<Item> ().is_player) {
 			held_object.GetComponent<Item> ().current_player.GetComponent<PlayerScript> ().GetPickedUp (this.gameObject);
 		}
@@ -488,7 +495,7 @@ public class PlayerScript : MonoBehaviour {
 		}
         held_object.GetComponent<Item> ().held = true;
 		held_object.GetComponent<Item> ().enabled = true;
-
+		held_object.GetComponent<Item> ().current_player = this.gameObject;
 		nearestActionObject.GetComponent<SpriteGlow> ().enabled = false;
 		nearestActionObject = null;
 	}
@@ -738,7 +745,19 @@ public class PlayerScript : MonoBehaviour {
 	}
 
 	public void OnTriggerEnter(Collider coll){
-		if (coll.gameObject.tag == "Item") {
+		if (coll.gameObject.tag == "Item Wall") {
+			GameObject truck;
+			float x_ = 0f;
+			if (red_team) {
+				truck = Game.GameInstance.redTruck;
+				x_ = 0.5f;
+			} else {
+				truck = Game.GameInstance.blueTruck;
+				x_ = -0.5f;
+			}
+			if(is_holding){
+				Drop ();
+			}
 
 		} else if (coll.gameObject.tag == "Exit") {
 			if (is_holding_briefcase) {
@@ -884,7 +903,8 @@ public class PlayerScript : MonoBehaviour {
 			pickupPrompt.transform.position = new Vector3( nearestActionObject.transform.position.x + 0.25f, nearestActionObject.transform.position.y + 0.5f, 0f);
 			pickupPrompt.GetComponent<PickupPrompt> ().parentObject = nearestActionObject;
 			pickupPrompt.GetComponent<PickupPrompt> ().parentPlayer = this.gameObject;
-			pickupPrompt.GetComponent<PickupPrompt> ().itemPickup.GetComponent<SpriteRenderer>().sprite = nearestActionObject.GetComponent<SpriteRenderer> ().sprite;
+			//pickupPrompt.GetComponent<PickupPrompt> ().itemPickup.GetComponent<SpriteRenderer>().sprite = nearestActionObject.GetComponent<SpriteRenderer> ().sprite;
+			pickupPrompt.GetComponent<PickupPrompt> ().SetGrade(nearestActionObject.GetComponent<Item>().money_grade);
 		}
 		if (!is_knocked_out && nearestActionObject && nearestActionObject.tag == "Stairs") {
 
