@@ -459,8 +459,10 @@ PlayerSettings:
   XboxOneAllowedProductIds: []
   XboxOnePersistentLocalStorageSize: 0
   vrEditorSettings: {}
-  cloudServicesEnabled: {}
-  cloudProjectId: 
-  projectName: 
-  organizationId: 
+  cloudServicesEnabled:
+    Build: 0
+    UNet: 1
+  cloudProjectId: 26ca4ccb-5cf5-4cf9-9508-5708d79b4755
+  projectName: Magician's Heist
+  organizationId: bluechill
   cloudEnabled: 0
