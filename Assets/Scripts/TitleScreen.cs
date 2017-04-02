@@ -10,8 +10,11 @@ public class TitleScreen : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		SoundsController.instance.QueueClip (mainLoop);
-		SoundsController.instance.EnableLooping ();
+		if (mainLoop != null) {
+			SoundsController.instance.StopPlaying ();
+			SoundsController.instance.QueueClip (mainLoop);
+			SoundsController.instance.EnableLooping ();
+		}
 	}
 	
 	// Update is called once per frame

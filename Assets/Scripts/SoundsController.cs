@@ -1,15 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SoundsController : MonoBehaviour {
 	public static SoundsController instance;
+	public bool isPlaying = false;
 
 	private Dictionary<AudioSource, double> sound_objects = new Dictionary<AudioSource, double>();
 	private double nextEventTime = 0.0f;
 
 	// Use this for initialization
 	void Start () {
+	}
+
+	void OnSceneUnloaded(Scene aScene)
+	{
+		sound_objects.Clear ();
+	}
+
+	void OnSceneLoaded(Scene aScene, LoadSceneMode aMode)
+	{
 		nextEventTime = AudioSettings.dspTime;
 	}
 
@@ -17,8 +28,11 @@ public class SoundsController : MonoBehaviour {
 	{
 		if (instance == null)
 		{
-			DontDestroyOnLoad(gameObject);
+			DontDestroyOnLoad(this.gameObject);
 			instance = this;
+
+			SceneManager.sceneLoaded += OnSceneLoaded;
+			SceneManager.sceneUnloaded += OnSceneUnloaded;
 		}
 		else if (instance != this)
 		{
@@ -30,10 +44,13 @@ public class SoundsController : MonoBehaviour {
 	void Update () {
 		List<AudioSource> toDestroy = new List<AudioSource>();
 
+		isPlaying = false;
 		foreach (KeyValuePair<AudioSource, double> kv in sound_objects) {
 			if (AudioSettings.dspTime > (kv.Value + kv.Key.clip.length) && !kv.Key.isPlaying) {
 				toDestroy.Add (kv.Key);
 			}
+
+			isPlaying = isPlaying || kv.Key.isPlaying;
 		}
 
 		foreach (AudioSource source in toDestroy) {
@@ -66,7 +83,7 @@ public class SoundsController : MonoBehaviour {
 		GameObject source = new GameObject ();
 		source.name = "Audio Source: " + clip.name;
 		source.AddComponent<AudioSource> ();
-		source.transform.parent = this.transform;
+//		source.transform.parent = this.transform;
 		source.GetComponent<AudioSource>().playOnAwake = false;
 		source.GetComponent<AudioSource>().clip = clip;
 
