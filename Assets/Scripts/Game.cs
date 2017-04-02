@@ -84,14 +84,19 @@ public class Game : MonoBehaviour {
         {
             Restart();
         }
-        if (Input.GetKeyDown(KeyCode.F1))
+		else if (Input.GetKeyDown(KeyCode.F1))
         {
             RestartNoTut();
         }
-		if (Input.GetKeyDown(KeyCode.F2))
+		else if (Input.GetKeyDown(KeyCode.F2))
 		{
 			Win ();
 		}
+		else if (Input.GetKeyDown (KeyCode.F3))
+		{
+			RestartGame ();
+		}
+
         if (tut < tutorials.Length)
         {
             return;
