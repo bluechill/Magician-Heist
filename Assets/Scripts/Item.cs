@@ -34,6 +34,7 @@ public class Item : MonoBehaviour {
 	public int money_grade = 1;
 	public GameObject capacity_indicator;
 	public GameObject capacity_indicator_prefab;
+    public GameObject curr_Truck;
 
 	// Use this for initialization
 	void Start () {
@@ -46,8 +47,9 @@ public class Item : MonoBehaviour {
 		if (counted && !capacity_indicator) {
 			capacity_indicator = MonoBehaviour.Instantiate ( (GameObject)(Resources.Load ("Capacity Indicator")));
 			capacity_indicator.transform.parent = this.transform;
-			capacity_indicator.transform.localPosition = Vector3.zero;
-			growCap = true;
+			capacity_indicator.transform.localPosition = new Vector3(0f, 1f, 0f);
+            capacity_indicator.transform.localRotation = Quaternion.Euler(Vector3.zero);
+            growCap = true;
 		} else if (!counted && capacity_indicator) {
 			DestroyCap ();
 		} else if (growCap) {
@@ -156,13 +158,13 @@ public class Item : MonoBehaviour {
 		}
 	}
 	void GrowCap(){
-		if (!(capacity_indicator.transform.localScale.y >= 5f)) {
-			capacity_indicator.transform.localScale = Vector3.Lerp (capacity_indicator.transform.localScale, new Vector3(capacity_indicator.transform.localScale.x, 5f, 1f), 0.1f);
+		if (capacity_indicator && !(capacity_indicator.transform.localScale.y >= 10f)) {
+			capacity_indicator.transform.localScale = Vector3.Lerp (capacity_indicator.transform.localScale, new Vector3(capacity_indicator.transform.localScale.x, 10f, 1f), 0.1f);
 		}
-		if (!(capacity_indicator.transform.localScale.x >= size)) {
-			capacity_indicator.transform.localScale = Vector3.Lerp (capacity_indicator.transform.localScale, new Vector3(size, capacity_indicator.transform.localScale.y, 1f), 0.1f);
+		if (capacity_indicator && !(capacity_indicator.transform.localScale.x >= size/2.25f)) {
+			capacity_indicator.transform.localScale = Vector3.Lerp (capacity_indicator.transform.localScale, new Vector3(size/2.25f, capacity_indicator.transform.localScale.y, 1f), 0.1f);
 		}
-		if (capacity_indicator.transform.localScale.x >= size && capacity_indicator.transform.localScale.y >= 5f) {
+		if (capacity_indicator && capacity_indicator.transform.localScale.x >= size/2.25f && capacity_indicator.transform.localScale.y >= 10f) {
 			growCap = false;
 		}
 	}

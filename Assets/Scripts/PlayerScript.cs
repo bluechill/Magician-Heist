@@ -495,6 +495,10 @@ public class PlayerScript : MonoBehaviour {
 		}
         held_object.GetComponent<Item> ().held = true;
 		held_object.GetComponent<Item> ().enabled = true;
+        if (held_object.GetComponent<Item>().counted) {
+            held_object.GetComponent<Item>().counted = false;
+            held_object.GetComponent<Item>().curr_Truck.GetComponent<TruckScript>().RemoveItem(held_object);
+        }
 		held_object.GetComponent<Item> ().current_player = this.gameObject;
 		nearestActionObject.GetComponent<SpriteGlow> ().enabled = false;
 		nearestActionObject = null;
