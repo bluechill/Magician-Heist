@@ -110,9 +110,19 @@ public class Game : MonoBehaviour {
 		if (run_time >= time_limit) {
 			Win ();
 		}
+        int minutes = (int)((time_limit - run_time )/ 60f);
+        int second = (int)((time_limit - run_time) % 60f);
+        if (second < 10) {
+            timer_text.text = minutes.ToString() + ":0" + second.ToString();
+        }
+        else {
+            timer_text.text = minutes.ToString() + ":" + second.ToString();
+        }
+        if (minutes == 0) {
+            timer_text.color = Color.Lerp(timer_text.color, Color.red, 0.01f);
+        }
 
-		timer_text.text = "Time Remaining: " + ((time_limit - run_time)).ToString("0.00");
-		if (low_time) {
+        if (low_time) {
 			FlashTimer ();
 		}
 		UpdateUI ();

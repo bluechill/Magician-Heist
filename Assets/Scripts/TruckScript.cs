@@ -22,11 +22,12 @@ public class TruckScript : MonoBehaviour {
 		room_text.GetComponent<TextMesh> ().text = "";
 		room_text.GetComponent<TextMesh> ().text += weight_used.ToString ();
 		FindContained ();
-		FillSpace ();
-		SpreadItems ();
+		//FillSpace ();
+		
 
 		UpdateCapacity ();
-	}
+        SpreadItems();
+    }
 
     private void OnTriggerEnter(Collider coll) {
 
@@ -67,11 +68,12 @@ public class TruckScript : MonoBehaviour {
         }
         */
     }
-	public void RemoveItem(){
-
+	public void RemoveItem(GameObject item){
+        if (countedItems.Contains(item))
+            countedItems.Remove(item);
 	}
 	void UpdateCapacity(){
-		float boxWidth = 6f;
+		float boxWidth = 7f;
 		float sign = 1.0f;
 
 		if (this.transform.localEulerAngles.y >= 180f)
@@ -85,10 +87,14 @@ public class TruckScript : MonoBehaviour {
 		List<Collider> taggedColliders = new List<Collider> ();
 		weight_used = 0;
 		for (int i = 0; i < colliders.Length; ++i) {
-			if (colliders [i].GetComponent<SpriteGlow> () != null && !colliders [i].GetComponent<Item> ().held &&
+			if (colliders [i].GetComponent<SpriteGlow> () != null && !colliders[i].GetComponent<Item>().held && !colliders[i].GetComponent<Item>().held &&
 			    !colliders [i].transform.IsChildOf (this.transform)) {
 				weight_used += colliders [i].gameObject.GetComponent<Item> ().size;
-			}
+                colliders[i].gameObject.GetComponent<Item>().counted = true;
+                colliders[i].gameObject.GetComponent<Item>().curr_Truck = this.gameObject;
+                if (!countedItems.Contains(colliders[i].gameObject))
+                    countedItems.Add(colliders[i].gameObject);
+            }
 			
 		}
 
@@ -124,7 +130,7 @@ public class TruckScript : MonoBehaviour {
 		}
 
 		for (int i = 0; i < taggedColliders.Count; i++) {
-			taggedColliders [i].GetComponent<SpriteGlow> ().enabled = true;
+			//taggedColliders [i].GetComponent<SpriteGlow> ().enabled = true;
 		}
 		overStockItems = taggedColliders;
 
@@ -168,7 +174,7 @@ public class TruckScript : MonoBehaviour {
 				int sign = 1;
 				if (red_team)
 					sign = -1;
-				x_ = (bed_center_obj.transform.position.x + (sign * 5f)) - (sign * (i * 13f/countedItems.Count));
+				x_ = (bed_center_obj.transform.position.x + (sign * 5.5f)) - (sign * (i * 12f/countedItems.Count));
 
 
 				if (!V3Equals (countedItems [i].transform.position, new Vector3 (x_, bed_center_obj.transform.position.y, 0f))) {
