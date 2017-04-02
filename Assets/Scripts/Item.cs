@@ -4,6 +4,7 @@ using UnityEngine;
 
 [ExecuteInEditMode]
 public class Item : MonoBehaviour {
+	public bool growCap = false;
 	public bool couch = false;
 	public bool briefcase = false;
 	public bool flash_light = false;
@@ -31,6 +32,9 @@ public class Item : MonoBehaviour {
 	float kill_time = 0f; 
 	int original_sortingOrder;
 	public int money_grade = 1;
+	public GameObject capacity_indicator;
+	public GameObject capacity_indicator_prefab;
+
 	// Use this for initialization
 	void Start () {
 		srend = GetComponent<SpriteRenderer>();
@@ -39,6 +43,16 @@ public class Item : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (counted && !capacity_indicator) {
+			capacity_indicator = MonoBehaviour.Instantiate ( (GameObject)(Resources.Load ("Capacity Indicator")));
+			capacity_indicator.transform.parent = this.transform;
+			capacity_indicator.transform.localPosition = Vector3.zero;
+			growCap = true;
+		} else if (!counted && capacity_indicator) {
+			DestroyCap ();
+		} else if (growCap) {
+			GrowCap ();
+		}
 		if (kill) {
 			age = Time.time - kill_time;
 			if (age > lifespan){
@@ -133,6 +147,23 @@ public class Item : MonoBehaviour {
 		transform.localScale = Vector3.Lerp (transform.localScale, Vector3.zero, 0.1f);
 		if (transform.localScale.magnitude <= 0.0001f) {
 			Destroy (this.gameObject);
+		}
+	}
+	void DestroyCap(){
+		capacity_indicator.transform.localScale = Vector3.Lerp (capacity_indicator.transform.localScale, Vector3.zero, 0.1f);
+		if (capacity_indicator.transform.localScale.magnitude <= 0.0001f) {
+			Destroy (capacity_indicator.gameObject);
+		}
+	}
+	void GrowCap(){
+		if (!(capacity_indicator.transform.localScale.y >= 5f)) {
+			capacity_indicator.transform.localScale = Vector3.Lerp (capacity_indicator.transform.localScale, new Vector3(capacity_indicator.transform.localScale.x, 5f, 1f), 0.1f);
+		}
+		if (!(capacity_indicator.transform.localScale.x >= size)) {
+			capacity_indicator.transform.localScale = Vector3.Lerp (capacity_indicator.transform.localScale, new Vector3(size, capacity_indicator.transform.localScale.y, 1f), 0.1f);
+		}
+		if (capacity_indicator.transform.localScale.x >= size && capacity_indicator.transform.localScale.y >= 5f) {
+			growCap = false;
 		}
 	}
 }

@@ -23,7 +23,7 @@ public class TruckScript : MonoBehaviour {
 		room_text.GetComponent<TextMesh> ().text += weight_used.ToString ();
 		FindContained ();
 		FillSpace ();
-		//SpreadItems ();
+		SpreadItems ();
 
 		UpdateCapacity ();
 	}
@@ -134,7 +134,6 @@ public class TruckScript : MonoBehaviour {
 			return;
 		if (overStockItems.Count == 0)
 			return;
-
 		int i = 0;
 		while (weight_used < 100 && i < overStockItems.Count) {
 			if (overStockItems [i].gameObject.GetComponent<Item> ().size + weight_used <= 100) {
@@ -166,19 +165,12 @@ public class TruckScript : MonoBehaviour {
 			if (!countedItems [i].GetComponent<Item> ().held && !countedItems [i].GetComponent<Item> ().thrown) { 
 
 				float x_;
-				if (red_team) {
-					x_ = (bed_center_obj.transform.position.x - 5f) + i;
-					if (i > 10) {
-						x_ = (bed_center_obj.transform.position.x - 5f) + (i - 10.5f);
-					}
+				int sign = 1;
+				if (red_team)
+					sign = -1;
+				x_ = (bed_center_obj.transform.position.x + (sign * 5f)) - (sign * (i * 13f/countedItems.Count));
 
-				} else {
-					x_ = (bed_center_obj.transform.position.x + 5f) - i;
-					if (i > 10) {
-						x_ = (bed_center_obj.transform.position.x + 5f) - (i - 10.5f);
-					}
 
-				}
 				if (!V3Equals (countedItems [i].transform.position, new Vector3 (x_, bed_center_obj.transform.position.y, 0f))) {
 					countedItems [i].transform.position = Vector3.Lerp(countedItems [i].transform.position, new Vector3 (x_, bed_center_obj.transform.position.y, 0f), 0.05f) ;
 
