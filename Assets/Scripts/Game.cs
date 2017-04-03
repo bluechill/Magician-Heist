@@ -8,7 +8,7 @@ public class Game : MonoBehaviour {
 
 	public AudioClip mainLoop;
 	public AudioClip endGame;
-
+	public bool keyb_debug;
 	public bool end = false;
 	public GameObject ui;
 	bool low_time = false;
@@ -63,15 +63,20 @@ public class Game : MonoBehaviour {
         else tut = tutorials.Length;
     }
 	void InitGame(){
-        playerChoices = new int[4];
-        for (int k = 0; k < 4; k++) {
-            playerChoices[k] = PlayerSelector.instance.choices[k];
-        }
+
+
         SoundsController.instance.StopPlaying ();
 
 		SoundsController.instance.QueueClip (mainLoop);
 		SoundsController.instance.QueueClip (mainLoop);
 		SoundsController.instance.QueueClip (endGame);
+		if (keyb_debug) {
+			return;
+		}
+		playerChoices = new int[4];
+		for (int k = 0; k < 4; k++) {
+			playerChoices[k] = PlayerSelector.instance.choices[k];
+		}
 	}
 
     // Update is called once per frame

@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TruckScript : MonoBehaviour {
+	public Text score_text;
     public int team_score;
 	public int weight_used = 0;
 	public int capacity = 100;
@@ -24,7 +26,7 @@ public class TruckScript : MonoBehaviour {
 		FindContained ();
 		//FillSpace ();
 		
-
+		UpdateScore ();
 		UpdateCapacity ();
         SpreadItems();
     }
@@ -69,8 +71,17 @@ public class TruckScript : MonoBehaviour {
         */
     }
 	public void RemoveItem(GameObject item){
-        if (countedItems.Contains(item))
-            countedItems.Remove(item);
+		if (countedItems.Contains (item)) {
+
+			if (red_team) {
+				Game.GameInstance.red_team_score -= item.GetComponent<Item>().points;
+			} else {
+				Game.GameInstance.blue_team_score -= item.GetComponent<Item>().points;
+			}
+
+			countedItems.Remove (item);
+
+		}
 	}
 	void UpdateCapacity(){
 		float boxWidth = 7f;
@@ -90,6 +101,14 @@ public class TruckScript : MonoBehaviour {
 			if (colliders [i].GetComponent<SpriteGlow> () != null && !colliders[i].GetComponent<Item>().held && !colliders[i].GetComponent<Item>().thrown &&
 			    !colliders [i].transform.IsChildOf (this.transform)) {
 				weight_used += colliders [i].gameObject.GetComponent<Item> ().size;
+				if (colliders [i].gameObject.GetComponent<Item> ().counted == false) {
+					if (red_team) {
+						Game.GameInstance.red_team_score += colliders [i].gameObject.GetComponent<Item> ().points;
+					} else {
+						Game.GameInstance.blue_team_score += colliders [i].gameObject.GetComponent<Item> ().points;
+					}
+				}
+
                 colliders[i].gameObject.GetComponent<Item>().counted = true;
                 colliders[i].gameObject.GetComponent<Item>().curr_Truck = this.gameObject;
                 if (!countedItems.Contains(colliders[i].gameObject))
@@ -165,6 +184,15 @@ public class TruckScript : MonoBehaviour {
 			}
 
 		}
+	}
+	public void UpdateScore(){
+		score_text.text = "";
+		if (red_team) {
+			score_text.text = Game.GameInstance.red_team_score.ToString();
+		} else {
+			score_text.text = Game.GameInstance.blue_team_score.ToString();
+		}
+
 	}
 	public void SpreadItems(){
 		for (int i = 0; i < countedItems.Count; i++) {

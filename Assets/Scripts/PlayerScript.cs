@@ -97,7 +97,6 @@ public class PlayerScript : MonoBehaviour {
 
 	public Vector3 original_position;
 	public void Start(){
-        print(PlayerSelector.instance.controller_refs[2]);
 		original_position = this.transform.position;
 		original_velocity = vel;
 		birthtime = Time.time;
@@ -385,7 +384,8 @@ public class PlayerScript : MonoBehaviour {
 	}
 	//uses InControl as InputManager
 	public void ProcessInputController(){
-
+		if (Game.GameInstance.keyb_debug)
+			return;
         print(InputManager.Devices.Count);
 
         if(InputManager.Devices.Count > Game.GameInstance.playerChoices[player_num]) {
@@ -519,6 +519,7 @@ public class PlayerScript : MonoBehaviour {
         held_object.GetComponent<Item> ().held = true;
 		held_object.GetComponent<Item> ().enabled = true;
         if (held_object.GetComponent<Item>().counted) {
+			
             held_object.GetComponent<Item>().counted = false;
             held_object.GetComponent<Item>().curr_Truck.GetComponent<TruckScript>().RemoveItem(held_object);
         }
