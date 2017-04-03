@@ -161,10 +161,10 @@ public class Item : MonoBehaviour {
 		if (capacity_indicator && !(capacity_indicator.transform.localScale.y >= 10f)) {
 			capacity_indicator.transform.localScale = Vector3.Lerp (capacity_indicator.transform.localScale, new Vector3(capacity_indicator.transform.localScale.x, 10f, 1f), 0.1f);
 		}
-		if (capacity_indicator && !(capacity_indicator.transform.localScale.x >= size/2.25f)) {
-			capacity_indicator.transform.localScale = Vector3.Lerp (capacity_indicator.transform.localScale, new Vector3(size/2.25f, capacity_indicator.transform.localScale.y, 1f), 0.1f);
+		if (capacity_indicator && !(capacity_indicator.transform.localScale.x >= size/4.5f)) {
+			capacity_indicator.transform.localScale = Vector3.Lerp (capacity_indicator.transform.localScale, new Vector3(size/4.5f, capacity_indicator.transform.localScale.y, 1f), 0.1f);
 		}
-		if (capacity_indicator && capacity_indicator.transform.localScale.x >= size/2.25f && capacity_indicator.transform.localScale.y >= 10f) {
+		if (capacity_indicator && capacity_indicator.transform.localScale.x >= size/4.5f && capacity_indicator.transform.localScale.y >= 10f) {
 			growCap = false;
 		}
 	}

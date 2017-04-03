@@ -44,10 +44,8 @@ public class PickupPrompt : MonoBehaviour {
 
 		if (grade <= 1) {
 			moneyGrade.GetComponent<TextMesh> ().color = Color.green;
-		} else if (grade <= 2) {
-			//moneyGrade.GetComponent<TextMesh> ().color = new Color(0.827f,0.827f,0.827f );
-		} else if (grade <= 3) {
-			//moneyGrade.GetComponent<TextMesh> ().color = new Color (0.831f, 0.686f, 0.216f);
-		} 
+		} else if (grade == 4) {
+            moneyGrade.GetComponent<TextMesh> ().color = new Color (0.831f, 0.686f, 0.216f);
+        }
 	}
 }

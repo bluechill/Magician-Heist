@@ -97,6 +97,7 @@ public class PlayerScript : MonoBehaviour {
 
 	public Vector3 original_position;
 	public void Start(){
+        print(PlayerSelector.instance.controller_refs[2]);
 		original_position = this.transform.position;
 		original_velocity = vel;
 		birthtime = Time.time;
@@ -108,6 +109,7 @@ public class PlayerScript : MonoBehaviour {
 		for (int i = 0; i < num_actions; i++) {
 			actions[i] = false;
 		}
+        print(Game.GameInstance);
 		if (red_team)
 			truck = Game.GameInstance.redTruck;
 		else 
@@ -297,7 +299,9 @@ public class PlayerScript : MonoBehaviour {
 	}
 
 	public void UseStairs() {
-		touching_stairs.GetComponent<Stairs> ().Use (this.gameObject);
+        cam.GetComponent<Camera2DFollowMultiple>().targets[1] = this.gameObject.transform;
+        cam.GetComponent<Camera2DFollowMultiple>().viewing_stairs = false;
+        touching_stairs.GetComponent<Stairs> ().Use (this.gameObject);
 	}
 
 	public void UseElevator(){
@@ -311,8 +315,8 @@ public class PlayerScript : MonoBehaviour {
 		left = false;
 		Hide ();
 		Drop ();
-		Invoke ("WakeupAnimation", 4f);
-		Invoke ("Wakeup", 5f);
+		Invoke ("WakeupAnimation", 2f);
+		Invoke ("Wakeup", 3f);
 	}
 	public void WakeupAnimation(){
 		animator.SetBool ("knockout", false);
@@ -361,6 +365,11 @@ public class PlayerScript : MonoBehaviour {
 
 	//initialize a controller to this magician
 	public void TryInitializeController(){
+        if (!controller_set) {
+            controller = PlayerSelector.instance.controller_refs[player_num];
+        }
+
+
 		if (InputManager.Devices.Count > player_num) {
 			controller = InputManager.Devices [player_num];
 			controller_set = true;
@@ -376,7 +385,19 @@ public class PlayerScript : MonoBehaviour {
 	}
 	//uses InControl as InputManager
 	public void ProcessInputController(){
-		rb.AddForce(Vector3.right * controller.LeftStickX * vel);
+
+        print(InputManager.Devices.Count);
+
+        if(InputManager.Devices.Count > Game.GameInstance.playerChoices[player_num]) {
+            controller = InputManager.Devices[Game.GameInstance.playerChoices[player_num]];
+        } else {
+            print("controller error, player #: " + player_num);
+            return;
+        }
+
+        //InputManager.AttachDevice(controller);
+
+        rb.AddForce(Vector3.right * controller.LeftStickX * vel);
 		if (controller.LeftStickX < 0) {
 			left = true;
 			right = false;
@@ -399,13 +420,15 @@ public class PlayerScript : MonoBehaviour {
 			up = false;
 		}
 
-
+        if (controller.MenuWasPressed ) {
+            if (Game.GameInstance.end) {
+                Game.GameInstance.RestartGame();
+            }
+        }
 
 		if (controller.Action1) {
 
-			if (Game.GameInstance.end) {
-				Game.GameInstance.RestartGame ();
-			}
+			
 
 			if (!cooldown) {
 				actions [0] = true;
@@ -577,9 +600,8 @@ public class PlayerScript : MonoBehaviour {
 			transform.position = inside_box.transform.position;
 			return;
 		}
-		if (controller_set) {
 			ProcessInputController ();
-		}
+
 		if (is_ability && player_num == 1) {
 			return;
 		}
@@ -942,8 +964,8 @@ public class PlayerScript : MonoBehaviour {
 			Destroy(pickupPrompt.gameObject);
 			pickupPrompt = null;
 		}
-		if(!Game.GameInstance.skip_select)TryInitializeController ();
-		else TryInitializeController ();
+		//if(!Game.GameInstance.skip_select)TryInitializeController ();
+		//else TryInitializeController ();
 		if (is_grabbed) {
 			grabbed_time_current = Time.time - grabbed_time_initial;
 			if (grabbed_time_current > grabbed_time_limit) {

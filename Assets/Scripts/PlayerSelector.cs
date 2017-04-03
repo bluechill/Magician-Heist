@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using InControl;
 public class PlayerSelector : MonoBehaviour {
-
+    //public InputDevice[] controller_refs;
+    public Dictionary<int, InputDevice> controller_refs;
 	public static PlayerSelector instance;
 	public GameObject title_screen;
 	public GameObject selection_screen;
@@ -19,9 +20,12 @@ public class PlayerSelector : MonoBehaviour {
 	public bool setting_up = false;
 	public bool grow = false;
 	public bool kill = false;
+    public bool end_setup = false;
 	// Use this for initialization
 	void Start () {
-		init = new bool[4];
+        //controller_refs = new InputDevice[4];
+        controller_refs = new Dictionary<int, InputDevice>();
+        init = new bool[4];
 		cooldowns = new bool[4];
 		choices = new int[4];
 		controllers = new InputDevice[4];
@@ -45,7 +49,7 @@ public class PlayerSelector : MonoBehaviour {
 	}
 	// Update is called once per frame
 	void Update () {
-		num_players = InputManager.Devices.Count;
+		//num_players = InputManager.Devices.Count;
 		if (setting_up) {
 			if (title_screen) {
 				title_screen.GetComponent<TitleScreen> ().Kill ();
@@ -69,7 +73,7 @@ public class PlayerSelector : MonoBehaviour {
 		if (kill) {
 			DestroySelectionScreen ();
 		}
-
+        if (end_setup) Kill();
 	}
 	void InitControllers(){
 		for (int i = 0; i < num_players; i++) {
@@ -81,24 +85,22 @@ public class PlayerSelector : MonoBehaviour {
 
 	}
 	void TakeInput(){
+        if (end_setup) return;
 		for (int i = 0; i < num_players; i++) {
 			if (init[i]) {
 				bool cd = false;
 
-				if (controllers [i].MenuWasPressed && ValidChoices ()) {
+				if (controllers [i].MenuWasPressed && ValidChoices () && !end_setup) {
 					print ("selected characters");
-					if (true) {
-						Kill ();
-					} else {
-						Game.GameInstance.playerChoices = new int[4];
-						for (int k = 0; k < num_players; k++) {
-							Game.GameInstance.playerChoices [k] = choices [k];
-							Kill ();
-						}
-					}
+
+                    end_setup = true;
+                    for(int k = 0; k < 4; k++) {
+                        controller_refs.Add(choices[k], controllers[k]);
+
+                    }
 
 
-				}
+                }
 
 				if (!cooldowns[i] && controllers [i].LeftStickX < 0f) {
 					cd = true;
@@ -186,7 +188,6 @@ public class PlayerSelector : MonoBehaviour {
 	}
 
 	bool ValidChoices(){
-		return true;
 		if (num_players < 4)
 			return false;
 

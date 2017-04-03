@@ -14,7 +14,7 @@ public class Game : MonoBehaviour {
 	bool low_time = false;
 	public bool skip_select = false;
 	public GameObject camera;
-	public int num_players = 0;
+    public int num_players = 4;
     public bool do_tut = true;
 	public static Game GameInstance;
     public GameObject[] tutorials;
@@ -32,7 +32,7 @@ public class Game : MonoBehaviour {
 	public GameObject redTruck;
 	public GameObject blueTruck;
 
-	PlayerScript[] players;
+	public PlayerScript[] players;
 	public PlayerScript player1;
 	public PlayerScript player2;
 	public PlayerScript player3;
@@ -63,15 +63,11 @@ public class Game : MonoBehaviour {
         else tut = tutorials.Length;
     }
 	void InitGame(){
-		if (!skip_select) {
-			num_players = PlayerSelector.instance.num_players;
-
-			for (int i = 0; i < num_players; i++) {
-				players[i].GetComponent<PlayerScript> ().player_num = playerChoices[i];
-			}
-		}
-
-		SoundsController.instance.StopPlaying ();
+        playerChoices = new int[4];
+        for (int k = 0; k < 4; k++) {
+            playerChoices[k] = PlayerSelector.instance.choices[k];
+        }
+        SoundsController.instance.StopPlaying ();
 
 		SoundsController.instance.QueueClip (mainLoop);
 		SoundsController.instance.QueueClip (mainLoop);
