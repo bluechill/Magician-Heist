@@ -2708,7 +2708,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainLoop: {fileID: 8300000, guid: b03f97c5c079e4e70a23103c5fd757e0, type: 3}
   endGame: {fileID: 8300000, guid: 8f4010d633a224228bd73174cfa1f675, type: 3}
-  keyb_debug: 0
+  keyb_debug: 1
   end: 0
   ui: {fileID: 45587381}
   skip_select: 1
@@ -2753,7 +2753,7 @@ MonoBehaviour:
   gold_bars: 0
   red_team_score: 0
   blue_team_score: 0
-  time_limit: 360
+  time_limit: 365
   run_time: 0
   start_time: 0
 --- !u!1001 &182789025
