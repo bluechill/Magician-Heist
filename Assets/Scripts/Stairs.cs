@@ -15,7 +15,7 @@ public class Stairs : MonoBehaviour {
 	}
 
 	public void Use(GameObject player){
-		player.transform.position = destination.transform.position;
+		player.transform.position = new Vector3 (destination.transform.position.x + 1.5f, destination.transform.position.y, destination.transform.position.z) ;
 	}
 
 }

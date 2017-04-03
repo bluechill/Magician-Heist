@@ -87,7 +87,7 @@ public class TruckScript : MonoBehaviour {
 		List<Collider> taggedColliders = new List<Collider> ();
 		weight_used = 0;
 		for (int i = 0; i < colliders.Length; ++i) {
-			if (colliders [i].GetComponent<SpriteGlow> () != null && !colliders[i].GetComponent<Item>().held && !colliders[i].GetComponent<Item>().held &&
+			if (colliders [i].GetComponent<SpriteGlow> () != null && !colliders[i].GetComponent<Item>().held && !colliders[i].GetComponent<Item>().thrown &&
 			    !colliders [i].transform.IsChildOf (this.transform)) {
 				weight_used += colliders [i].gameObject.GetComponent<Item> ().size;
                 colliders[i].gameObject.GetComponent<Item>().counted = true;

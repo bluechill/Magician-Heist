@@ -92,7 +92,7 @@ public class Camera2DFollowMultiple : MonoBehaviour
     private void Update()
     {
 		if (viewing_stairs) {
-			damping = 1f;
+			damping = .3f;
 		} else {
 			damping = 0f;
 		}

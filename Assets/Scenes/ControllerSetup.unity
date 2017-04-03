@@ -3001,11 +3001,12 @@ MonoBehaviour:
   - {fileID: 1713689286}
   choices: 
   cooldowns: 
-  num_players: 0
+  num_players: 4
   init: 
   setting_up: 0
   grow: 0
   kill: 0
+  end_setup: 0
 --- !u!1 &1690774656
 GameObject:
   m_ObjectHideFlags: 0
