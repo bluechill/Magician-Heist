@@ -82,9 +82,9 @@ public class Camera2DFollowMultiple : MonoBehaviour
 		}
 
 		float horz = (xMax - xMin) * Screen.height / Screen.width + 10f;
-		float vert = yMax - yMin + 2f;
+		float vert = yMax - yMin + 4f;
 
-		return Mathf.Max(Mathf.Max (horz, vert) / 2f, 3f);
+		return 7;
 	}
 
 
