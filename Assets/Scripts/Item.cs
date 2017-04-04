@@ -4,6 +4,7 @@ using UnityEngine;
 
 [ExecuteInEditMode]
 public class Item : MonoBehaviour {
+	public float width;
 	public bool growCap = false;
 	public bool couch = false;
 	public bool briefcase = false;
@@ -44,7 +45,7 @@ public class Item : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (counted && !capacity_indicator) {
+		if (counted && !capacity_indicator && false) {
 			capacity_indicator = MonoBehaviour.Instantiate ( (GameObject)(Resources.Load ("Capacity Indicator")));
 			capacity_indicator.transform.parent = this.transform;
 			capacity_indicator.transform.localPosition = new Vector3(0f, 1f, 0f);
