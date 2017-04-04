@@ -191,11 +191,11 @@ public class TruckScript : MonoBehaviour {
 		}
 	}
 	public void UpdateScore(){
-		score_text.text = "";
+		score_text.text = "$";
 		if (red_team) {
-			score_text.text = Game.GameInstance.red_team_score.ToString();
+			score_text.text += Game.GameInstance.red_team_score.ToString();
 		} else {
-			score_text.text = Game.GameInstance.blue_team_score.ToString();
+			score_text.text += Game.GameInstance.blue_team_score.ToString();
 		}
 
 	}
