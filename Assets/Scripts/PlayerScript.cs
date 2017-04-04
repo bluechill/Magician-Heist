@@ -398,8 +398,8 @@ public class PlayerScript : MonoBehaviour {
 				return;
 			}
 		} else {
-			if (InputManager.Devices.Count > 0) {
-				controller = InputManager.Devices [0];
+			if (InputManager.Devices.Count > player_num) {
+				controller = InputManager.Devices [player_num];
 			} else {
 				print ("controller error, player #: " + player_num);
 				return;
@@ -436,11 +436,11 @@ public class PlayerScript : MonoBehaviour {
             }
         }
 
-		if (controller.Action4) {
-			if (cam.GetComponent<Camera> ().orthographicSize <= 13.9f)
-				cam.GetComponent<Camera> ().orthographicSize = Mathf.Lerp (cam.GetComponent<Camera> ().orthographicSize, 14f, 0.1f);
+		if (controller.RightBumper) {
+			if (cam.GetComponent<Camera> ().orthographicSize <= 20.9f)
+				cam.GetComponent<Camera> ().orthographicSize = Mathf.Lerp (cam.GetComponent<Camera> ().orthographicSize, 21f, 0.1f);
 			else 
-				cam.GetComponent<Camera> ().orthographicSize = 14;
+				cam.GetComponent<Camera> ().orthographicSize = 21;
 		} else {
 			if (cam.GetComponent<Camera> ().orthographicSize >= 7.1f)
 				cam.GetComponent<Camera> ().orthographicSize = Mathf.Lerp (cam.GetComponent<Camera> ().orthographicSize, 7f, 0.1f);
