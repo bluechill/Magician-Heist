@@ -40,11 +40,9 @@ public class PickupPrompt : MonoBehaviour {
 		for (int i = 0; i < grade; i++) {
 			moneyGrade.GetComponent<TextMesh> ().text += "$";
 		}
-		moneyGrade.GetComponent<TextMesh> ().color = Color.green;
+		moneyGrade.GetComponent<TextMesh> ().color = Color.white;
 
-		if (grade <= 1) {
-			moneyGrade.GetComponent<TextMesh> ().color = Color.green;
-		} else if (grade == 4) {
+		if (grade == 4) {
             moneyGrade.GetComponent<TextMesh> ().color = new Color (0.831f, 0.686f, 0.216f);
         }
 	}

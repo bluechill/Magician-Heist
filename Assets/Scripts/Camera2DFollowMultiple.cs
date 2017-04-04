@@ -52,7 +52,7 @@ public class Camera2DFollowMultiple : MonoBehaviour
     {
 		cam = GetComponent<Camera> ();
 		tilt = GetComponent<UnityStandardAssets.ImageEffects.TiltShift> ();
-
+		cam.orthographicSize = orthoSize ();
 		m_LastTargetPosition = averageTargetPosition();
 		m_OffsetZ = (transform.position - averageTargetPosition()).z;
         transform.parent = null;
@@ -97,7 +97,7 @@ public class Camera2DFollowMultiple : MonoBehaviour
 			damping = 0f;
 		}
 
-		cam.orthographicSize = orthoSize ();
+		//cam.orthographicSize = orthoSize ();
 		float y = maxTargetYDistance ();
 		tilt.blurArea = y * -9.4f / 7f + 15f;
 
