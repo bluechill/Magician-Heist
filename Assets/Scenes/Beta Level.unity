@@ -2278,7 +2278,7 @@ MonoBehaviour:
   keyb_debug: 1
   end: 0
   ui: {fileID: 45587381}
-  skip_select: 1
+  skip_select: 0
   camera: {fileID: 0}
   num_players: 0
   do_tut: 0
@@ -10266,7 +10266,22 @@ Prefab:
     - target: {fileID: 114097355583977746, guid: d7dadb4266346414c8ff3812896e8714,
         type: 2}
       propertyPath: contr_debug
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114088944904178380, guid: d7dadb4266346414c8ff3812896e8714,
+        type: 2}
+      propertyPath: contr_debug
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114688931996513264, guid: d7dadb4266346414c8ff3812896e8714,
+        type: 2}
+      propertyPath: contr_debug
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114898053104140770, guid: d7dadb4266346414c8ff3812896e8714,
+        type: 2}
+      propertyPath: contr_debug
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d7dadb4266346414c8ff3812896e8714, type: 2}
