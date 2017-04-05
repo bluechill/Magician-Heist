@@ -17,7 +17,7 @@ EditorBuildSettings:
     path: Assets/play_test_tut.unity
   - enabled: 0
     path: Assets/play_test_no_tut.unity
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/ControllerSetup.unity
   - enabled: 0
     path: Assets/Kari's work/Level With Artwork (2).unity

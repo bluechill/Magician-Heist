@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using InControl;
 
 public class PlayerScript : MonoBehaviour {
+	public bool contr_debug;
 	public GameObject cam;
 	float original_velocity;
 	public bool knockout_forcefield = false;
@@ -108,7 +109,6 @@ public class PlayerScript : MonoBehaviour {
 		for (int i = 0; i < num_actions; i++) {
 			actions[i] = false;
 		}
-        print(Game.GameInstance);
 		if (red_team)
 			truck = Game.GameInstance.redTruck;
 		else 
@@ -298,8 +298,7 @@ public class PlayerScript : MonoBehaviour {
 	}
 
 	public void UseStairs() {
-        cam.GetComponent<Camera2DFollowMultiple>().targets[1] = this.gameObject.transform;
-        cam.GetComponent<Camera2DFollowMultiple>().viewing_stairs = false;
+
         touching_stairs.GetComponent<Stairs> ().Use (this.gameObject);
 	}
 
@@ -384,20 +383,31 @@ public class PlayerScript : MonoBehaviour {
 	}
 	//uses InControl as InputManager
 	public void ProcessInputController(){
-		if (Game.GameInstance.keyb_debug)
-			return;
-        print(InputManager.Devices.Count);
 
-        if(InputManager.Devices.Count > Game.GameInstance.playerChoices[player_num]) {
-            controller = InputManager.Devices[Game.GameInstance.playerChoices[player_num]];
-        } else {
-            print("controller error, player #: " + player_num);
-            return;
-        }
 
+		if (!contr_debug) {
+
+			if (Game.GameInstance.keyb_debug)
+				return;
+			print (InputManager.Devices.Count);
+
+			if (InputManager.Devices.Count > Game.GameInstance.playerChoices [player_num]) {
+				controller = InputManager.Devices [Game.GameInstance.playerChoices [player_num]];
+			} else {
+				print ("controller error, player #: " + player_num);
+				return;
+			}
+		} else {
+			if (InputManager.Devices.Count > player_num) {
+				controller = InputManager.Devices [player_num];
+			} else {
+				print ("controller error, player #: " + player_num);
+				return;
+			}
+		}
         //InputManager.AttachDevice(controller);
 
-        rb.AddForce(Vector3.right * controller.LeftStickX * vel);
+        //rb.AddForce(Vector3.right * controller.LeftStickX * vel);
 		if (controller.LeftStickX < 0) {
 			left = true;
 			right = false;
@@ -426,6 +436,18 @@ public class PlayerScript : MonoBehaviour {
             }
         }
 
+		if (controller.RightBumper) {
+			if (cam.GetComponent<Camera> ().orthographicSize <= 20.9f)
+				cam.GetComponent<Camera> ().orthographicSize = Mathf.Lerp (cam.GetComponent<Camera> ().orthographicSize, 21f, 0.1f);
+			else 
+				cam.GetComponent<Camera> ().orthographicSize = 21;
+		} else {
+			if (cam.GetComponent<Camera> ().orthographicSize >= 7.1f)
+				cam.GetComponent<Camera> ().orthographicSize = Mathf.Lerp (cam.GetComponent<Camera> ().orthographicSize, 7f, 0.1f);
+			else
+				cam.GetComponent<Camera> ().orthographicSize = 7;
+		}
+
 		if (controller.Action1) {
 
 			
@@ -445,7 +467,7 @@ public class PlayerScript : MonoBehaviour {
 			}
 			return;
 		}
-		if (controller.Action4) {
+		if (controller.Action3) {
 			if (!cooldown) {
 				print ("Y BUTTON");
 				actions [2] = true;
@@ -454,6 +476,7 @@ public class PlayerScript : MonoBehaviour {
 			}
 			return;
 		}
+
 
 	}
 	public void Animate(){
@@ -594,6 +617,13 @@ public class PlayerScript : MonoBehaviour {
 		if (Input.GetKeyDown(key_mappings[player_num][6])) {
 			actions [2] = true;
 		}
+		if (Input.GetKey(KeyCode.Alpha1) && player_num == 0) {
+			if (cam.GetComponent<Camera> ().orthographicSize <= 13.9f)
+				cam.GetComponent<Camera> ().orthographicSize = Mathf.Lerp (cam.GetComponent<Camera> ().orthographicSize, 14f, 0.1f);
+		} else {
+			if (cam.GetComponent<Camera> ().orthographicSize >= 7.1f)
+				cam.GetComponent<Camera> ().orthographicSize = Mathf.Lerp (cam.GetComponent<Camera> ().orthographicSize, 7f, 0.1f);
+		}
 
 
 		if (is_in_box) {
@@ -606,28 +636,56 @@ public class PlayerScript : MonoBehaviour {
 		if (is_ability && player_num == 1) {
 			return;
 		}
+		if(contr_debug){
+			if (left) {
 
+				rb.velocity = Vector3.right * controller.LeftStickX * vel;
 
+				Animate ();
+			}
+			if (right) {
+				rb.velocity = Vector3.right * controller.LeftStickX * vel;
+				Animate ();
+			}
+			if (right && left) {
+				rb.velocity = Vector3.zero;
+				Idle ();
+			}
+			if (!right && !left) {
+				rb.velocity = Vector3.zero;
+				Idle ();
+			}
+			animator.speed = Mathf.Abs(controller.LeftStickX) * 1.5f;
+			if (!right & !left) {
+				animator.speed = 1f;
 
-		if (left) {
+			}
 
-			rb.velocity = Vector3.left * vel;
-
-			Animate ();
 		}
-		if (right) {
-			rb.velocity = Vector3.right * vel;
+		else if (Game.GameInstance.keyb_debug) {
+			if (left) {
 
-			Animate ();
+				rb.velocity = Vector3.left * vel;
+
+				Animate ();
+			}
+			if (right) {
+				rb.velocity = Vector3.right * vel;
+
+				Animate ();
+			}
+			if (right && left) {
+				rb.velocity = Vector3.zero;
+				Idle ();
+			}
+			if (!right && !left) {
+				rb.velocity = Vector3.zero;
+				Idle ();
+			}
+
 		}
-		if (right && left) {
-			rb.velocity = Vector3.zero;
-			Idle ();
-		}
-		if (!right && !left) {
-			rb.velocity = Vector3.zero;
-			Idle ();
-		}
+			
+
 		if (is_in_elevator || is_in_closet) {
 			rb.velocity = Vector3.zero;
 			return;
@@ -812,15 +870,13 @@ public class PlayerScript : MonoBehaviour {
 	}
 	public void TouchStairs(GameObject stairs){
 		if (stairsPrompt) {
-			stairsPrompt.GetComponent<StairsPrompt> ().Kill ();
-			stairsPrompt = null;
+			return;
 		}
 		stairsPrompt = MonoBehaviour.Instantiate (StairsPromptPrefab);
-		stairsPrompt.transform.position = new Vector3( stairs.transform.position.x + 0.5f, stairs.transform.position.y + 0.5f, 0f);
+		stairsPrompt.transform.position = new Vector3( stairs.transform.position.x + 1f, stairs.transform.position.y + 1.5f, 0f);
 		is_touching_stairs = true;
 		touching_stairs = stairs;
-		cam.GetComponent<Camera2DFollowMultiple> ().targets [1] = touching_stairs.GetComponent<Stairs>().destination.transform;
-		cam.GetComponent<Camera2DFollowMultiple> ().viewing_stairs = true;
+
 
 	}
 	public void StopTouchingStairs(){
@@ -830,8 +886,7 @@ public class PlayerScript : MonoBehaviour {
 		}
 		is_touching_stairs = false;
 		touching_stairs = null;
-		cam.GetComponent<Camera2DFollowMultiple> ().targets [1] = this.gameObject.transform;
-		cam.GetComponent<Camera2DFollowMultiple> ().viewing_stairs = false;
+
 	}
 	public void DisappearBody(){
 		body.SetActive (false);
@@ -927,7 +982,7 @@ public class PlayerScript : MonoBehaviour {
 				pickupPrompt = null;
 			}
 			pickupPrompt = MonoBehaviour.Instantiate (PickUpPromptPrefab);
-			pickupPrompt.transform.position = new Vector3( nearestActionObject.transform.position.x + 0.25f, nearestActionObject.transform.position.y + 0.5f, 0f);
+			pickupPrompt.transform.position = new Vector3( nearestActionObject.transform.position.x + 1f, nearestActionObject.transform.position.y + 1.5f, 0f);
 			pickupPrompt.GetComponent<PickupPrompt> ().parentObject = nearestActionObject;
 			pickupPrompt.GetComponent<PickupPrompt> ().parentPlayer = this.gameObject;
 			//pickupPrompt.GetComponent<PickupPrompt> ().itemPickup.GetComponent<SpriteRenderer>().sprite = nearestActionObject.GetComponent<SpriteRenderer> ().sprite;

@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 59a676b23d28344849b13be9d1592ea8
+timeCreated: 1491323660
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: MicroExtendFLF
+  fontNames:
+  - MicroExtendFLF
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

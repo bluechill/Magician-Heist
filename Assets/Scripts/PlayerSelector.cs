@@ -234,8 +234,8 @@ public class PlayerSelector : MonoBehaviour {
 
 	}
 	void GrowSelectionScreen(){
-		selection_screen.gameObject.transform.localScale = Vector3.Lerp (selection_screen.gameObject.transform.localScale, new Vector3(0.75f, 0.75f, 1f), 0.1f);
-		if (selection_screen.gameObject.transform.localScale.x >= 0.74f) {
+		selection_screen.gameObject.transform.localScale = Vector3.Lerp (selection_screen.gameObject.transform.localScale, new Vector3(0.6f, 0.6f, 1f), 0.1f);
+		if (selection_screen.gameObject.transform.localScale.x >= 0.59f) {
 			grow = false;
 		}
 	}

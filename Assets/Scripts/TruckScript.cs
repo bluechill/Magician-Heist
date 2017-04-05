@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class TruckScript : MonoBehaviour {
+	public float capacity_percent = 0f;
 	public Text score_text;
     public int team_score;
 	public int weight_used = 0;
@@ -14,6 +15,9 @@ public class TruckScript : MonoBehaviour {
 	public bool red_team;
 	public GameObject bed_center_obj;
 	public GameObject itemWall;
+	public GameObject capacity_indicator;
+	public GameObject indicators;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -21,6 +25,7 @@ public class TruckScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		capacity_percent = ((weight_used * 1f) / (capacity * 1f));
 		room_text.GetComponent<TextMesh> ().text = "";
 		room_text.GetComponent<TextMesh> ().text += weight_used.ToString ();
 		FindContained ();
@@ -28,7 +33,7 @@ public class TruckScript : MonoBehaviour {
 		
 		UpdateScore ();
 		UpdateCapacity ();
-        SpreadItems();
+        SpreadItems2();
     }
 
     private void OnTriggerEnter(Collider coll) {
@@ -186,15 +191,18 @@ public class TruckScript : MonoBehaviour {
 		}
 	}
 	public void UpdateScore(){
-		score_text.text = "";
+		score_text.text = "$";
 		if (red_team) {
-			score_text.text = Game.GameInstance.red_team_score.ToString();
+			score_text.text += Game.GameInstance.red_team_score.ToString();
 		} else {
-			score_text.text = Game.GameInstance.blue_team_score.ToString();
+			score_text.text += Game.GameInstance.blue_team_score.ToString();
 		}
 
 	}
 	public void SpreadItems(){
+
+
+
 		for (int i = 0; i < countedItems.Count; i++) {
 			if (!countedItems [i].GetComponent<Item> ().held && !countedItems [i].GetComponent<Item> ().thrown) { 
 
@@ -227,6 +235,92 @@ public class TruckScript : MonoBehaviour {
 			}
 		}
 	}
+	public void SpreadItems2(){
+
+		float size_used = 0f;
+		float start_x = 0f;
+		int sign = 1;
+		if (red_team)
+			sign = 1;
+		else
+			sign = -1;
+		
+		start_x = (bed_center_obj.transform.position.x - (sign *  6.5f));
+
+
+			
+		for (int i = 0; i < countedItems.Count; i++) {
+			if (!countedItems [i].GetComponent<Item> ().held && !countedItems [i].GetComponent<Item> ().thrown) { 
+
+				float x_ = start_x + (sign * size_used) + (sign * countedItems [i].GetComponent<Item> ().width / 2f);
+				size_used += countedItems [i].GetComponent<Item> ().width;
+
+
+
+				if (!V3EqualsFine (countedItems [i].transform.position, new Vector3 (x_, bed_center_obj.transform.position.y, 0f))) {
+					countedItems [i].transform.position = Vector3.Lerp(countedItems [i].transform.position, new Vector3 (x_, bed_center_obj.transform.position.y, 0f), 0.05f) ;
+
+				}
+
+
+				if (countedItems [i].GetComponent<Item> ().tree) {
+					if (!V3EqualsFine (countedItems [i].transform.position, new Vector3 (countedItems [i].transform.position.x, bed_center_obj.transform.position.y + (0.18f), 0f))) {
+						countedItems [i].transform.position = Vector3.Lerp(countedItems [i].transform.position, new Vector3 (countedItems [i].transform.position.x, bed_center_obj.transform.position.y + (0.15f), 0f), 0.05f) ;
+					}
+
+				} else if (!countedItems [i].GetComponent<Item> ().couch) {
+					if (!V3EqualsFine (countedItems [i].transform.position, new Vector3 (countedItems [i].transform.position.x, bed_center_obj.transform.position.y - (0.25f), 0f))) {
+						countedItems [i].transform.position = Vector3.Lerp(countedItems [i].transform.position, new Vector3 (countedItems [i].transform.position.x, bed_center_obj.transform.position.y - (0.25f), 0f), 0.05f) ;
+					}
+
+				}
+
+
+			}
+		}
+
+		int p = 0;
+		if (red_team) {
+			foreach (Transform indicator in indicators.transform) {
+
+				indicator.gameObject.SetActive (false);
+
+			}
+
+			foreach (Transform indicator in indicators.transform) {
+				p++;
+				if ((p * 1f) / 100f > capacity_percent) {
+					return;
+				}
+				indicator.gameObject.SetActive (true);
+
+			}
+		} else {
+
+			List<Transform> indicator_transforms = new List<Transform>();
+			foreach (Transform indicator in indicators.transform) {
+
+				indicator_transforms.Add (indicator);
+
+			}
+			indicator_transforms.Reverse ();
+			foreach (Transform indicator in indicator_transforms) {
+
+				indicator.gameObject.SetActive (false);
+
+			}
+			foreach (Transform indicator in indicator_transforms) {
+				p++;
+				if ((p * 1f) / 100f > capacity_percent) {
+					return;
+				}
+				indicator.gameObject.SetActive (true);
+
+			}
+
+		}
+
+	}
 	bool V3Equals(Vector3 vec_a, Vector3 vec_b){
 		float x_dif = vec_a.x - vec_b.x;
 		float y_dif = vec_a.y - vec_b.y;
@@ -238,6 +332,22 @@ public class TruckScript : MonoBehaviour {
 
 		if (x_dif <= 0.3) {
 			if (y_dif <= 0.3) {
+				return true;
+			}
+		}
+		return false;
+	}
+	bool V3EqualsFine(Vector3 vec_a, Vector3 vec_b){
+		float x_dif = vec_a.x - vec_b.x;
+		float y_dif = vec_a.y - vec_b.y;
+		if (x_dif < 0)
+			x_dif = x_dif * -1;
+
+		if (y_dif < 0)
+			y_dif = y_dif * -1;
+
+		if (x_dif <= 0.01) {
+			if (y_dif <= 0.01) {
 				return true;
 			}
 		}

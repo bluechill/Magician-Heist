@@ -114,10 +114,10 @@ public class Game : MonoBehaviour {
         int minutes = (int)((time_limit - run_time )/ 60f);
         int second = (int)((time_limit - run_time) % 60f);
         if (second < 10) {
-            timer_text.text = minutes.ToString() + ":0" + second.ToString();
+            timer_text.text = minutes.ToString() + ": 0" + second.ToString();
         }
         else {
-            timer_text.text = minutes.ToString() + ":" + second.ToString();
+            timer_text.text = minutes.ToString() + ": " + second.ToString();
         }
         if (minutes == 0) {
             timer_text.color = Color.Lerp(timer_text.color, Color.red, 0.01f);
@@ -139,10 +139,10 @@ public class Game : MonoBehaviour {
 		blue_team_capacity.text = "";
 		blue_team_capacity.text += blueTruck.GetComponent<TruckScript>().weight_used.ToString();
 
-		red_team_score_obj.text = "";
-		red_team_score_obj.text += red_team_score.ToString();
+		red_team_score_obj.text = "$";
+		red_team_score_obj.text +=  red_team_score.ToString();
 
-		blue_team_score_obj.text = "";
+		blue_team_score_obj.text = "$";
 		blue_team_score_obj.text += blue_team_score.ToString();
 
 
