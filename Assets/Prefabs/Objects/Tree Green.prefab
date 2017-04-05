@@ -24,6 +24,7 @@ GameObject:
   - component: {fileID: 114435276531195152}
   - component: {fileID: 54263154087697862}
   - component: {fileID: 114893518402106222}
+  - component: {fileID: 114254105565483604}
   m_Layer: 10
   m_Name: Tree Green
   m_TagString: Item
@@ -113,6 +114,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.67, y: 1.28, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114254105565483604
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1476681181424648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aaf00bc68af7416fa064a99b95996b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  switchTime: 0.3
+  juiceAmount: 0.4
 --- !u!114 &114435276531195152
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -124,6 +138,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5fd71269d86a45639bb831136f554dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  growCap: 0
+  couch: 0
   briefcase: 0
   flash_light: 0
   magical_key: 0
@@ -139,9 +155,14 @@ MonoBehaviour:
   plus50_prefab: {fileID: 1133873725776970, guid: 0448f09fe724f45198700a6ac536dfed,
     type: 2}
   gameScript: {fileID: 0}
-  points: 50
+  points: 30
   size: 10
+  counted: 0
   kill: 0
+  money_grade: 3
+  capacity_indicator: {fileID: 0}
+  capacity_indicator_prefab: {fileID: 0}
+  curr_Truck: {fileID: 0}
 --- !u!114 &114893518402106222
 MonoBehaviour:
   m_ObjectHideFlags: 1

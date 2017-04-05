@@ -24,6 +24,7 @@ GameObject:
   - component: {fileID: 114216109428401936}
   - component: {fileID: 54772072864394972}
   - component: {fileID: 114652256529664638}
+  - component: {fileID: 114569880100497292}
   m_Layer: 10
   m_Name: Tree Blue
   m_TagString: Item
@@ -149,6 +150,19 @@ MonoBehaviour:
   capacity_indicator: {fileID: 0}
   capacity_indicator_prefab: {fileID: 0}
   curr_Truck: {fileID: 0}
+--- !u!114 &114569880100497292
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1224310874719416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aaf00bc68af7416fa064a99b95996b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  switchTime: 0.3
+  juiceAmount: 0.4
 --- !u!114 &114652256529664638
 MonoBehaviour:
   m_ObjectHideFlags: 1
