@@ -91,11 +91,11 @@ public class Camera2DFollowMultiple : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-		if (viewing_stairs) {
+		/*if (viewing_stairs) {
 			damping = .3f;
 		} else {
 			damping = 0f;
-		}
+		}*/
 
 		//cam.orthographicSize = orthoSize ();
 		float y = maxTargetYDistance ();

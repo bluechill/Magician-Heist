@@ -11,6 +11,22 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1718080092951886}
   m_IsPrefabParent: 1
+--- !u!1 &1596614304955094
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4398828316418098}
+  - component: {fileID: 65084167184997036}
+  m_Layer: 10
+  m_Name: Collider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1718080092951886
 GameObject:
   m_ObjectHideFlags: 0
@@ -21,9 +37,12 @@ GameObject:
   - component: {fileID: 4018798046575240}
   - component: {fileID: 212494177907777530}
   - component: {fileID: 65699162813027288}
-  m_Layer: 0
+  - component: {fileID: 114608723895022118}
+  - component: {fileID: 54317609172456360}
+  - component: {fileID: 114895579600510428}
+  m_Layer: 10
   m_Name: Picture Blue
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -34,13 +53,54 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1718080092951886}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 18.71, y: 4.49, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 18.65, y: 4.49, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 4398828316418098}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4398828316418098
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1596614304955094}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4018798046575240}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &54317609172456360
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1718080092951886}
+  serializedVersion: 2
+  m_Mass: 2
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 120
+  m_CollisionDetection: 2
+--- !u!65 &65084167184997036
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1596614304955094}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &65699162813027288
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -49,10 +109,60 @@ BoxCollider:
   m_GameObject: {fileID: 1718080092951886}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
-  m_Size: {x: 0.78, y: 1.16, z: 0.2}
+  m_Size: {x: 1, y: 1.5, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114608723895022118
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1718080092951886}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5fd71269d86a45639bb831136f554dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  width: 1
+  growCap: 0
+  couch: 0
+  briefcase: 0
+  flash_light: 0
+  magical_key: 0
+  is_player: 0
+  gold_bar: 0
+  tree: 0
+  key_card: 0
+  held: 0
+  thrown: 0
+  player_num: -1
+  enabled: 0
+  current_player: {fileID: 0}
+  plus50_prefab: {fileID: 1133873725776970, guid: 0448f09fe724f45198700a6ac536dfed,
+    type: 2}
+  gameScript: {fileID: 0}
+  points: 500
+  size: 25
+  counted: 0
+  kill: 0
+  money_grade: 4
+  capacity_indicator: {fileID: 0}
+  capacity_indicator_prefab: {fileID: 0}
+  curr_Truck: {fileID: 0}
+--- !u!114 &114895579600510428
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1718080092951886}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85309204d424945cc8326458e180b2fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlowColor: {r: 0.5147058, g: 5, b: 0, a: 1}
+  OutlineWidth: 1
 --- !u!212 &212494177907777530
 SpriteRenderer:
   m_ObjectHideFlags: 1

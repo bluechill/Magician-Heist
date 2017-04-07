@@ -24,6 +24,7 @@ GameObject:
   - component: {fileID: 114216109428401936}
   - component: {fileID: 54772072864394972}
   - component: {fileID: 114652256529664638}
+  - component: {fileID: 114583671176660998}
   m_Layer: 10
   m_Name: Tree Blue
   m_TagString: Item
@@ -67,7 +68,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1224310874719416}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.91, y: -8.08, z: 0}
+  m_LocalPosition: {x: -7.68, y: -8.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4121569489446836}
@@ -124,6 +125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5fd71269d86a45639bb831136f554dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  width: 0.7
   growCap: 0
   couch: 0
   briefcase: 0
@@ -149,6 +151,19 @@ MonoBehaviour:
   capacity_indicator: {fileID: 0}
   capacity_indicator_prefab: {fileID: 0}
   curr_Truck: {fileID: 0}
+--- !u!114 &114583671176660998
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1224310874719416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aaf00bc68af7416fa064a99b95996b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  switchTime: 0.3
+  juiceAmount: 0.4
 --- !u!114 &114652256529664638
 MonoBehaviour:
   m_ObjectHideFlags: 1

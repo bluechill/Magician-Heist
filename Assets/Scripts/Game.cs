@@ -39,6 +39,10 @@ public class Game : MonoBehaviour {
 	public PlayerScript player4;
 
 	public GameObject[] playerPrefabs;
+    public GameObject[] RTA1_Items;
+    public GameObject[] RTA2_Items;
+    public GameObject Gold_Door;
+    public GameObject[] RTA_Arrows;
 	public int[] playerChoices;
 
 	public int gold_bars = 0;
@@ -47,6 +51,9 @@ public class Game : MonoBehaviour {
 	public float time_limit;
 	public float run_time = 0f;
 	public float start_time = 0f;
+    bool RTA1_Active = false;
+    bool RTA2_Active = false;
+    bool Gold_Door_Active = true;
 	// Use this for initialization
 	void Start () {
 
@@ -108,7 +115,50 @@ public class Game : MonoBehaviour {
 			low_time = true;
 
 		}
-		if (run_time >= time_limit) {
+
+        if (run_time > 5 && !RTA1_Active) {
+            RTA1_Active = true;
+            // PLAY VOICE LINE HERE
+            int rand1 = Random.Range(0, RTA1_Items.Length);
+            int rand2 = Random.Range(0, RTA1_Items.Length);
+            print(rand1);
+            print(rand2);
+            if (rand1 == rand2) {
+                if (rand2 < 5)
+                    rand2 += 1;
+                else {
+                    rand2 = Random.Range(0, (RTA1_Items.Length - 1));
+                }
+            }
+            print(rand1);
+            print(rand2);
+
+            RTA1_Items[rand1].gameObject.GetComponent<Item>().points *= 3;
+            RTA1_Items[rand2].gameObject.GetComponent<Item>().points *= 3;
+            RTA_Arrows[0].GetComponent<Transform>().position = new Vector3 (RTA1_Items[rand1].gameObject.GetComponent<Transform>().position.x, RTA1_Items[rand1].gameObject.GetComponent<Transform>().position.y + 2);
+            RTA_Arrows[1].GetComponent<Transform>().position = new Vector3(RTA1_Items[rand2].gameObject.GetComponent<Transform>().position.x, RTA1_Items[rand2].gameObject.GetComponent<Transform>().position.y + 2);
+            RTA_Arrows[0].GetComponent<Transform>().parent = RTA1_Items[rand1].GetComponent<Transform>();
+            RTA_Arrows[1].GetComponent<Transform>().parent = RTA1_Items[rand2].GetComponent<Transform>();
+        }
+
+        if (run_time > 90 && Gold_Door_Active) {
+            Gold_Door_Active = false;
+            Destroy(Gold_Door);
+            //PLAY AUDIO OF DOOR BEING DESTROYED
+        }
+
+        if (run_time > 10 && !RTA2_Active) {
+            RTA2_Active = true;
+            // PLAY SECOND RTA VOICE LINE HERE
+            int rand3 = Random.Range(0, RTA2_Items.Length);
+            RTA2_Items[rand3].gameObject.GetComponent<Item>().enabled = true;
+            RTA2_Items[rand3].gameObject.GetComponent<Collider>().enabled = true;
+            RTA2_Items[rand3].gameObject.GetComponent<Item>().points = 500;
+            RTA_Arrows[2].GetComponent<Transform>().position = new Vector3(RTA2_Items[rand3].gameObject.GetComponent<Transform>().position.x, RTA2_Items[rand3].gameObject.GetComponent<Transform>().position.y + 2);
+            RTA_Arrows[2].GetComponent<Transform>().parent = RTA2_Items[rand3].GetComponent<Transform>();
+        }
+
+        if (run_time >= time_limit) {
 			Win ();
 		}
         int minutes = (int)((time_limit - run_time )/ 60f);
