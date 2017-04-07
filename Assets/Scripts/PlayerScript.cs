@@ -1120,7 +1120,7 @@ public class PlayerScript : MonoBehaviour {
 	void PuffSmoke(){
 		smoke = MonoBehaviour.Instantiate (smokePrefab);
 		smoke.transform.position = transform.position;
-
+		SoundsController.instance.PlaySound(Game.GameInstance.poof);
 		smoke.GetComponent<ParticleSystem>().GetComponent<Renderer>().sortingOrder = 100;
 		Invoke ("ExhaleSmoke", 1f);
 	}
@@ -1135,6 +1135,7 @@ public class PlayerScript : MonoBehaviour {
 		}
 	}
 	void BlockAttack(){
+		SoundsController.instance.PlaySound (Game.GameInstance.shield_hit);
 		forceField.GetComponent<SpriteRenderer> ().sprite = forceField_red;
 		forceField.GetComponent<SpriteGlow> ().GlowColor = forceField_red_color;
 		Invoke ("ResetForceField", 0.4f);
