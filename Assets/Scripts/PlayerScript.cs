@@ -6,10 +6,15 @@ using UnityEngine.SceneManagement;
 using InControl;
 
 public class PlayerScript : MonoBehaviour {
+	
+	public GameObject bicep;
+	public bool attacking = false;
     public GameObject weapon;
     float attack_time = .5f;
     float attack_cd = 0f;
-
+	public GameObject smokePrefab;
+	public GameObject sparkPrefab;
+	public GameObject smoke;
     public bool contr_debug;
 	public GameObject cam;
 	float original_velocity;
@@ -37,6 +42,10 @@ public class PlayerScript : MonoBehaviour {
 	public GameObject transformed_object;
 	public GameObject right_hand;
 	public GameObject forceField;
+	public Sprite forceField_blue;
+	public Sprite forceField_red;
+	public Color forceField_red_color;
+	public Color forceField_blue_color;
     public Game gameScript;
 
 	public float forceFieldCoolDown = 0.0f;
@@ -102,6 +111,7 @@ public class PlayerScript : MonoBehaviour {
 
 	public Vector3 original_position;
 	public void Start(){
+		forceField_blue_color = forceField.GetComponent<SpriteGlow> ().GlowColor;
 		original_position = this.transform.localPosition;
 		original_velocity = vel;
 		birthtime = Time.time;
@@ -317,6 +327,7 @@ public class PlayerScript : MonoBehaviour {
 		left = false;
 		Hide ();
 		Drop ();
+		PuffSmoke ();
         transform.localPosition = original_position;
 		Invoke ("WakeupAnimation", 2f);
 		Invoke ("Wakeup", 3f);
@@ -360,7 +371,8 @@ public class PlayerScript : MonoBehaviour {
 
 			if (forceFieldLength > 0f)
 				forceFieldCoolDown -= forceFieldLength;
-			
+
+			ResetForceField ();
 			forceField.SetActive (false);
 		}
 	}
@@ -392,21 +404,29 @@ public class PlayerScript : MonoBehaviour {
 
 		if (!contr_debug) {
 
-			if (Game.GameInstance.keyb_debug)
+			if (Game.GameInstance.keyb_debug) {
+				controller_set = false;
 				return;
+			}
 			print (InputManager.Devices.Count);
 
 			if (InputManager.Devices.Count > Game.GameInstance.playerChoices [player_num]) {
 				controller = InputManager.Devices [Game.GameInstance.playerChoices [player_num]];
+				controller_set = true;
+
 			} else {
 				print ("controller error, player #: " + player_num);
+				controller_set = false;
 				return;
 			}
 		} else {
 			if (InputManager.Devices.Count > player_num) {
 				controller = InputManager.Devices [player_num];
+				controller_set = true;
+
 			} else {
 				print ("controller error, player #: " + player_num);
+				controller_set = false;
 				return;
 			}
 		}
@@ -484,6 +504,8 @@ public class PlayerScript : MonoBehaviour {
 		}
 
         if (controller.RightBumper) {
+			//PuffSmoke ();
+			//BlockAttack();
             if (!cooldown && attack_cd <= 0 && !is_holding) {
                 print("right bumper");
                 actions[3] = true;
@@ -652,7 +674,7 @@ public class PlayerScript : MonoBehaviour {
 		if (is_ability && player_num == 1) {
 			return;
 		}
-		if(contr_debug){
+		if(contr_debug && controller_set){
 			if (left) {
 
 				rb.velocity = Vector3.right * controller.LeftStickX * vel;
@@ -670,8 +692,9 @@ public class PlayerScript : MonoBehaviour {
 			if (!right && !left) {
 				rb.velocity = Vector3.zero;
 				Idle ();
+				animator.speed = Mathf.Abs(controller.LeftStickX) * 1.5f;
+
 			}
-			animator.speed = Mathf.Abs(controller.LeftStickX) * 1.5f;
 			if (!right & !left) {
 				animator.speed = 1f;
 
@@ -835,6 +858,8 @@ public class PlayerScript : MonoBehaviour {
     public void ProcessAction4() {
         attack_cd = 1.5f;
         actions[3] = false;
+		attacking = true;
+
         CancelInvoke("TurnOffWeapon");
         weapon.SetActive(true);
         Invoke("TurnOffWeapon", attack_time);
@@ -896,8 +921,12 @@ public class PlayerScript : MonoBehaviour {
             coll.gameObject.GetComponent<SecurityCam>().Use(player_num);
         }
         else if (coll.gameObject.layer == 28 && coll.gameObject.GetComponentInParent<PlayerScript>().red_team != red_team ) {
-            if (!forceField.activeSelf && !is_knocked_out)
-                KnockOut();
+			if (!forceField.activeSelf && !is_knocked_out)
+				KnockOut ();
+			else if (forceField.activeSelf && !is_knocked_out) {
+				BlockAttack ();
+			}
+
             coll.gameObject.GetComponentInParent<PlayerScript>().SheathWeapon();
         }
     }
@@ -1044,8 +1073,10 @@ public class PlayerScript : MonoBehaviour {
 
 		if (forceFieldLength > 0f)
 			forceFieldLength -= Time.fixedDeltaTime;
-		else if (forceFieldLength <= 0f && forceField.activeSelf)
+		else if (forceFieldLength <= 0f && forceField.activeSelf) {
+			ResetForceField ();
 			forceField.SetActive (false);
+		}
 		/*
 
         if (red_team)
@@ -1073,12 +1104,44 @@ public class PlayerScript : MonoBehaviour {
 		} else {
 			vel = original_velocity;
 		}
+		AttackLunge ();
 	}
     void TurnOffWeapon() {
+		attacking = false;
+		weapon.GetComponent<CapsuleCollider> ().enabled = true;
         weapon.SetActive(false);
     }
     void SheathWeapon() {
-        //CancelInvoke("TurnOffWeapon");
-        weapon.SetActive(false);
+		weapon.GetComponent<CapsuleCollider> ().enabled = false;
+		Invoke ("TurnOffWeapon", 0.1f);
     }
+
+	//begin 420
+	void PuffSmoke(){
+		smoke = MonoBehaviour.Instantiate (smokePrefab);
+		smoke.transform.position = transform.position;
+
+		smoke.GetComponent<ParticleSystem>().GetComponent<Renderer>().sortingOrder = 100;
+		Invoke ("ExhaleSmoke", 1f);
+	}
+	void ExhaleSmoke(){
+		Destroy (smoke);
+	}
+	void AttackLunge(){
+		if (attacking) {
+			bicep.transform.localRotation = Quaternion.Euler (new Vector3 (0f, 0f, 50f));
+		} else {
+//			bicep.transform.localRotation = Quaternion.Euler (new Vector3 (0f, 0f, 0f));
+		}
+	}
+	void BlockAttack(){
+		forceField.GetComponent<SpriteRenderer> ().sprite = forceField_red;
+		forceField.GetComponent<SpriteGlow> ().GlowColor = forceField_red_color;
+		Invoke ("ResetForceField", 0.4f);
+	}
+	void ResetForceField(){
+		forceField.GetComponent<SpriteRenderer> ().sprite = forceField_blue;
+		forceField.GetComponent<SpriteGlow> ().GlowColor = forceField_blue_color;
+	}
+
 }
