@@ -103,4 +103,7 @@ public class SoundsController : MonoBehaviour {
 
 		sound_objects.Clear ();
 	}
+	public void PlaySound(AudioSource clip){
+		clip.Play ();
+	}
 }

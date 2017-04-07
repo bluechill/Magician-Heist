@@ -17,7 +17,7 @@ public class TruckScript : MonoBehaviour {
 	public GameObject itemWall;
 	public GameObject capacity_indicator;
 	public GameObject indicators;
-
+	public GameObject itemWallSprite;
 	// Use this for initialization
 	void Start () {
 		
@@ -26,6 +26,11 @@ public class TruckScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		capacity_percent = ((weight_used * 1f) / (capacity * 1f));
+		if (capacity_percent >= 1f) {
+			itemWallSprite.SetActive (true);
+		} else {
+			itemWallSprite.SetActive (false);
+		}
 		room_text.GetComponent<TextMesh> ().text = "";
 		room_text.GetComponent<TextMesh> ().text += weight_used.ToString ();
 		FindContained ();
@@ -112,6 +117,7 @@ public class TruckScript : MonoBehaviour {
 					} else {
 						Game.GameInstance.blue_team_score += colliders [i].gameObject.GetComponent<Item> ().points;
 					}
+					SoundsController.instance.PlaySound (Game.GameInstance.chaChing);
 				}
 
                 colliders[i].gameObject.GetComponent<Item>().counted = true;

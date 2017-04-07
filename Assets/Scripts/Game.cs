@@ -5,7 +5,28 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class Game : MonoBehaviour {
+	public GameObject goldTextBox;
+	string gold_text = "We've cracked the vault, time to get the gold !";
+	int gold_index = 0;
+	float write_speed = 0.1f;
+	bool growGoldText = false;
+	bool shrinkGoldText = false;
+	public GameObject goldbar1;
+	public GameObject goldbar2;
 
+	public GameObject event1TextBox;
+	string event1_text = "We've located some valuable items, be on the lookout for these arrows !";
+	int event1_index = 0;
+	bool growEvent1Text = false;
+	bool shrinkEvent1Text = false;
+	public GameObject event1_arrow1;
+	public GameObject event1_arrow2;
+
+
+	public AudioSource chaChing;
+	public AudioSource poof;
+	public AudioSource phone;
+	public AudioSource shield_hit;
 	public AudioClip mainLoop;
 	public AudioClip endGame;
 	public bool keyb_debug;
@@ -88,6 +109,18 @@ public class Game : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
+		if (growGoldText) {
+			GrowGoldTextBox ();
+		}
+		if (shrinkGoldText) {
+			ShrinkGoldTextBox ();
+		}
+		if (growEvent1Text) {
+			GrowEvent1TextBox ();
+		}
+		if (shrinkEvent1Text) {
+			ShrinkEvent1TextBox ();
+		}
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Restart();
@@ -132,7 +165,8 @@ public class Game : MonoBehaviour {
             }
             print(rand1);
             print(rand2);
-
+			event1TextBox.SetActive(true);
+			growEvent1Text = true;
             RTA1_Items[rand1].gameObject.GetComponent<Item>().points *= 3;
             RTA1_Items[rand2].gameObject.GetComponent<Item>().points *= 3;
             RTA_Arrows[0].GetComponent<Transform>().position = new Vector3 (RTA1_Items[rand1].gameObject.GetComponent<Transform>().position.x, RTA1_Items[rand1].gameObject.GetComponent<Transform>().position.y + 2);
@@ -140,13 +174,16 @@ public class Game : MonoBehaviour {
             RTA_Arrows[0].GetComponent<Transform>().parent = RTA1_Items[rand1].GetComponent<Transform>();
             RTA_Arrows[1].GetComponent<Transform>().parent = RTA1_Items[rand2].GetComponent<Transform>();
         }
-
+		if (run_time > 16) {
+			shrinkEvent1Text = true;
+		}
         if (run_time > 90 && Gold_Door_Active) {
-            Gold_Door_Active = false;
-            Destroy(Gold_Door);
-            //PLAY AUDIO OF DOOR BEING DESTROYED
-        }
 
+			OpenGoldDoor();
+        }
+		if (run_time > 101) {
+			shrinkGoldText = true;
+		}
         if (run_time > 10 && !RTA2_Active) {
             RTA2_Active = true;
             // PLAY SECOND RTA VOICE LINE HERE
@@ -267,5 +304,68 @@ public class Game : MonoBehaviour {
 	}
 	public void GrowWinMenuX(){
 		win_menu.transform.localScale = Vector3.Lerp (win_menu.transform.localScale, new Vector3(1f, win_menu.transform.localScale.y, 1f), 0.05f);
+	}
+	public void OpenGoldDoor(){
+		Gold_Door_Active = false;
+		Destroy(Gold_Door);
+		//PLAY AUDIO OF DOOR BEING DESTROYED
+		goldTextBox.SetActive(true);
+		growGoldText = true;
+	}
+	void GrowGoldTextBox(){
+		if(goldTextBox.activeSelf) goldTextBox.transform.localScale = Vector3.Lerp (goldTextBox.transform.localScale, new Vector3(1f, 1f, 1f), 0.1f);
+		if (goldTextBox.activeSelf && goldTextBox.transform.localScale.x >= 0.9f) {
+			growGoldText = false;
+			SoundsController.instance.PlaySound (Game.GameInstance.phone);
+			Invoke ("WriteGoldText", write_speed);
+		}
+	}
+
+	void ShrinkGoldTextBox(){
+		if(goldTextBox.activeSelf) goldTextBox.transform.localScale = Vector3.Lerp (goldTextBox.transform.localScale, new Vector3(0f, 0f, 0f), 0.1f);
+		if (goldTextBox.activeSelf && goldTextBox.transform.localScale.magnitude <= 0.1f) {
+			shrinkGoldText = false;
+			goldTextBox.SetActive (false);
+		}
+
+	}
+	void WriteGoldText(){
+		if (gold_index == gold_text.Length) {
+			goldbar1.SetActive (true);
+			goldbar2.SetActive (true);
+			phone.Stop ();
+			return;
+		}
+		goldTextBox.GetComponentInChildren<Text> ().text += gold_text [gold_index++];
+		Invoke ("WriteGoldText", write_speed);
+	}
+
+
+	void GrowEvent1TextBox(){
+		if(event1TextBox.activeSelf) event1TextBox.transform.localScale = Vector3.Lerp (event1TextBox.transform.localScale, new Vector3(1f, 1f, 1f), 0.1f);
+		if (event1TextBox.activeSelf && event1TextBox.transform.localScale.x >= 0.9f) {
+			growEvent1Text = false;
+			SoundsController.instance.PlaySound (Game.GameInstance.phone);
+			Invoke ("WriteEvent1Text", write_speed);
+		}
+	}
+
+	void ShrinkEvent1TextBox(){
+		if(event1TextBox.activeSelf) event1TextBox.transform.localScale = Vector3.Lerp (event1TextBox.transform.localScale, new Vector3(0f, 0f, 0f), 0.1f);
+		if (event1TextBox.activeSelf && event1TextBox.transform.localScale.magnitude <= 0.1f) {
+			shrinkEvent1Text = false;
+			event1TextBox.SetActive (false);
+		}
+
+	}
+	void WriteEvent1Text(){
+		if (event1_index == event1_text.Length) {
+			event1_arrow1.SetActive (true);
+			event1_arrow2.SetActive (true);
+			phone.Stop ();
+			return;
+		}
+		event1TextBox.GetComponentInChildren<Text> ().text += event1_text [event1_index++];
+		Invoke ("WriteEvent1Text", write_speed);
 	}
 }
