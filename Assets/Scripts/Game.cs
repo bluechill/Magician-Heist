@@ -22,8 +22,14 @@ public class Game : MonoBehaviour {
 	public GameObject event1_arrow1;
 	public GameObject event1_arrow2;
 
+    public GameObject event2TextBox;
+    string event2_text = "The Boss heard they got a rare painting in there he wants,     GO GET IT!";
+    int event2_index = 0;
+    bool growEvent2Text = false;
+    bool shrinkEvent2Text = false;
 
-	public AudioSource chaChing;
+
+    public AudioSource chaChing;
 	public AudioSource poof;
 	public AudioSource phone;
 	public AudioSource shield_hit;
@@ -121,6 +127,12 @@ public class Game : MonoBehaviour {
 		if (shrinkEvent1Text) {
 			ShrinkEvent1TextBox ();
 		}
+        if (growEvent2Text) {
+            GrowEvent2TextBox();
+        }
+        if (shrinkEvent2Text) {
+            ShrinkEvent2TextBox();
+        }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Restart();
@@ -169,8 +181,10 @@ public class Game : MonoBehaviour {
 			growEvent1Text = true;
             RTA1_Items[rand1].gameObject.GetComponent<Item>().points *= 3;
             RTA1_Items[rand2].gameObject.GetComponent<Item>().points *= 3;
-            RTA_Arrows[0].GetComponent<Transform>().position = new Vector3 (RTA1_Items[rand1].gameObject.GetComponent<Transform>().position.x, RTA1_Items[rand1].gameObject.GetComponent<Transform>().position.y + 2);
-            RTA_Arrows[1].GetComponent<Transform>().position = new Vector3(RTA1_Items[rand2].gameObject.GetComponent<Transform>().position.x, RTA1_Items[rand2].gameObject.GetComponent<Transform>().position.y + 2);
+            RTA1_Items[rand1].gameObject.GetComponent<Item>().money_grade = 4;
+            RTA1_Items[rand2].gameObject.GetComponent<Item>().money_grade = 4;
+            RTA_Arrows[0].GetComponent<Transform>().position = new Vector3 (RTA1_Items[rand1].gameObject.GetComponent<Transform>().position.x, RTA1_Items[rand1].gameObject.GetComponent<Transform>().position.y + 1.5f);
+            RTA_Arrows[1].GetComponent<Transform>().position = new Vector3(RTA1_Items[rand2].gameObject.GetComponent<Transform>().position.x, RTA1_Items[rand2].gameObject.GetComponent<Transform>().position.y + 1.5f);
             RTA_Arrows[0].GetComponent<Transform>().parent = RTA1_Items[rand1].GetComponent<Transform>();
             RTA_Arrows[1].GetComponent<Transform>().parent = RTA1_Items[rand2].GetComponent<Transform>();
         }
@@ -184,15 +198,20 @@ public class Game : MonoBehaviour {
 		if (run_time > 101) {
 			shrinkGoldText = true;
 		}
-        if (run_time > 10 && !RTA2_Active) {
+        if (run_time > 150 && !RTA2_Active) {
             RTA2_Active = true;
-            // PLAY SECOND RTA VOICE LINE HERE
+            event2TextBox.SetActive(true);
+            growEvent2Text = true;
             int rand3 = Random.Range(0, RTA2_Items.Length);
             RTA2_Items[rand3].gameObject.GetComponent<Item>().enabled = true;
             RTA2_Items[rand3].gameObject.GetComponent<Collider>().enabled = true;
             RTA2_Items[rand3].gameObject.GetComponent<Item>().points = 500;
-            RTA_Arrows[2].GetComponent<Transform>().position = new Vector3(RTA2_Items[rand3].gameObject.GetComponent<Transform>().position.x, RTA2_Items[rand3].gameObject.GetComponent<Transform>().position.y + 2);
+            RTA_Arrows[2].GetComponent<Transform>().position = new Vector3(RTA2_Items[rand3].gameObject.GetComponent<Transform>().position.x, RTA2_Items[rand3].gameObject.GetComponent<Transform>().position.y + 1.5f);
             RTA_Arrows[2].GetComponent<Transform>().parent = RTA2_Items[rand3].GetComponent<Transform>();
+        }
+
+        if (run_time > 161) {
+            shrinkEvent2Text = true;
         }
 
         if (run_time >= time_limit) {
@@ -368,4 +387,29 @@ public class Game : MonoBehaviour {
 		event1TextBox.GetComponentInChildren<Text> ().text += event1_text [event1_index++];
 		Invoke ("WriteEvent1Text", write_speed);
 	}
+    void GrowEvent2TextBox() {
+        if (event2TextBox.activeSelf) event2TextBox.transform.localScale = Vector3.Lerp(event2TextBox.transform.localScale, new Vector3(1f, 1f, 1f), 0.1f);
+        if (event2TextBox.activeSelf && event2TextBox.transform.localScale.x >= 0.9f) {
+            growEvent2Text = false;
+            SoundsController.instance.PlaySound(Game.GameInstance.phone);
+            Invoke("WriteEvent2Text", write_speed);
+        }
+    }
+
+    void ShrinkEvent2TextBox() {
+        if (event2TextBox.activeSelf) event2TextBox.transform.localScale = Vector3.Lerp(event2TextBox.transform.localScale, new Vector3(0f, 0f, 0f), 0.1f);
+        if (event2TextBox.activeSelf && event2TextBox.transform.localScale.magnitude <= 0.1f) {
+            shrinkEvent2Text = false;
+            event2TextBox.SetActive(false);
+        }
+
+    }
+    void WriteEvent2Text() {
+        if (event2_index == event2_text.Length) {
+            phone.Stop();
+            return;
+        }
+        event2TextBox.GetComponentInChildren<Text>().text += event2_text[event2_index++];
+        Invoke("WriteEvent2Text", write_speed);
+    }
 }
