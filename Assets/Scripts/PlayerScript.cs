@@ -1044,11 +1044,12 @@ public class PlayerScript : MonoBehaviour {
 			nearestActionObject.GetComponent<SpriteGlow> ().enabled = true;
 		}
 
-		if (!is_knocked_out && nearestActionObject && nearestActionObject.tag == "Item" && !nearestActionObject.GetComponent<Item>().thrown) {
+		if (!is_knocked_out && nearestActionObject && nearestActionObject.tag == "Item" && !nearestActionObject.GetComponent<Item>().thrown && !nearestActionObject.GetComponent<Item>().held) {
 			if (pickupPrompt) {
 				Destroy(pickupPrompt.gameObject);
 				pickupPrompt = null;
 			}
+		
 			pickupPrompt = MonoBehaviour.Instantiate (PickUpPromptPrefab);
 			pickupPrompt.transform.position = new Vector3( nearestActionObject.transform.position.x + 1f, nearestActionObject.transform.position.y + 1.5f, 0f);
 			pickupPrompt.GetComponent<PickupPrompt> ().parentObject = nearestActionObject;
