@@ -6,16 +6,16 @@ using UnityEngine.SceneManagement;
 
 public class Game : MonoBehaviour {
 	public GameObject goldTextBox;
-	string gold_text = "We've cracked the vault, time to get the gold !";
+	string[] gold_text = {"We've ", "cracked ", "the vault, ", "time ", "to ", "get ", "the ", "gold !"};
 	int gold_index = 0;
-	float write_speed = 0.1f;
+	float write_speed = 0.12f;
 	bool growGoldText = false;
 	bool shrinkGoldText = false;
 	public GameObject goldbar1;
 	public GameObject goldbar2;
 
 	public GameObject event1TextBox;
-	string event1_text = "We've located some valuable items, be on the lookout for these arrows !";
+	string[] event1_text = {"We've ", "located ", "some ", "valuable ", "items, ", "be ", "on ", "the ", "lookout ", "for ", "these ", "arrows !"};
 	int event1_index = 0;
 	bool growEvent1Text = false;
 	bool shrinkEvent1Text = false;
@@ -23,12 +23,13 @@ public class Game : MonoBehaviour {
 	public GameObject event1_arrow2;
 
     public GameObject event2TextBox;
-    string event2_text = "The Boss heard they got a rare painting in there he wants,     GO GET IT!";
-    int event2_index = 0;
+	string[] event2_text = {"The ", "Boss ", "heard ", "they ", "got ", "a ", "rare ", "painting ", "in ", "there ", "he ", "wants,     ","GO ", "GET ", "IT !"};
+
+	int event2_index = 0;
     bool growEvent2Text = false;
     bool shrinkEvent2Text = false;
 
-
+	public GameObject sparklesPrefab;
     public AudioSource chaChing;
 	public AudioSource poof;
 	public AudioSource phone;
@@ -187,6 +188,16 @@ public class Game : MonoBehaviour {
             RTA_Arrows[1].GetComponent<Transform>().position = new Vector3(RTA1_Items[rand2].gameObject.GetComponent<Transform>().position.x, RTA1_Items[rand2].gameObject.GetComponent<Transform>().position.y + 1.5f);
             RTA_Arrows[0].GetComponent<Transform>().parent = RTA1_Items[rand1].GetComponent<Transform>();
             RTA_Arrows[1].GetComponent<Transform>().parent = RTA1_Items[rand2].GetComponent<Transform>();
+			RTA_Arrows [0].GetComponent<Arrow> ().SetOriginal ();
+			RTA_Arrows [1].GetComponent<Arrow> ().SetOriginal ();
+			GameObject sparkles1 = MonoBehaviour.Instantiate (sparklesPrefab);
+			sparkles1.transform.parent = RTA1_Items[rand1].GetComponent<Transform>();
+			sparkles1.transform.localPosition = new Vector3 (0f, 0.5f, 0f);
+			GameObject sparkles2 = MonoBehaviour.Instantiate (sparklesPrefab);
+			sparkles2.transform.parent = RTA1_Items[rand2].GetComponent<Transform>();
+			sparkles2.transform.localPosition = new Vector3 (0f, 0.5f, 0f);
+
+
         }
 		if (run_time > 16) {
 			shrinkEvent1Text = true;
@@ -208,6 +219,7 @@ public class Game : MonoBehaviour {
             RTA2_Items[rand3].gameObject.GetComponent<Item>().points = 500;
             RTA_Arrows[2].GetComponent<Transform>().position = new Vector3(RTA2_Items[rand3].gameObject.GetComponent<Transform>().position.x, RTA2_Items[rand3].gameObject.GetComponent<Transform>().position.y + 1.5f);
             RTA_Arrows[2].GetComponent<Transform>().parent = RTA2_Items[rand3].GetComponent<Transform>();
+			RTA_Arrows [2].GetComponent<Arrow> ().SetOriginal ();
         }
 
         if (run_time > 161) {
