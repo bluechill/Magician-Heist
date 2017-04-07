@@ -6,7 +6,11 @@ using UnityEngine.SceneManagement;
 using InControl;
 
 public class PlayerScript : MonoBehaviour {
-	public bool contr_debug;
+    public GameObject weapon;
+    float attack_time = .5f;
+    float attack_cd = 0f;
+
+    public bool contr_debug;
 	public GameObject cam;
 	float original_velocity;
 	public bool knockout_forcefield = false;
@@ -58,7 +62,7 @@ public class PlayerScript : MonoBehaviour {
 	public float birthtime;
 
 	public bool[] actions;
-	public int num_actions = 3;
+	public int num_actions = 4;
 
 	public KeyCode[][] key_mappings;
 
@@ -98,7 +102,7 @@ public class PlayerScript : MonoBehaviour {
 
 	public Vector3 original_position;
 	public void Start(){
-		original_position = this.transform.position;
+		original_position = this.transform.localPosition;
 		original_velocity = vel;
 		birthtime = Time.time;
 		rb = GetComponent<Rigidbody> ();
@@ -131,7 +135,7 @@ public class PlayerScript : MonoBehaviour {
             is_holding_key_card = false;
         }
         if (is_touching_desk_overlap) {
-			held_object.GetComponent<Item> ().enabled = false;
+			held_object.GetComponent<Item> ().activated = false;
 			held_object.transform.position = new Vector3(touching_desk_overlap.transform.position.x, touching_desk_overlap.transform.position.y + 0.5f, 0f);
 		}
 		held_object.GetComponent<Item> ().held = false;
@@ -284,7 +288,7 @@ public class PlayerScript : MonoBehaviour {
 
 	public void OpenDoor()
 	{
-		nearestActionObject.GetComponent<Door> ().SwitchState ();
+		//nearestActionObject.GetComponent<Door> ().SwitchState ();
 	}
 	public void SwitchElevator(){
 		nearestActionObject.GetComponentInChildren<Elevator> ().SwitchState (this.gameObject);
@@ -313,6 +317,7 @@ public class PlayerScript : MonoBehaviour {
 		left = false;
 		Hide ();
 		Drop ();
+        transform.localPosition = original_position;
 		Invoke ("WakeupAnimation", 2f);
 		Invoke ("Wakeup", 3f);
 	}
@@ -436,19 +441,20 @@ public class PlayerScript : MonoBehaviour {
             }
         }
 
-		if (controller.RightBumper) {
-			if (cam.GetComponent<Camera> ().orthographicSize <= 20.9f)
-				cam.GetComponent<Camera> ().orthographicSize = Mathf.Lerp (cam.GetComponent<Camera> ().orthographicSize, 21f, 0.1f);
-			else 
-				cam.GetComponent<Camera> ().orthographicSize = 21;
-		} else {
-			if (cam.GetComponent<Camera> ().orthographicSize >= 7.1f)
-				cam.GetComponent<Camera> ().orthographicSize = Mathf.Lerp (cam.GetComponent<Camera> ().orthographicSize, 7f, 0.1f);
-			else
-				cam.GetComponent<Camera> ().orthographicSize = 7;
-		}
+        if (controller.DPad) {
+            if (cam.GetComponent<Camera>().orthographicSize <= 20.9f)
+                cam.GetComponent<Camera>().orthographicSize = Mathf.Lerp(cam.GetComponent<Camera>().orthographicSize, 21f, 0.1f);
+            else
+                cam.GetComponent<Camera>().orthographicSize = 21;
+        }
+        else {
+            if (cam.GetComponent<Camera>().orthographicSize >= 7.1f)
+                cam.GetComponent<Camera>().orthographicSize = Mathf.Lerp(cam.GetComponent<Camera>().orthographicSize, 7f, 0.1f);
+            else
+                cam.GetComponent<Camera>().orthographicSize = 7;
+        }
 
-		if (controller.Action1) {
+        if (controller.Action1) {
 
 			
 
@@ -459,7 +465,7 @@ public class PlayerScript : MonoBehaviour {
 			}
 			return;
 		}
-		if (controller.Action2) {
+		if (controller.LeftBumper) {
 			if (!cooldown) {
 				actions [1] = true;
 				cooldown = true;
@@ -477,9 +483,19 @@ public class PlayerScript : MonoBehaviour {
 			return;
 		}
 
+        if (controller.RightBumper) {
+            if (!cooldown && attack_cd <= 0 && !is_holding) {
+                print("right bumper");
+                actions[3] = true;
+                cooldown = true;
+                Invoke("ActionCooldown", action_cooldown);
+            }
+            return;
+        }
 
-	}
-	public void Animate(){
+
+    }
+    public void Animate(){
 		if (is_in_elevator || is_in_closet) {
 			return;
 		}
@@ -540,7 +556,7 @@ public class PlayerScript : MonoBehaviour {
 
 		}
         held_object.GetComponent<Item> ().held = true;
-		held_object.GetComponent<Item> ().enabled = true;
+		held_object.GetComponent<Item> ().activated = true;
         if (held_object.GetComponent<Item>().counted) {
 			
             held_object.GetComponent<Item>().counted = false;
@@ -738,10 +754,13 @@ public class PlayerScript : MonoBehaviour {
 		if (actions [1]) {
 			ProcessAction2 ();
 		}
-		if (actions [2]) {
-			ProcessAction3 ();
-		}
-	}
+        if (actions[2]) {
+            ProcessAction3();
+        }
+        if (actions[3]) {
+            ProcessAction4();
+        }
+    }
 	public void ProcessAction1(){
 		actions [0] = false;
 
@@ -802,19 +821,28 @@ public class PlayerScript : MonoBehaviour {
 		UseAbility ();
 
 	}
-	public void ProcessAction3(){
-		actions [2] = false;
-		print ("Trying Stairs");
-		print (is_touching_stairs);
-		print (!cooldown);
-		if (is_touching_stairs) {
-			UseStairs ();
-			cooldown = true;
-		}
-	}
+    public void ProcessAction3() {
+        actions[2] = false;
+        print("Trying Stairs");
+        print(is_touching_stairs);
+        print(!cooldown);
+        if (is_touching_stairs) {
+            UseStairs();
+            cooldown = true;
+        }
+    }
+
+    public void ProcessAction4() {
+        attack_cd = 1.5f;
+        actions[3] = false;
+        CancelInvoke("TurnOffWeapon");
+        weapon.SetActive(true);
+        Invoke("TurnOffWeapon", attack_time);
+    }
 
 
-	public void ProcessHold(){
+
+    public void ProcessHold(){
 		if (!is_holding) {
 			return;
 		}
@@ -830,37 +858,48 @@ public class PlayerScript : MonoBehaviour {
 	}
 
 	public void OnTriggerEnter(Collider coll){
-		if (coll.gameObject.tag == "Item Wall") {
-			GameObject truck;
-			float x_ = 0f;
-			if (red_team) {
-				truck = Game.GameInstance.redTruck;
-				x_ = 0.5f;
-			} else {
-				truck = Game.GameInstance.blueTruck;
-				x_ = -0.5f;
-			}
-			if(is_holding){
-				Drop ();
-			}
+        if (coll.gameObject.tag == "Item Wall") {
+            GameObject truck;
+            float x_ = 0f;
+            if (red_team) {
+                truck = Game.GameInstance.redTruck;
+                x_ = 0.5f;
+            }
+            else {
+                truck = Game.GameInstance.blueTruck;
+                x_ = -0.5f;
+            }
+            if (is_holding) {
+                Drop();
+            }
 
-		} else if (coll.gameObject.tag == "Exit") {
-			if (is_holding_briefcase) {
-				print ("win!");
-				Game.GameInstance.Win ();
-			} else if (held_object && held_object.GetComponent<Item> ().gold_bar) {
-				Game.GameInstance.gold_bars += 1;
-				held_object.GetComponent<Item> ().gold_bar = false;
-			} 
-		} else if (coll.gameObject.tag == "Guard") {
-			grabbed_time_initial = Time.time;
-			is_grabbed = true;
-			//coll.gameObject.transform.parent = this.transform;
-		} else if (coll.gameObject.tag == "Stairs") {
-			TouchStairs (coll.gameObject);
-		} else if (coll.gameObject.tag == "Security Cam") {
-			coll.gameObject.GetComponent<SecurityCam> ().Use (player_num);
-		} 
+        }
+        else if (coll.gameObject.tag == "Exit") {
+            if (is_holding_briefcase) {
+                print("win!");
+                Game.GameInstance.Win();
+            }
+            else if (held_object && held_object.GetComponent<Item>().gold_bar) {
+                Game.GameInstance.gold_bars += 1;
+                held_object.GetComponent<Item>().gold_bar = false;
+            }
+        }
+        else if (coll.gameObject.tag == "Guard") {
+            grabbed_time_initial = Time.time;
+            is_grabbed = true;
+            //coll.gameObject.transform.parent = this.transform;
+        }
+        else if (coll.gameObject.tag == "Stairs") {
+            TouchStairs(coll.gameObject);
+        }
+        else if (coll.gameObject.tag == "Security Cam") {
+            coll.gameObject.GetComponent<SecurityCam>().Use(player_num);
+        }
+        else if (coll.gameObject.layer == 28 && coll.gameObject.GetComponentInParent<PlayerScript>().red_team != red_team ) {
+            if (!forceField.activeSelf && !is_knocked_out)
+                KnockOut();
+            coll.gameObject.GetComponentInParent<PlayerScript>().SheathWeapon();
+        }
     }
 
 	public void OnTriggerExit(Collider coll){
@@ -999,6 +1038,7 @@ public class PlayerScript : MonoBehaviour {
 	}
 
 	public void Update() {
+        attack_cd -= Time.deltaTime;
 		if (forceFieldCoolDown > 0f)
 			forceFieldCoolDown -= Time.fixedDeltaTime;
 
@@ -1034,5 +1074,11 @@ public class PlayerScript : MonoBehaviour {
 			vel = original_velocity;
 		}
 	}
-
+    void TurnOffWeapon() {
+        weapon.SetActive(false);
+    }
+    void SheathWeapon() {
+        //CancelInvoke("TurnOffWeapon");
+        weapon.SetActive(false);
+    }
 }

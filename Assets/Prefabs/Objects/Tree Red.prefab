@@ -26,6 +26,7 @@ GameObject:
   - component: {fileID: 114195908819190570}
   - component: {fileID: 114389972197649650}
   - component: {fileID: 114343016035927972}
+  - component: {fileID: 114772706967631392}
   m_Layer: 10
   m_Name: Tree Red
   m_TagString: Item
@@ -56,7 +57,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1080074006254736}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 8.112, y: -0.563, z: 0}
+  m_LocalPosition: {x: 11.11, y: -0.563, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4211013913872708}
@@ -154,6 +155,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GlowColor: {r: 0, g: 0.8088231, b: 5, a: 1}
   OutlineWidth: 1
+--- !u!114 &114772706967631392
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1080074006254736}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aaf00bc68af7416fa064a99b95996b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  switchTime: 0.3
+  juiceAmount: 0.4
 --- !u!114 &114823772729075988
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -165,6 +179,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5fd71269d86a45639bb831136f554dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  width: 0.7
+  growCap: 0
+  couch: 0
   briefcase: 0
   flash_light: 0
   magical_key: 0
@@ -180,9 +197,14 @@ MonoBehaviour:
   plus50_prefab: {fileID: 1133873725776970, guid: 0448f09fe724f45198700a6ac536dfed,
     type: 2}
   gameScript: {fileID: 0}
-  points: 50
+  points: 20
   size: 10
+  counted: 0
   kill: 0
+  money_grade: 2
+  capacity_indicator: {fileID: 0}
+  capacity_indicator_prefab: {fileID: 0}
+  curr_Truck: {fileID: 0}
 --- !u!212 &212501038186174470
 SpriteRenderer:
   m_ObjectHideFlags: 1

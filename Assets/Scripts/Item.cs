@@ -17,7 +17,7 @@ public class Item : MonoBehaviour {
 	public bool held = false;
     public bool thrown = false;
 	public int player_num = -1;
-	public bool enabled = false;
+	public bool activated = false;
 	public GameObject current_player;
 	public GameObject plus50_prefab;
     public Game gameScript;
@@ -69,7 +69,7 @@ public class Item : MonoBehaviour {
 			transform.rotation = Quaternion.Euler (new Vector3 (transform.rotation.x, transform.rotation.y, 0f));
 		}
 
-		if (enabled) {
+		if (activated) {
 			GetComponent<Rigidbody> ().isKinematic = false;
 			GetComponent<SpriteRenderer> ().sortingOrder = 30;
 		} else {
@@ -83,7 +83,7 @@ public class Item : MonoBehaviour {
         }
 		if (GetComponent<Rigidbody> ().velocity.magnitude <= 0.01f || (GetComponent<Rigidbody> ().velocity.y <= 0.0001f && GetComponent<Rigidbody> ().velocity.y >= -0.0001f)) {
 			thrown = false;
-			GetComponent<SpriteRenderer> ().sortingOrder = original_sortingOrder;
+			//GetComponent<SpriteRenderer> ().sortingOrder = original_sortingOrder;
 			gameObject.transform.GetChild (0).gameObject.layer = 10;
 		}
 	}
@@ -111,7 +111,7 @@ public class Item : MonoBehaviour {
 			//print (!p.forceField.activeSelf);
 			//print (GetComponent<Rigidbody> ().velocity);
 
-			if (p != null && !p.is_knocked_out && thrown && current_player != p.gameObject && !p.forceField.activeSelf && (p.red_team != current_player.GetComponent<PlayerScript> ().red_team)) {
+			if (false && p != null && !p.is_knocked_out && thrown && current_player != p.gameObject && !p.forceField.activeSelf && (p.red_team != current_player.GetComponent<PlayerScript> ().red_team)) {
 				p.KnockOut ();
 				current_player.GetComponent<PlayerScript> ().points += 50;
 				print (current_player);
