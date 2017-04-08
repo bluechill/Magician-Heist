@@ -205,6 +205,7 @@ MonoBehaviour:
   capacity_indicator: {fileID: 0}
   capacity_indicator_prefab: {fileID: 0}
   curr_Truck: {fileID: 0}
+  moneyPopupPrefab: {fileID: 0}
 --- !u!212 &212501038186174470
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -218,7 +219,7 @@ SpriteRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 2100000, guid: c85c5c4dfb5ec492fbd6a250a0240377, type: 2}
+  - {fileID: 2100000, guid: 0f360808a46f34907ba7c99c51f5d8e4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
