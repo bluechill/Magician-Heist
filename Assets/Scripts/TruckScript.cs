@@ -94,7 +94,7 @@ public class TruckScript : MonoBehaviour {
 		}
 	}
 	void UpdateCapacity(){
-		float boxWidth = 7f;
+		float boxWidth = 7.5f;
 		float sign = 1.0f;
 
 		if (this.transform.localEulerAngles.y >= 180f)

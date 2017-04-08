@@ -34,6 +34,9 @@ public class Game : MonoBehaviour {
 	public AudioSource poof;
 	public AudioSource phone;
 	public AudioSource shield_hit;
+	public AudioSource gun_cock;
+	public AudioSource gun_reload;
+	public AudioSource gun_shot;
 	public AudioClip mainLoop;
 	public AudioClip endGame;
 	public bool keyb_debug;
