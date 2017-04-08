@@ -5,6 +5,8 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class Game : MonoBehaviour {
+
+	public AudioSource[] grunts;
 	public GameObject goldTextBox;
 	string[] gold_text = {"We've ", "cracked ", "the vault, ", "time ", "to ", "get ", "the ", "gold !"};
 	int gold_index = 0;
@@ -30,7 +32,9 @@ public class Game : MonoBehaviour {
     bool shrinkEvent2Text = false;
 
 	public GameObject sparklesPrefab;
-    public AudioSource chaChing;
+	public AudioSource cheering;
+	public AudioSource itemRemoval;
+	public AudioSource chaChing;
 	public AudioSource poof;
 	public AudioSource phone;
 	public AudioSource shield_hit;

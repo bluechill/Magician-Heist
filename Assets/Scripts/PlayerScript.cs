@@ -34,6 +34,8 @@ public class PlayerScript : MonoBehaviour {
 	float original_velocity;
 	public bool knockout_forcefield = false;
 	public bool started = false;
+	public GameObject blood;
+	public GameObject bloodPrefab;
 	public GameObject PickUpPromptPrefab;
 	public GameObject StairsPromptPrefab;
 	GameObject pickupPrompt = null;
@@ -333,7 +335,13 @@ public class PlayerScript : MonoBehaviour {
 	public void UseElevator(){
 		nearestActionObject.GetComponentInChildren<Elevator> ().Use ();
 	}
-	public void KnockOut(){
+	public void KnockOut(float bullet_vel){
+		if (bullet_vel > 0) {
+			this.transform.rotation = Quaternion.Euler (new Vector3 (0f, 180f, 0f));
+
+		} else {
+			this.transform.rotation = Quaternion.Euler (new Vector3 (0f, 0f, 0f));
+		}
 		is_knocked_out = true;
 		animator.SetBool ("knockout", true);
 		animator.Play ("Knockout");
@@ -342,6 +350,16 @@ public class PlayerScript : MonoBehaviour {
 		Hide ();
 		Drop ();
 		health--;
+		if (blood) {
+			Destroy (blood);
+		}
+		if(player_num == 3){
+			Game.GameInstance.grunts [Random.Range (3, 4)].Play ();
+		} else {
+			Game.GameInstance.grunts [player_num].Play ();
+		}
+		blood = MonoBehaviour.Instantiate (bloodPrefab);
+		blood.transform.position = transform.transform.position;
 		if (health == 0) {
 			health = 3;
 			PuffSmoke ();
@@ -512,6 +530,7 @@ public class PlayerScript : MonoBehaviour {
             else
                 cam.GetComponent<Camera>().orthographicSize = 7;
         }
+		animator.speed = Mathf.Abs(controller.LeftStickX) * 1.5f;
 
         if (controller.Action1) {
 
@@ -561,8 +580,8 @@ public class PlayerScript : MonoBehaviour {
 			return;
 		}
 		//print ("animate");
-		animator.speed = 1f;
 		animator.SetBool ("idle", false);
+
 
 	}
 	public void Idle(){
@@ -727,6 +746,7 @@ public class PlayerScript : MonoBehaviour {
 			if (right) {
 				rb.velocity = Vector3.right * controller.LeftStickX * vel;
 				Animate ();
+
 			}
 			if (right && left) {
 				rb.velocity = Vector3.zero;
@@ -907,8 +927,8 @@ public class PlayerScript : MonoBehaviour {
 		reload = true;
 		gun.gameObject.SetActive (true);
 
-		Invoke ("ShootGun", 1f);
-		Invoke ("LowerArm", 1.5f);
+		Invoke ("ShootGun", 0.6f);
+		Invoke ("LowerArm", 1f);
         //CancelInvoke("TurnOffWeapon");
         //weapon.SetActive(true);
         //Invoke("TurnOffWeapon", attack_time);
@@ -963,8 +983,9 @@ public class PlayerScript : MonoBehaviour {
 		} else if (coll.gameObject.tag == "Security Cam") {
 			coll.gameObject.GetComponent<SecurityCam> ().Use (player_num);
 		} else if (coll.gameObject.layer == 28 && coll.gameObject.GetComponentInParent<PlayerScript> ().red_team != red_team) {
-			if (!forceField.activeSelf && !is_knocked_out)
-				KnockOut ();
+			if (!forceField.activeSelf && !is_knocked_out){
+				//KnockOut ();
+			}
 			else if (forceField.activeSelf && !is_knocked_out) {
 				BlockAttack ();
 			}
@@ -972,9 +993,10 @@ public class PlayerScript : MonoBehaviour {
 			coll.gameObject.GetComponentInParent<PlayerScript> ().SheathWeapon ();
 		} else if (coll.gameObject.tag == "Bullet") {
 			if (coll.gameObject.GetComponent<Bullet> ().red_team != red_team) {
-				if (!dodge && !is_knocked_out && !forceField.activeSelf) {					
+				if (!dodge && !is_knocked_out && !forceField.activeSelf) {	
+					float x_vel = coll.gameObject.GetComponent<Rigidbody> ().velocity.x;
 					Destroy (coll.gameObject);
-					KnockOut ();
+					KnockOut (x_vel);
 				} else if(!dodge && forceField.activeSelf && !is_knocked_out){
 					Destroy (coll.gameObject);
 					BlockAttack ();

@@ -36,7 +36,7 @@ public class Item : MonoBehaviour {
 	public GameObject capacity_indicator;
 	public GameObject capacity_indicator_prefab;
     public GameObject curr_Truck;
-
+	public GameObject moneyPopupPrefab;
 	// Use this for initialization
 	void Start () {
 		srend = GetComponent<SpriteRenderer>();
@@ -112,7 +112,7 @@ public class Item : MonoBehaviour {
 			//print (GetComponent<Rigidbody> ().velocity);
 
 			if (false && p != null && !p.is_knocked_out && thrown && current_player != p.gameObject && !p.forceField.activeSelf && (p.red_team != current_player.GetComponent<PlayerScript> ().red_team)) {
-				p.KnockOut ();
+				//p.KnockOut ();
 				current_player.GetComponent<PlayerScript> ().points += 50;
 				print (current_player);
 				if (current_player.GetComponent<PlayerScript> ().red_team)
@@ -143,7 +143,7 @@ public class Item : MonoBehaviour {
 					gameObject.transform.GetChild (0).gameObject.layer = 10;
 					thrown = false;
 				}
-			}
+			} 
 		}
     }
 	void DestroyThis(){
