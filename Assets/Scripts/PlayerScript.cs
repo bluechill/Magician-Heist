@@ -6,7 +6,21 @@ using UnityEngine.SceneManagement;
 using InControl;
 
 public class PlayerScript : MonoBehaviour {
-	
+
+	public GameObject gun_icon;
+	int health = 3;
+	public Gun gun;
+	bool reload = false;
+	public bool rolling = false;
+	bool dodge = false;
+	public float rolling_start = 0;
+	public float rolling_duration = 0;
+	float rolling_limit = 1.25f;
+	float roll_speed = 4f;
+	public float roll_colldown = 0f;
+	public float roll_location;
+	public int roll_sign = 1;
+
 	public GameObject bicep;
 	public bool attacking = false;
     public GameObject weapon;
@@ -327,8 +341,14 @@ public class PlayerScript : MonoBehaviour {
 		left = false;
 		Hide ();
 		Drop ();
-		PuffSmoke ();
-        transform.localPosition = original_position;
+		health--;
+		if (health == 0) {
+			health = 3;
+			PuffSmoke ();
+			transform.localPosition = original_position;
+		} else {
+			FlashRed ();
+		}
 		Invoke ("WakeupAnimation", 2f);
 		Invoke ("Wakeup", 3f);
 	}
@@ -352,7 +372,26 @@ public class PlayerScript : MonoBehaviour {
 	public void ActionCooldown(){
 		cooldown = false;
 	}
-
+	public void Roll(){
+		
+		rolling = true;
+		rolling_start = Time.time;
+		roll_location = transform.localPosition.x;
+		if (transform.localRotation.y != 0) {
+			roll_sign = -1;
+		} else
+			roll_sign = 1;
+		rolling_duration = 0f;
+		animator.speed = 1f;
+		animator.SetBool ("idle", false);
+		animator.Play ("Roll");
+		Invoke ("DodgeOn", 0.3f);
+		Invoke ("DodgeOff", 0.9f);
+	}
+	public void StopRoll(){
+		animator.SetBool("rolling", false);
+		rolling = false;
+	}
 	public virtual void UseAbility(){
 
 		if (knockout_forcefield) {
@@ -486,7 +525,7 @@ public class PlayerScript : MonoBehaviour {
 			return;
 		}
 		if (controller.LeftBumper) {
-			if (!cooldown) {
+			if (!cooldown && !attacking) {
 				actions [1] = true;
 				cooldown = true;
 				Invoke ("ActionCooldown", action_cooldown);
@@ -612,6 +651,10 @@ public class PlayerScript : MonoBehaviour {
 	}
 
 	public void ProcessMovement(){
+		if (rolling) {
+			rb.velocity = Vector3.zero;
+			return;
+		}
 		if (is_knocked_out) {
 			rb.velocity = Vector3.down * 5f;
 			//print (player_num + "knockout idle");
@@ -841,8 +884,8 @@ public class PlayerScript : MonoBehaviour {
 	}
 	public void ProcessAction2(){
 		actions [1] = false;
-		UseAbility ();
-
+		//UseAbility ();
+		Roll();
 	}
     public void ProcessAction3() {
         actions[2] = false;
@@ -856,13 +899,19 @@ public class PlayerScript : MonoBehaviour {
     }
 
     public void ProcessAction4() {
-        attack_cd = 1.5f;
+		print ("ACTION 4");
+        attack_cd = 3f;
         actions[3] = false;
 		attacking = true;
+		Game.GameInstance.gun_cock.Play ();
+		reload = true;
+		gun.gameObject.SetActive (true);
 
-        CancelInvoke("TurnOffWeapon");
-        weapon.SetActive(true);
-        Invoke("TurnOffWeapon", attack_time);
+		Invoke ("ShootGun", 1f);
+		Invoke ("LowerArm", 1.5f);
+        //CancelInvoke("TurnOffWeapon");
+        //weapon.SetActive(true);
+        //Invoke("TurnOffWeapon", attack_time);
     }
 
 
@@ -883,52 +932,55 @@ public class PlayerScript : MonoBehaviour {
 	}
 
 	public void OnTriggerEnter(Collider coll){
-        if (coll.gameObject.tag == "Item Wall") {
-            GameObject truck;
-            float x_ = 0f;
-            if (red_team) {
-                truck = Game.GameInstance.redTruck;
-                x_ = 0.5f;
-            }
-            else {
-                truck = Game.GameInstance.blueTruck;
-                x_ = -0.5f;
-            }
-            if (is_holding) {
-                Drop();
-            }
+		if (coll.gameObject.tag == "Item Wall") {
+			GameObject truck;
+			float x_ = 0f;
+			if (red_team) {
+				truck = Game.GameInstance.redTruck;
+				x_ = 0.5f;
+			} else {
+				truck = Game.GameInstance.blueTruck;
+				x_ = -0.5f;
+			}
+			if (is_holding) {
+				Drop ();
+			}
 
-        }
-        else if (coll.gameObject.tag == "Exit") {
-            if (is_holding_briefcase) {
-                print("win!");
-                Game.GameInstance.Win();
-            }
-            else if (held_object && held_object.GetComponent<Item>().gold_bar) {
-                Game.GameInstance.gold_bars += 1;
-                held_object.GetComponent<Item>().gold_bar = false;
-            }
-        }
-        else if (coll.gameObject.tag == "Guard") {
-            grabbed_time_initial = Time.time;
-            is_grabbed = true;
-            //coll.gameObject.transform.parent = this.transform;
-        }
-        else if (coll.gameObject.tag == "Stairs") {
-            TouchStairs(coll.gameObject);
-        }
-        else if (coll.gameObject.tag == "Security Cam") {
-            coll.gameObject.GetComponent<SecurityCam>().Use(player_num);
-        }
-        else if (coll.gameObject.layer == 28 && coll.gameObject.GetComponentInParent<PlayerScript>().red_team != red_team ) {
+		} else if (coll.gameObject.tag == "Exit") {
+			if (is_holding_briefcase) {
+				print ("win!");
+				Game.GameInstance.Win ();
+			} else if (held_object && held_object.GetComponent<Item> ().gold_bar) {
+				Game.GameInstance.gold_bars += 1;
+				held_object.GetComponent<Item> ().gold_bar = false;
+			}
+		} else if (coll.gameObject.tag == "Guard") {
+			grabbed_time_initial = Time.time;
+			is_grabbed = true;
+			//coll.gameObject.transform.parent = this.transform;
+		} else if (coll.gameObject.tag == "Stairs") {
+			TouchStairs (coll.gameObject);
+		} else if (coll.gameObject.tag == "Security Cam") {
+			coll.gameObject.GetComponent<SecurityCam> ().Use (player_num);
+		} else if (coll.gameObject.layer == 28 && coll.gameObject.GetComponentInParent<PlayerScript> ().red_team != red_team) {
 			if (!forceField.activeSelf && !is_knocked_out)
 				KnockOut ();
 			else if (forceField.activeSelf && !is_knocked_out) {
 				BlockAttack ();
 			}
 
-            coll.gameObject.GetComponentInParent<PlayerScript>().SheathWeapon();
-        }
+			coll.gameObject.GetComponentInParent<PlayerScript> ().SheathWeapon ();
+		} else if (coll.gameObject.tag == "Bullet") {
+			if (coll.gameObject.GetComponent<Bullet> ().red_team != red_team) {
+				if (!dodge && !is_knocked_out && !forceField.activeSelf) {					
+					Destroy (coll.gameObject);
+					KnockOut ();
+				} else if(!dodge && forceField.activeSelf && !is_knocked_out){
+					Destroy (coll.gameObject);
+					BlockAttack ();
+				}
+			}
+		}
     }
 
 	public void OnTriggerExit(Collider coll){
@@ -1068,7 +1120,26 @@ public class PlayerScript : MonoBehaviour {
 	}
 
 	public void Update() {
+
+		if (rolling) {
+			rolling_duration += Time.deltaTime;
+			if (rolling_duration >= rolling_limit) {
+				rolling = false;
+				StopRoll ();
+			} else {
+				transform.localPosition = new Vector3 (transform.localPosition.x + ( roll_sign * roll_speed * Time.deltaTime ), transform.localPosition.y, 10f);
+			}
+
+		}
+		float gun_percentage = attack_cd / 3f;
         attack_cd -= Time.deltaTime;
+		if (attack_cd <= 0 && reload) {
+			reload = false;
+			attack_cd = 0;
+			//Game.GameInstance.gun_reload.Play ();
+		}
+		gun_icon.GetComponent<Image> ().fillAmount = gun_percentage;
+
 		if (forceFieldCoolDown > 0f)
 			forceFieldCoolDown -= Time.fixedDeltaTime;
 
@@ -1105,6 +1176,17 @@ public class PlayerScript : MonoBehaviour {
 		} else {
 			vel = original_velocity;
 		}
+
+		if (!is_holding) {
+			if (attacking)
+				RaiseArm ();
+			else {
+				gun.gameObject.SetActive (false);
+				LowerArm ();
+			}
+		} else {
+			gun.gameObject.SetActive (false);
+		}
 		AttackLunge ();
 	}
     void TurnOffWeapon() {
@@ -1122,15 +1204,15 @@ public class PlayerScript : MonoBehaviour {
 		smoke = MonoBehaviour.Instantiate (smokePrefab);
 		smoke.transform.position = transform.position;
 		SoundsController.instance.PlaySound(Game.GameInstance.poof);
-		smoke.GetComponent<ParticleSystem>().GetComponent<Renderer>().sortingOrder = 100;
+		//smoke.GetComponent<ParticleSystem>().GetComponent<Renderer>().sortingOrder = 100;
 		Invoke ("ExhaleSmoke", 1f);
 	}
 	void ExhaleSmoke(){
-		Destroy (smoke);
+		Destroy (smoke.gameObject);
 	}
 	void AttackLunge(){
 		if (attacking) {
-			bicep.transform.localRotation = Quaternion.Euler (new Vector3 (0f, 0f, 50f));
+			//bicep.transform.localRotation = Quaternion.Euler (new Vector3 (0f, 0f, 50f));
 		} else {
 //			bicep.transform.localRotation = Quaternion.Euler (new Vector3 (0f, 0f, 0f));
 		}
@@ -1145,5 +1227,21 @@ public class PlayerScript : MonoBehaviour {
 		forceField.GetComponent<SpriteRenderer> ().sprite = forceField_blue;
 		forceField.GetComponent<SpriteGlow> ().GlowColor = forceField_blue_color;
 	}
-
+	void RaiseArm(){
+		bicep.transform.localRotation = Quaternion.Euler( new Vector3(0f, 0f, 90f));
+	}
+	void LowerArm(){
+		attacking = false;
+	}
+	void ShootGun(){
+		if(gun) gun.Shoot ();
+	}
+	void FlashRed(){
+	}
+	void DodgeOn(){
+		dodge = true;
+	}
+	void DodgeOff(){
+		dodge = false;
+	}
 }

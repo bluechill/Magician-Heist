@@ -36,6 +36,7 @@ TagManager:
   - Red Truck
   - Blue Truck
   - Item Wall
+  - Bullet
   layers:
   - Default
   - TransparentFX
@@ -66,7 +67,7 @@ TagManager:
   - Edge
   - Item Wall
   - Weapon
-  - 
+  - Bullet
   - 
   - 
   m_SortingLayers:
