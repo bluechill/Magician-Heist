@@ -183,6 +183,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5fd71269d86a45639bb831136f554dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  width: 1.1
+  growCap: 0
+  couch: 0
   briefcase: 0
   flash_light: 0
   magical_key: 0
@@ -193,14 +196,20 @@ MonoBehaviour:
   held: 0
   thrown: 0
   player_num: -1
-  enabled: 0
+  activated: 0
   current_player: {fileID: 0}
   plus50_prefab: {fileID: 1133873725776970, guid: 0448f09fe724f45198700a6ac536dfed,
     type: 2}
   gameScript: {fileID: 0}
-  points: 150
+  points: 10
   size: 10
+  counted: 0
   kill: 0
+  money_grade: 1
+  capacity_indicator: {fileID: 0}
+  capacity_indicator_prefab: {fileID: 0}
+  curr_Truck: {fileID: 0}
+  moneyPopupPrefab: {fileID: 0}
 --- !u!114 &114280825505086094
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -227,7 +236,7 @@ SpriteRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 0f360808a46f34907ba7c99c51f5d8e4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -244,7 +253,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
-  m_SortingOrder: 4
+  m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: 49ebe836c4a5440e3ae585dcf89fcc87, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -262,7 +271,7 @@ SpriteRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 0f360808a46f34907ba7c99c51f5d8e4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

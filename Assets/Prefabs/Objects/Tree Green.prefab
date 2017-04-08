@@ -55,7 +55,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1476681181424648}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.42, y: -0.57, z: 0}
+  m_LocalPosition: {x: -5.276, y: -0.552, z: 0}
   m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
   m_Children:
   - {fileID: 4286831805217046}
@@ -151,6 +151,7 @@ MonoBehaviour:
   capacity_indicator: {fileID: 0}
   capacity_indicator_prefab: {fileID: 0}
   curr_Truck: {fileID: 0}
+  moneyPopupPrefab: {fileID: 0}
 --- !u!114 &114719795818719426
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -190,7 +191,7 @@ SpriteRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 2100000, guid: c85c5c4dfb5ec492fbd6a250a0240377, type: 2}
+  - {fileID: 2100000, guid: 0f360808a46f34907ba7c99c51f5d8e4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
