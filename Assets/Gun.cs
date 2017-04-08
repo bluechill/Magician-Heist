@@ -5,7 +5,7 @@ using UnityEngine;
 public class Gun : MonoBehaviour {
 	public Transform exit_point;
 	public Transform flash_point;
-	public float bullet_speed;
+	float bullet_speed = 40f;
 	public GameObject bulletPrefab;
 	public GameObject flamePrefab;
 

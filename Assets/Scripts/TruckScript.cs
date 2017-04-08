@@ -18,6 +18,9 @@ public class TruckScript : MonoBehaviour {
 	public GameObject capacity_indicator;
 	public GameObject indicators;
 	public GameObject itemWallSprite;
+	public GameObject moneyPopupPrefab;
+
+	public GameObject[] players;
 	// Use this for initialization
 	void Start () {
 		
@@ -88,10 +91,19 @@ public class TruckScript : MonoBehaviour {
 			} else {
 				Game.GameInstance.blue_team_score -= item.GetComponent<Item>().points;
 			}
-
+			GameObject moneyPopup1 = MonoBehaviour.Instantiate (moneyPopupPrefab);
+			moneyPopup1.GetComponent<MoneyPopup> ().SetValue (item.GetComponent<Item> ().points, false);
+			moneyPopup1.transform.position = new Vector3(players [0].transform.position.x, players [0].transform.position.y + 2f, -10f);
+			GameObject moneyPopup2 = MonoBehaviour.Instantiate (moneyPopupPrefab);
+			moneyPopup2.GetComponent<MoneyPopup> ().SetValue (item.GetComponent<Item> ().points, false);
+			moneyPopup2.transform.position = new Vector3(players [1].transform.position.x, players [1].transform.position.y + 2f, -10f);
+			Game.GameInstance.itemRemoval.Play ();
 			countedItems.Remove (item);
 
 		}
+	}
+	void Cheer(){
+		Game.GameInstance.cheering.Play ();
 	}
 	void UpdateCapacity(){
 		float boxWidth = 7.5f;
@@ -108,24 +120,35 @@ public class TruckScript : MonoBehaviour {
 		List<Collider> taggedColliders = new List<Collider> ();
 		weight_used = 0;
 		for (int i = 0; i < colliders.Length; ++i) {
-			if (colliders [i].GetComponent<SpriteGlow> () != null && !colliders[i].GetComponent<Item>().held && !colliders[i].GetComponent<Item>().thrown &&
-			    !colliders [i].transform.IsChildOf (this.transform)) {
-				weight_used += colliders [i].gameObject.GetComponent<Item> ().size;
-				if (colliders [i].gameObject.GetComponent<Item> ().counted == false) {
-					if (red_team) {
-						Game.GameInstance.red_team_score += colliders [i].gameObject.GetComponent<Item> ().points;
-					} else {
-						Game.GameInstance.blue_team_score += colliders [i].gameObject.GetComponent<Item> ().points;
+			if (colliders [i].gameObject.tag != "Bullet") {
+				
+				if (colliders [i].GetComponent<SpriteGlow> () != null && !colliders [i].GetComponent<Item> ().held && !colliders [i].GetComponent<Item> ().thrown &&
+				   !colliders [i].transform.IsChildOf (this.transform)) {
+					weight_used += colliders [i].gameObject.GetComponent<Item> ().size;
+					if (colliders [i].gameObject.GetComponent<Item> ().counted == false) {
+						if (red_team) {
+							Game.GameInstance.red_team_score += colliders [i].gameObject.GetComponent<Item> ().points;
+						} else {
+							Game.GameInstance.blue_team_score += colliders [i].gameObject.GetComponent<Item> ().points;
+						}
+						GameObject moneyPopup1 = MonoBehaviour.Instantiate (moneyPopupPrefab);
+						moneyPopup1.GetComponent<MoneyPopup> ().SetValue (colliders [i].gameObject.GetComponent<Item> ().points, true);
+						moneyPopup1.transform.position = new Vector3 (players [0].transform.position.x, players [0].transform.position.y + 2f, -10f);
+						GameObject moneyPopup2 = MonoBehaviour.Instantiate (moneyPopupPrefab);
+						moneyPopup2.GetComponent<MoneyPopup> ().SetValue (colliders [i].gameObject.GetComponent<Item> ().points, true);
+						moneyPopup2.transform.position = new Vector3 (players [1].transform.position.x, players [1].transform.position.y + 2f, -10f);
+						Game.GameInstance.chaChing.Play ();
+						if (colliders [i].gameObject.GetComponent<Item> ().points >= 80) {
+							Invoke ("Cheer", 0.25f);
+						}
 					}
-					SoundsController.instance.PlaySound (Game.GameInstance.chaChing);
-				}
 
-                colliders[i].gameObject.GetComponent<Item>().counted = true;
-                colliders[i].gameObject.GetComponent<Item>().curr_Truck = this.gameObject;
-                if (!countedItems.Contains(colliders[i].gameObject))
-                    countedItems.Add(colliders[i].gameObject);
-            }
-			
+					colliders [i].gameObject.GetComponent<Item> ().counted = true;
+					colliders [i].gameObject.GetComponent<Item> ().curr_Truck = this.gameObject;
+					if (!countedItems.Contains (colliders [i].gameObject))
+						countedItems.Add (colliders [i].gameObject);
+				}
+			}
 		}
 
 		if (taggedColliders.Count == 0) {
@@ -149,9 +172,11 @@ public class TruckScript : MonoBehaviour {
 		List<Collider> taggedColliders = new List<Collider> ();
 
 		for (int i = 0; i < colliders.Length; ++i) {
-			if (colliders[i].GetComponent<SpriteGlow>() != null && !colliders[i].GetComponent<Item>().counted && 
-				!colliders[i].transform.IsChildOf(this.transform) )
-				taggedColliders.Add (colliders [i]);
+			if (colliders [i].gameObject.tag != "Bullet") {
+				if (colliders [i].GetComponent<SpriteGlow> () != null && !colliders [i].GetComponent<Item> ().counted &&
+				   !colliders [i].transform.IsChildOf (this.transform))
+					taggedColliders.Add (colliders [i]);
+			}
 		}
 
 		if (taggedColliders.Count == 0) {
