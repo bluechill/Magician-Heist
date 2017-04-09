@@ -4,13 +4,16 @@ using UnityEngine;
 
 public class StrobeLight : MonoBehaviour {
 	Light light;
+	ParticleSystem ps;
 	float intensity = 1.25f;
 	private float time = 0.0f;
 	public float switchTime = 0.6f;
 	public bool loose;
+	private bool emitted = false;
 	// Use this for initialization
 	void Start () {
 		light = GetComponent<Light> ();
+		ps = GetComponent<ParticleSystem> ();
 	}
 	
 	// Update is called once per frame
@@ -20,13 +23,21 @@ public class StrobeLight : MonoBehaviour {
 		
 		time += Time.deltaTime;
 
-		if (time > switchTime * 2.0f)
+		if (time > switchTime * 2.0f) {
 			time = 0.0f;
+			emitted = false;
+		}
 
 		float amount = (time / switchTime);
 
-		if (amount > 1.0f)
+		if (amount > 1.0f) {
 			amount = 2.0f - amount;
+
+			if (!emitted && ps != null) {
+				ps.Emit (10);
+				emitted = true;
+			}
+		}
 
 		amount *= intensity;
 		light.intensity = amount;
