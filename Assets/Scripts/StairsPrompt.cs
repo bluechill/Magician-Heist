@@ -5,6 +5,8 @@ using UnityEngine;
 public class StairsPrompt : MonoBehaviour {
 
 	public bool kill = false;
+	public bool up;
+	TextMesh txt;
 	// Use this for initialization
 	void Start () {
 
@@ -12,6 +14,13 @@ public class StairsPrompt : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		if(!txt) txt = GetComponentInChildren<TextMesh> ();
+		txt.text = "";
+		if (up)
+			txt.text = "Up Stairs";
+		else
+			txt.text = "Down Stairs";
+		
 		if (kill) {
 			DestroyThis ();
 		}
