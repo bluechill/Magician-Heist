@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 using InControl;
 
 public class PlayerScript : MonoBehaviour {
-
+	public GameObject destination;
 	public GameObject gun_icon;
 	int health = 3;
 	public Gun gun;
@@ -63,7 +63,7 @@ public class PlayerScript : MonoBehaviour {
 	public Color forceField_red_color;
 	public Color forceField_blue_color;
     public Game gameScript;
-
+	public GameObject ring;
 	public float forceFieldCoolDown = 0.0f;
 	public float forceFieldLength = 0.0f;
 	public float defaultForceFieldCoolDown = 5.0f;
@@ -109,7 +109,7 @@ public class PlayerScript : MonoBehaviour {
 	public bool elevator_ready = false;
 	public bool is_holding_briefcase = false;
 	public GameObject inside_box;
-
+	public bool is_using_stairs = false;
 	public GameObject ability;
 	public GameObject body;
 	public CapsuleCollider capsule;
@@ -328,7 +328,7 @@ public class PlayerScript : MonoBehaviour {
 	}
 
 	public void UseStairs() {
-
+		is_using_stairs = true;
         touching_stairs.GetComponent<Stairs> ().Use (this.gameObject);
 	}
 
@@ -458,7 +458,8 @@ public class PlayerScript : MonoBehaviour {
 	//uses InControl as InputManager
 	public void ProcessInputController(){
 
-
+		if (is_using_stairs)
+			return;
 		if (!contr_debug) {
 
 			if (Game.GameInstance.keyb_debug) {
@@ -670,6 +671,28 @@ public class PlayerScript : MonoBehaviour {
 	}
 
 	public void ProcessMovement(){
+		if (is_using_stairs) {
+			body.SetActive (false);
+			capsule.enabled = false;
+			ring.SetActive (false);
+			if (is_holding)
+				held_object.SetActive (false);
+			rb.velocity = Vector3.zero;
+			if (transform.position.x - destination.transform.position.x <= 0.2f && transform.position.x - destination.transform.position.x >= -0.2f) {
+				if (transform.position.y - destination.transform.position.y <= 0.2f && transform.position.y - destination.transform.position.y >= -0.2f) {
+					transform.position = destination.transform.position;
+					body.SetActive (true);
+					ring.SetActive (true);
+					capsule.enabled = true;
+					is_using_stairs = false;
+					if (is_holding)
+						held_object.SetActive (true);
+					return;
+				}
+			}
+			transform.position = Vector3.Lerp (transform.position, destination.transform.position, 0.1f);
+			return;
+		}
 		if (rolling) {
 			rb.velocity = Vector3.zero;
 			return;
@@ -1018,7 +1041,12 @@ public class PlayerScript : MonoBehaviour {
 		stairsPrompt.transform.position = new Vector3( stairs.transform.position.x + 1f, stairs.transform.position.y + 1.5f, 0f);
 		is_touching_stairs = true;
 		touching_stairs = stairs;
-
+		if (touching_stairs.GetComponent<Stairs> ().destination.transform.position.y > transform.position.y) {
+			stairsPrompt.GetComponent<StairsPrompt> ().up = true;
+		} else {
+			stairsPrompt.GetComponent<StairsPrompt> ().up = false;
+		}
+		stairsPrompt.GetComponentInChildren<MeshRenderer> ().sortingOrder = 30;
 
 	}
 	public void StopTouchingStairs(){

@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Stairs : MonoBehaviour {
-	public GameObject destination;
+public class ParticleSystemLayer : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
@@ -12,12 +11,6 @@ public class Stairs : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		GetComponent<Renderer> ().sortingOrder = 35;
 	}
-
-	public void Use(GameObject player){
-		
-		player.GetComponent<PlayerScript> ().destination = destination;
-	}
-
 }

@@ -138,7 +138,7 @@ public class TruckScript : MonoBehaviour {
 						moneyPopup2.GetComponent<MoneyPopup> ().SetValue (colliders [i].gameObject.GetComponent<Item> ().points, true);
 						moneyPopup2.transform.position = new Vector3 (players [1].transform.position.x, players [1].transform.position.y + 2f, -10f);
 						Game.GameInstance.chaChing.Play ();
-						if (colliders [i].gameObject.GetComponent<Item> ().points >= 80) {
+						if (colliders [i].gameObject.GetComponent<Item> ().points >= 80 || colliders [i].gameObject.GetComponent<Item> ().money_grade == 4) {
 							Invoke ("Cheer", 0.25f);
 						}
 					}

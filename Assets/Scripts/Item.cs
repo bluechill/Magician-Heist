@@ -33,6 +33,7 @@ public class Item : MonoBehaviour {
 	float kill_time = 0f; 
 	int original_sortingOrder;
 	public int money_grade = 1;
+
 	public GameObject capacity_indicator;
 	public GameObject capacity_indicator_prefab;
     public GameObject curr_Truck;
