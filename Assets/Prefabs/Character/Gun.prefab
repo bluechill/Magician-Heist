@@ -54,9 +54,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   exit_point: {fileID: 0}
   flash_point: {fileID: 0}
-  bullet_speed: 25
-  bulletPrefab: {fileID: 1424824117963702, guid: 873e434c7bab74ab6a8fd1a94671313d,
-    type: 2}
+  BluePrefab: {fileID: 1424824117963702, guid: 873e434c7bab74ab6a8fd1a94671313d, type: 2}
+  RedBullet: {fileID: 1424824117963702, guid: 0daed853c976133429e4a9d4dd765eb8, type: 2}
   flamePrefab: {fileID: 1316138434878440, guid: 7cf481f990a1e4170863f3dfbc0f6eba,
     type: 2}
 --- !u!212 &212546895683851400

@@ -6,7 +6,8 @@ public class Gun : MonoBehaviour {
 	public Transform exit_point;
 	public Transform flash_point;
 	float bullet_speed = 40f;
-	public GameObject bulletPrefab;
+	public GameObject BluePrefab;
+    public GameObject RedBullet;
 	public GameObject flamePrefab;
 
 	// Use this for initialization
@@ -19,7 +20,11 @@ public class Gun : MonoBehaviour {
 		
 	}
 	public void Shoot(){
-		GameObject bullet = MonoBehaviour.Instantiate (bulletPrefab);
+        GameObject bullet = null;
+        if (GetComponentInParent<PlayerScript>().red_team)
+            bullet = MonoBehaviour.Instantiate(RedBullet);
+        else
+            bullet = MonoBehaviour.Instantiate(BluePrefab);
 		bullet.transform.position = exit_point.transform.position;
 		float sign = 1;
 		if (GetComponentInParent<PlayerScript> ().transform.localRotation.y != 0) {
