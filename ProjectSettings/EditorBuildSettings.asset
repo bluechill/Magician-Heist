@@ -25,5 +25,7 @@ EditorBuildSettings:
     path: Assets/Scenes/AfterControllerSetup.unity
   - enabled: 0
     path: Assets/Scenes/SkipControllerSetup.unity
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Beta Level.unity
+  - enabled: 1
+    path: Assets/Scenes/ScreenRecording.unity
