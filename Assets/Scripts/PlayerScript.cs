@@ -8,7 +8,7 @@ using InControl;
 public class PlayerScript : MonoBehaviour {
 	public GameObject destination;
 	public GameObject gun_icon;
-	int health = 3;
+	public int health = 3;
 	public Gun gun;
 	bool reload = false;
 	public bool rolling = false;
