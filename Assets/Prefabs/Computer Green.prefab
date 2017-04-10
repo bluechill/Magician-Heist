@@ -71,6 +71,7 @@ GameObject:
   - component: {fileID: 54247366812012754}
   - component: {fileID: 114281385086517028}
   - component: {fileID: 212039762316289620}
+  - component: {fileID: 114094675029451942}
   m_Layer: 10
   m_Name: Computer Green
   m_TagString: Item
@@ -172,6 +173,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.8, y: 0.5, z: 1}
   m_Center: {x: -0.1, y: 0, z: 0}
+--- !u!114 &114094675029451942
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1943001814569188}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aaf00bc68af7416fa064a99b95996b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  switchTime: 0.6
+  juiceAmount: 0.4
 --- !u!114 &114279275146626650
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -253,7 +267,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
-  m_SortingOrder: 4
+  m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: cadf99fe13f0648eeb916e3310776e3e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
