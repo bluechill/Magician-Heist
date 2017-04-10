@@ -7647,6 +7647,10 @@ Prefab:
       propertyPath: m_Name
       value: Gold_Door
       objectReference: {fileID: 0}
+    - target: {fileID: 1141191805095956, guid: b0658f3943913428bbc7f3ba7cd20d25, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b0658f3943913428bbc7f3ba7cd20d25, type: 2}
   m_IsPrefabParent: 0
@@ -18434,8 +18438,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   exit_point: {fileID: 1468413254}
   flash_point: {fileID: 1662595953}
-  bulletPrefab: {fileID: 1424824117963702, guid: 873e434c7bab74ab6a8fd1a94671313d,
-    type: 2}
+  BlueBullet: {fileID: 0}
+  RedBullet: {fileID: 0}
   flamePrefab: {fileID: 1316138434878440, guid: 7cf481f990a1e4170863f3dfbc0f6eba,
     type: 2}
 --- !u!212 &969671119
@@ -36187,7 +36191,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1755850984
 Transform:
   m_ObjectHideFlags: 0
