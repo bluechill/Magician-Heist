@@ -24,6 +24,7 @@ GameObject:
   - component: {fileID: 54752680129915730}
   - component: {fileID: 114367690247955176}
   - component: {fileID: 212372395264551160}
+  - component: {fileID: 114552370403675410}
   m_Layer: 10
   m_Name: Computer Red
   m_TagString: Item
@@ -223,6 +224,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GlowColor: {r: 0.5147058, g: 5, b: 0, a: 1}
   OutlineWidth: 1
+--- !u!114 &114552370403675410
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1069978826673556}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aaf00bc68af7416fa064a99b95996b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  switchTime: 0.6
+  juiceAmount: 0.4
 --- !u!212 &212063132852523728
 SpriteRenderer:
   m_ObjectHideFlags: 1

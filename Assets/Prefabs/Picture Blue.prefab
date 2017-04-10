@@ -40,6 +40,7 @@ GameObject:
   - component: {fileID: 114608723895022118}
   - component: {fileID: 54317609172456360}
   - component: {fileID: 114895579600510428}
+  - component: {fileID: 114558982619704212}
   m_Layer: 10
   m_Name: Picture Blue
   m_TagString: Item
@@ -54,7 +55,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1718080092951886}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -17.11, y: 27.345896, z: 0}
+  m_LocalPosition: {x: 18.65, y: 4.49, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4398828316418098}
@@ -113,6 +114,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1.5, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114558982619704212
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1718080092951886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aaf00bc68af7416fa064a99b95996b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  switchTime: 0.6
+  juiceAmount: 0.4
 --- !u!114 &114608723895022118
 MonoBehaviour:
   m_ObjectHideFlags: 1
