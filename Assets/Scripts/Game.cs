@@ -110,8 +110,6 @@ public class Game : MonoBehaviour {
 
         SoundsController.instance.StopPlaying ();
 
-		SoundsController.instance.QueueClip (mainLoop);
-		SoundsController.instance.QueueClip (mainLoop);
 		SoundsController.instance.QueueClip (endGame);
 		if (keyb_debug) {
 			return;
