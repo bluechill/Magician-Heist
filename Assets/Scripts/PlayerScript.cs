@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using InControl;
 
 public class PlayerScript : MonoBehaviour {
+	public GameObject bloodDrip;
 	public GameObject destination;
 	public GameObject gun_icon;
 	public int health = 3;
@@ -127,6 +128,7 @@ public class PlayerScript : MonoBehaviour {
 
 	public Vector3 original_position;
 	public void Start(){
+		UpdateHealth ();
 		forceField_blue_color = forceField.GetComponent<SpriteGlow> ().GlowColor;
 		original_position = this.transform.localPosition;
 		original_velocity = vel;
@@ -343,6 +345,7 @@ public class PlayerScript : MonoBehaviour {
 			this.transform.rotation = Quaternion.Euler (new Vector3 (0f, 0f, 0f));
 		}
 		is_knocked_out = true;
+
 		animator.SetBool ("knockout", true);
 		animator.Play ("Knockout");
 		right = false;
@@ -350,6 +353,7 @@ public class PlayerScript : MonoBehaviour {
 		Hide ();
 		Drop ();
 		health--;
+		Invoke ("UpdateHealth", 3.25f);
 		if (blood) {
 			Destroy (blood);
 		}
@@ -1181,6 +1185,7 @@ public class PlayerScript : MonoBehaviour {
 			}
 
 		}
+		//UpdateHealth ();
 		float gun_percentage = attack_cd / 3f;
         attack_cd -= Time.deltaTime;
 		if (attack_cd <= 0 && reload) {
@@ -1293,5 +1298,12 @@ public class PlayerScript : MonoBehaviour {
 	}
 	void DodgeOff(){
 		dodge = false;
+	}
+	void UpdateHealth(){
+		if (health == 1) {
+			bloodDrip.SetActive (true);
+		} else {
+			bloodDrip.SetActive (false);
+		}
 	}
 }
