@@ -675,168 +675,172 @@ public class PlayerScript : MonoBehaviour {
 	}
 
 	public void ProcessMovement(){
-		if (is_using_stairs) {
-			body.SetActive (false);
-			capsule.enabled = false;
-			ring.SetActive (false);
-			if (is_holding)
-				held_object.SetActive (false);
-			rb.velocity = Vector3.zero;
-			if (transform.position.x - destination.transform.position.x <= 0.2f && transform.position.x - destination.transform.position.x >= -0.2f) {
-				if (transform.position.y - destination.transform.position.y <= 0.2f && transform.position.y - destination.transform.position.y >= -0.2f) {
-					transform.position = destination.transform.position;
-					body.SetActive (true);
-					ring.SetActive (true);
-					capsule.enabled = true;
-					is_using_stairs = false;
-					if (is_holding)
-						held_object.SetActive (true);
-					return;
-				}
-			}
-			transform.position = Vector3.Lerp (transform.position, destination.transform.position, 0.1f);
-			return;
-		}
-		if (rolling) {
-			rb.velocity = Vector3.zero;
-			return;
-		}
-		if (is_knocked_out) {
-			rb.velocity = Vector3.down * 5f;
-			//print (player_num + "knockout idle");
-			Idle ();
-			return;
-		}
+        if (Game.GameInstance.AcceptInput) {
+            if (is_using_stairs) {
+                body.SetActive(false);
+                capsule.enabled = false;
+                ring.SetActive(false);
+                if (is_holding)
+                    held_object.SetActive(false);
+                rb.velocity = Vector3.zero;
+                if (transform.position.x - destination.transform.position.x <= 0.2f && transform.position.x - destination.transform.position.x >= -0.2f) {
+                    if (transform.position.y - destination.transform.position.y <= 0.2f && transform.position.y - destination.transform.position.y >= -0.2f) {
+                        transform.position = destination.transform.position;
+                        body.SetActive(true);
+                        ring.SetActive(true);
+                        capsule.enabled = true;
+                        is_using_stairs = false;
+                        if (is_holding)
+                            held_object.SetActive(true);
+                        return;
+                    }
+                }
+                transform.position = Vector3.Lerp(transform.position, destination.transform.position, 0.1f);
+                return;
+            }
+            if (rolling) {
+                rb.velocity = Vector3.zero;
+                return;
+            }
+            if (is_knocked_out) {
+                rb.velocity = Vector3.down * 5f;
+                //print (player_num + "knockout idle");
+                Idle();
+                return;
+            }
 
 
-		if (Input.GetKeyDown(key_mappings[player_num][0])) {
-			left = true;
-		}
-		if (Input.GetKeyUp(key_mappings[player_num][0])) {
-			left = false;
-		}
-		if (Input.GetKeyDown(key_mappings[player_num][1])) {
-			right = true;
-		} 		
-		if (Input.GetKeyUp(key_mappings[player_num][1])) {
-			right = false;
-		}
-		if (Input.GetKeyDown(key_mappings[player_num][2])) {
-			up = true;
-		}
-		if (Input.GetKeyUp(key_mappings[player_num][2])) {
-			up = false;
-		}
-		if (Input.GetKeyDown(key_mappings[player_num][3])) {
-			down = true;
-		} 		
-		if (Input.GetKeyUp(key_mappings[player_num][3])) {
-			down = false;
-		}
+            if (Input.GetKeyDown(key_mappings[player_num][0])) {
+                left = true;
+            }
+            if (Input.GetKeyUp(key_mappings[player_num][0])) {
+                left = false;
+            }
+            if (Input.GetKeyDown(key_mappings[player_num][1])) {
+                right = true;
+            }
+            if (Input.GetKeyUp(key_mappings[player_num][1])) {
+                right = false;
+            }
+            if (Input.GetKeyDown(key_mappings[player_num][2])) {
+                up = true;
+            }
+            if (Input.GetKeyUp(key_mappings[player_num][2])) {
+                up = false;
+            }
+            if (Input.GetKeyDown(key_mappings[player_num][3])) {
+                down = true;
+            }
+            if (Input.GetKeyUp(key_mappings[player_num][3])) {
+                down = false;
+            }
 
 
-		if (Input.GetKeyDown(key_mappings[player_num][4])) {
-			actions [0] = true;
-		}
-		if (Input.GetKeyDown(key_mappings[player_num][5])) {
-			actions [1] = true;
-		}
-		if (Input.GetKeyDown(key_mappings[player_num][6])) {
-			actions [2] = true;
-		}
-		if (Input.GetKey(KeyCode.Alpha1) && player_num == 0) {
-			if (cam.GetComponent<Camera> ().orthographicSize <= 13.9f)
-				cam.GetComponent<Camera> ().orthographicSize = Mathf.Lerp (cam.GetComponent<Camera> ().orthographicSize, 14f, 0.1f);
-		} else {
-			if (cam.GetComponent<Camera> ().orthographicSize >= 7.1f)
-				cam.GetComponent<Camera> ().orthographicSize = Mathf.Lerp (cam.GetComponent<Camera> ().orthographicSize, 7f, 0.1f);
-		}
+            if (Input.GetKeyDown(key_mappings[player_num][4])) {
+                actions[0] = true;
+            }
+            if (Input.GetKeyDown(key_mappings[player_num][5])) {
+                actions[1] = true;
+            }
+            if (Input.GetKeyDown(key_mappings[player_num][6])) {
+                actions[2] = true;
+            }
+            if (Input.GetKey(KeyCode.Alpha1) && player_num == 0) {
+                if (cam.GetComponent<Camera>().orthographicSize <= 13.9f)
+                    cam.GetComponent<Camera>().orthographicSize = Mathf.Lerp(cam.GetComponent<Camera>().orthographicSize, 14f, 0.1f);
+            }
+            else {
+                if (cam.GetComponent<Camera>().orthographicSize >= 7.1f)
+                    cam.GetComponent<Camera>().orthographicSize = Mathf.Lerp(cam.GetComponent<Camera>().orthographicSize, 7f, 0.1f);
+            }
 
 
-		if (is_in_box) {
-			rb.velocity = Vector3.zero;
-			transform.position = inside_box.transform.position;
-			return;
-		}
-			ProcessInputController ();
+            if (is_in_box) {
+                rb.velocity = Vector3.zero;
+                transform.position = inside_box.transform.position;
+                return;
+            }
 
-		if (is_ability && player_num == 1) {
-			return;
-		}
-		if(contr_debug && controller_set){
-			if (left) {
+            ProcessInputController();
 
-				rb.velocity = Vector3.right * controller.LeftStickX * vel;
+            if (is_ability && player_num == 1) {
+                return;
+            }
+            if (contr_debug && controller_set) {
+                if (left) {
 
-				Animate ();
-			}
-			if (right) {
-				rb.velocity = Vector3.right * controller.LeftStickX * vel;
-				Animate ();
+                    rb.velocity = Vector3.right * controller.LeftStickX * vel;
 
-			}
-			if (right && left) {
-				rb.velocity = Vector3.zero;
-				Idle ();
-			}
-			if (!right && !left) {
-				rb.velocity = Vector3.zero;
-				Idle ();
-				animator.speed = Mathf.Abs(controller.LeftStickX) * 1.5f;
+                    Animate();
+                }
+                if (right) {
+                    rb.velocity = Vector3.right * controller.LeftStickX * vel;
+                    Animate();
 
-			}
-			if (!right & !left) {
-				animator.speed = 1f;
+                }
+                if (right && left) {
+                    rb.velocity = Vector3.zero;
+                    Idle();
+                }
+                if (!right && !left) {
+                    rb.velocity = Vector3.zero;
+                    Idle();
+                    animator.speed = Mathf.Abs(controller.LeftStickX) * 1.5f;
 
-			}
+                }
+                if (!right & !left) {
+                    animator.speed = 1f;
 
-		}
-		else if (Game.GameInstance.keyb_debug) {
-			if (left) {
+                }
 
-				rb.velocity = Vector3.left * vel;
+            }
+            else if (Game.GameInstance.keyb_debug) {
+                if (left) {
 
-				Animate ();
-			}
-			if (right) {
-				rb.velocity = Vector3.right * vel;
+                    rb.velocity = Vector3.left * vel;
 
-				Animate ();
-			}
-			if (right && left) {
-				rb.velocity = Vector3.zero;
-				Idle ();
-			}
-			if (!right && !left) {
-				rb.velocity = Vector3.zero;
-				Idle ();
-			}
+                    Animate();
+                }
+                if (right) {
+                    rb.velocity = Vector3.right * vel;
 
-		}
-			
+                    Animate();
+                }
+                if (right && left) {
+                    rb.velocity = Vector3.zero;
+                    Idle();
+                }
+                if (!right && !left) {
+                    rb.velocity = Vector3.zero;
+                    Idle();
+                }
 
-		if (is_in_elevator || is_in_closet) {
-			rb.velocity = Vector3.zero;
-			return;
-		}
+            }
 
-		if (is_ability && player_num == 0)
-			grounded = IsBoxGrounded ();
-		else grounded = IsGrounded();
 
-		if (!grounded) {
-			rb.velocity = Vector3.down * vel;
-		}
-		else if (is_ability && player_num == 0) {	
-			if (rb.velocity.magnitude > 0f) {
-				//box is moving
-				AbilityAnimate();
-			} else {
-				AbilityIdle ();
-			}
-			rb.velocity /= 3;
-		}
+            if (is_in_elevator || is_in_closet) {
+                rb.velocity = Vector3.zero;
+                return;
+            }
 
+            if (is_ability && player_num == 0)
+                grounded = IsBoxGrounded();
+            else grounded = IsGrounded();
+
+            if (!grounded) {
+                rb.velocity = Vector3.down * vel;
+            }
+            else if (is_ability && player_num == 0) {
+                if (rb.velocity.magnitude > 0f) {
+                    //box is moving
+                    AbilityAnimate();
+                }
+                else {
+                    AbilityIdle();
+                }
+                rb.velocity /= 3;
+            }
+        }
 	}
 	public void ProcessRotation(){
 
@@ -1174,7 +1178,12 @@ public class PlayerScript : MonoBehaviour {
 	}
 
 	public void Update() {
-
+        if (!Game.GameInstance.AcceptInput) {
+            rb.velocity = Vector3.zero;
+            if (Game.GameInstance.run_time > Game.GameInstance.time_limit) {
+                animator.Stop();
+            }
+        }
 		if (rolling) {
 			rolling_duration += Time.deltaTime;
 			if (rolling_duration >= rolling_limit) {

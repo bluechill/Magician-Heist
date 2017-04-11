@@ -90,6 +90,9 @@ public class Game : MonoBehaviour {
     bool RTA1_Active = false;
     bool RTA2_Active = false;
     bool Gold_Door_Active = true;
+
+
+    public bool AcceptInput = false;
 	// Use this for initialization
 	void Start () {
 
@@ -122,7 +125,10 @@ public class Game : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-		if (growGoldText) {
+        if (run_time >= time_limit) {
+            Win();
+        }
+        if (growGoldText) {
 			GrowGoldTextBox ();
 		}
 		if (shrinkGoldText) {
@@ -163,6 +169,9 @@ public class Game : MonoBehaviour {
         }
 
         run_time = Time.time - start_time;
+        if (run_time > 5f && run_time < time_limit) {
+            AcceptInput = true;
+        }
 		if (time_limit - run_time < 60f) {
 			low_time = true;
 
@@ -186,8 +195,8 @@ public class Game : MonoBehaviour {
             print(rand2);
 			event1TextBox.SetActive(true);
 			growEvent1Text = true;
-            RTA1_Items[rand1].gameObject.GetComponent<Item>().points *= 3;
-            RTA1_Items[rand2].gameObject.GetComponent<Item>().points *= 3;
+            RTA1_Items[rand1].gameObject.GetComponent<Item>().points *= 5;
+            RTA1_Items[rand2].gameObject.GetComponent<Item>().points *= 5;
             RTA1_Items[rand1].gameObject.GetComponent<Item>().money_grade = 4;
             RTA1_Items[rand2].gameObject.GetComponent<Item>().money_grade = 4;
             RTA_Arrows[0].GetComponent<Transform>().position = new Vector3 (RTA1_Items[rand1].gameObject.GetComponent<Transform>().position.x, RTA1_Items[rand1].gameObject.GetComponent<Transform>().position.y + 1.5f);
@@ -222,7 +231,7 @@ public class Game : MonoBehaviour {
             int rand3 = Random.Range(0, RTA2_Items.Length);
             RTA2_Items[rand3].gameObject.GetComponent<Item>().enabled = true;
             RTA2_Items[rand3].gameObject.GetComponent<Collider>().enabled = true;
-            RTA2_Items[rand3].gameObject.GetComponent<Item>().points = 500;
+            RTA2_Items[rand3].gameObject.GetComponent<Item>().points = 300;
             RTA_Arrows[2].GetComponent<Transform>().position = new Vector3(RTA2_Items[rand3].gameObject.GetComponent<Transform>().position.x, RTA2_Items[rand3].gameObject.GetComponent<Transform>().position.y + 1.5f);
             RTA_Arrows[2].GetComponent<Transform>().parent = RTA2_Items[rand3].GetComponent<Transform>();
 			RTA_Arrows [2].GetComponent<Arrow> ().SetOriginal ();
@@ -232,9 +241,7 @@ public class Game : MonoBehaviour {
             shrinkEvent2Text = true;
         }
 
-        if (run_time >= time_limit) {
-			Win ();
-		}
+        
         int minutes = (int)((time_limit - run_time )/ 60f);
         int second = (int)((time_limit - run_time) % 60f);
         if (second < 10) {
@@ -295,7 +302,8 @@ public class Game : MonoBehaviour {
         tutorial.SetActive(false);
     }
     public void Win(){
-		end = true;
+        AcceptInput = false;
+        end = true;
 		win_menu.SetActive (true);
 		ui.SetActive (false);
 		bool red_winner = false;
