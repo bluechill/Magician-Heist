@@ -1185,7 +1185,7 @@ public class PlayerScript : MonoBehaviour {
 			}
 
 		}
-		//UpdateHealth ();
+		UpdateHealth ();
 		float gun_percentage = attack_cd / 3f;
         attack_cd -= Time.deltaTime;
 		if (attack_cd <= 0 && reload) {
