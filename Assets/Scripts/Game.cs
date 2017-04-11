@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class Game : MonoBehaviour {
-
+	public GameObject timer;
 	public AudioSource[] grunts;
 	public GameObject goldTextBox;
 	string[] gold_text = {"We've ", "cracked ", "the vault, ", "time ", "to ", "get ", "the ", "gold !"};
@@ -119,12 +119,22 @@ public class Game : MonoBehaviour {
 		}
 		playerChoices = new int[4];
 		for (int k = 0; k < 4; k++) {
-			playerChoices[k] = PlayerSelector.instance.choices[k];
+			if (PlayerSelector.instance)
+				playerChoices [k] = PlayerSelector.instance.choices [k];
+			else
+				playerChoices [k] = k;
 		}
 	}
 
     // Update is called once per frame
     void Update () {
+		if (TimerTick.instance.ticking)
+			return;
+		else if(!timer.activeSelf) {
+			start_time = Time.time;
+			timer.SetActive (true);
+			AcceptInput = true;
+		}
         if (run_time >= time_limit) {
             Win();
         }
@@ -169,9 +179,6 @@ public class Game : MonoBehaviour {
         }
 
         run_time = Time.time - start_time;
-        if (run_time > 5f && run_time < time_limit) {
-            AcceptInput = true;
-        }
 		if (time_limit - run_time < 60f) {
 			low_time = true;
 
@@ -358,8 +365,8 @@ public class Game : MonoBehaviour {
 		growGoldText = true;
 	}
 	void GrowGoldTextBox(){
-		if(goldTextBox.activeSelf) goldTextBox.transform.localScale = Vector3.Lerp (goldTextBox.transform.localScale, new Vector3(1f, 1f, 1f), 0.1f);
-		if (goldTextBox.activeSelf && goldTextBox.transform.localScale.x >= 0.9f) {
+		if(goldTextBox.activeSelf) goldTextBox.transform.localScale = Vector3.Lerp (goldTextBox.transform.localScale, new Vector3(1.25f, 1.25f, 1.25f), 0.1f);
+		if (goldTextBox.activeSelf && goldTextBox.transform.localScale.x >= 1.2f) {
 			growGoldText = false;
 			SoundsController.instance.PlaySound (Game.GameInstance.phone);
 			Invoke ("WriteGoldText", write_speed);
@@ -387,8 +394,8 @@ public class Game : MonoBehaviour {
 
 
 	void GrowEvent1TextBox(){
-		if(event1TextBox.activeSelf) event1TextBox.transform.localScale = Vector3.Lerp (event1TextBox.transform.localScale, new Vector3(1f, 1f, 1f), 0.1f);
-		if (event1TextBox.activeSelf && event1TextBox.transform.localScale.x >= 0.9f) {
+		if(event1TextBox.activeSelf) event1TextBox.transform.localScale = Vector3.Lerp (event1TextBox.transform.localScale, new Vector3(1.25f, 1.25f, 1.25f), 0.1f);
+		if (event1TextBox.activeSelf && event1TextBox.transform.localScale.x >= 1.2f) {
 			growEvent1Text = false;
 			SoundsController.instance.PlaySound (Game.GameInstance.phone);
 			Invoke ("WriteEvent1Text", write_speed);
@@ -414,8 +421,8 @@ public class Game : MonoBehaviour {
 		Invoke ("WriteEvent1Text", write_speed);
 	}
     void GrowEvent2TextBox() {
-        if (event2TextBox.activeSelf) event2TextBox.transform.localScale = Vector3.Lerp(event2TextBox.transform.localScale, new Vector3(1f, 1f, 1f), 0.1f);
-        if (event2TextBox.activeSelf && event2TextBox.transform.localScale.x >= 0.9f) {
+        if (event2TextBox.activeSelf) event2TextBox.transform.localScale = Vector3.Lerp(event2TextBox.transform.localScale, new Vector3(1.25f, 1.25f, 1.25f), 0.1f);
+        if (event2TextBox.activeSelf && event2TextBox.transform.localScale.x >= 1.2f) {
             growEvent2Text = false;
             SoundsController.instance.PlaySound(Game.GameInstance.phone);
             Invoke("WriteEvent2Text", write_speed);
