@@ -24,6 +24,11 @@ public class SoundsController : MonoBehaviour {
 		nextEventTime = AudioSettings.dspTime;
 	}
 
+	public void ResetEventTime()
+	{
+		nextEventTime = AudioSettings.dspTime;
+	}
+
 	void Awake ()   
 	{
 		if (instance == null)

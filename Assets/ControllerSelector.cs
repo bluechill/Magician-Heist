@@ -1,9 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using InControl;
 
 public class ControllerSelector : MonoBehaviour {
+	public GameObject a_button;
+	public Sprite a_button_sprite;
+	public Sprite b_button_sprite;
 	public int controller_num;
 	bool controller_init;
 	InputDevice controller;
@@ -32,6 +36,7 @@ public class ControllerSelector : MonoBehaviour {
 		TakeInput ();
 		MoveToCenter ();
 		LockPos ();
+		SetAButton ();
 	}
 	void TryInitController(){
 		controller_init = false;
@@ -62,11 +67,26 @@ public class ControllerSelector : MonoBehaviour {
 			GetQuadrant ();
 		}
 	}
+	void SetAButton(){
+		if (choice == -1) {
+			a_button.GetComponent<Image> ().sprite = a_button_sprite;
+		} else {
+			a_button.GetComponent<Image> ().sprite = b_button_sprite;
+		}
+
+		if (transform.localPosition.x - pos.x < 20f && transform.localPosition.x - pos.x > -20f && transform.localPosition.y - pos.y < 20f && transform.localPosition.y - pos.y > -20f) {
+			a_button.SetActive (false);
+			return;
+		} else {
+			a_button.SetActive (true);
+		}
+	}
 	void GetQuadrant(){
 		if (choice != -1)
 			return;
-		if (transform.localPosition.x - pos.x < 0.1f && transform.localPosition.x - pos.x > -0.1f && transform.localPosition.y - pos.y < 0.1f && transform.localPosition.y - pos.y > -0.1f)
+		if (transform.localPosition.x - pos.x < 0.1f && transform.localPosition.x - pos.x > -0.1f && transform.localPosition.y - pos.y < 0.1f && transform.localPosition.y - pos.y > -0.1f) {
 			return;
+		}
 		if (transform.localPosition.x >= x_border.x && transform.localPosition.x <= x_border.x + width / 2) {
 			if(transform.localPosition.y >= y_border.x + height / 2 && transform.localPosition.y <= y_border.y){
 
@@ -127,10 +147,10 @@ public class ControllerSelector : MonoBehaviour {
 		if (!controller_init || !center)
 			return;
 		if (controller.LeftStickX == 0) {
-			transform.localPosition = Vector3.Lerp (transform.localPosition, new Vector3(pos.x, transform.localPosition.y, transform.localPosition.z), 0.075f);
+			transform.localPosition = Vector3.Lerp (transform.localPosition, new Vector3(pos.x, transform.localPosition.y, transform.localPosition.z), 0.0175f);
 		}
 		if (controller.LeftStickY == 0) {
-			transform.localPosition = Vector3.Lerp (transform.localPosition, new Vector3(transform.localPosition.x, pos.y, transform.localPosition.z), 0.075f);
+			transform.localPosition = Vector3.Lerp (transform.localPosition, new Vector3(transform.localPosition.x, pos.y, transform.localPosition.z), 0.0175f);
 		}
 
 	}

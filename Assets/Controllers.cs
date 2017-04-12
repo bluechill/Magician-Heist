@@ -32,11 +32,11 @@ public class Controllers : MonoBehaviour {
 		GrowChoices();
 		ShrinkChoices();
 		if (AllChoices ()) {
-			prompt1.SetActive (false);
-			prompt2.SetActive (true);
+			//prompt1.SetActive (false);
+			//prompt2.SetActive (true);
 		} else {
-			prompt1.SetActive (true);
-			prompt2.SetActive (false);
+			//prompt1.SetActive (true);
+			//prompt2.SetActive (false);
 		}
 
 	}

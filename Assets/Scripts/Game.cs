@@ -144,6 +144,12 @@ public class Game : MonoBehaviour {
 		if (TimerTick.instance.ticking)
 			return;
 		else if(!timer.activeSelf) {
+
+			SoundsController.instance.DisableLooping ();
+			SoundsController.instance.StopPlaying ();
+			SoundsController.instance.ResetEventTime ();
+			SoundsController.instance.QueueClip (endGame);
+
 			start_time = Time.time;
 			timer.SetActive (true);
 			AcceptInput = true;
