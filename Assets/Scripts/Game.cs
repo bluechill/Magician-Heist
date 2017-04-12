@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-
+using InControl;
 public class Game : MonoBehaviour {
+	public GameObject timer_tick;
+	public GameObject contr_selection;
+	public bool start_game = false;
 	public GameObject timer;
 	public AudioSource[] grunts;
 	public GameObject goldTextBox;
@@ -108,26 +111,36 @@ public class Game : MonoBehaviour {
         }
         else tut = tutorials.Length;
     }
+	void Awake(){
+		
+	}
 	void InitGame(){
 
-
-        SoundsController.instance.StopPlaying ();
-
-		SoundsController.instance.QueueClip (endGame);
 		if (keyb_debug) {
 			return;
 		}
 		playerChoices = new int[4];
 		for (int k = 0; k < 4; k++) {
-			if (PlayerSelector.instance)
-				playerChoices [k] = PlayerSelector.instance.choices [k];
-			else
-				playerChoices [k] = k;
+			playerChoices [k] = k;
 		}
 	}
-
+	void InitControllerSetup(){
+		for (int k = 0; k < 4; k++) {
+			players [k].player_num = Controllers.instance.choice_nums [k];
+		}
+	}
     // Update is called once per frame
     void Update () {
+		if (!start_game) {
+			timer_tick.SetActive (false);
+			return;
+		}
+		else {
+			timer_tick.SetActive (true);
+			ShrinkControllers ();
+			InitControllerSetup ();
+
+		}
 		if (TimerTick.instance.ticking)
 			return;
 		else if(!timer.activeSelf) {
@@ -267,6 +280,13 @@ public class Game : MonoBehaviour {
 		UpdateUI ();
 		if (end)
 			GrowWinMenuX ();
+		if (end) {
+			for (int i = 0; i < 4; i++) {
+				if (InputManager.Devices.Count > i && InputManager.Devices[i].MenuWasPressed) {
+					SceneManager.LoadScene (SceneManager.GetActiveScene ().name);
+				}
+			}
+		}
 
 	}
 	void UpdateUI(){
@@ -368,7 +388,6 @@ public class Game : MonoBehaviour {
 		if(goldTextBox.activeSelf) goldTextBox.transform.localScale = Vector3.Lerp (goldTextBox.transform.localScale, new Vector3(1.25f, 1.25f, 1.25f), 0.1f);
 		if (goldTextBox.activeSelf && goldTextBox.transform.localScale.x >= 1.2f) {
 			growGoldText = false;
-			SoundsController.instance.PlaySound (Game.GameInstance.phone);
 			Invoke ("WriteGoldText", write_speed);
 		}
 	}
@@ -397,7 +416,6 @@ public class Game : MonoBehaviour {
 		if(event1TextBox.activeSelf) event1TextBox.transform.localScale = Vector3.Lerp (event1TextBox.transform.localScale, new Vector3(1.25f, 1.25f, 1.25f), 0.1f);
 		if (event1TextBox.activeSelf && event1TextBox.transform.localScale.x >= 1.2f) {
 			growEvent1Text = false;
-			SoundsController.instance.PlaySound (Game.GameInstance.phone);
 			Invoke ("WriteEvent1Text", write_speed);
 		}
 	}
@@ -424,7 +442,6 @@ public class Game : MonoBehaviour {
         if (event2TextBox.activeSelf) event2TextBox.transform.localScale = Vector3.Lerp(event2TextBox.transform.localScale, new Vector3(1.25f, 1.25f, 1.25f), 0.1f);
         if (event2TextBox.activeSelf && event2TextBox.transform.localScale.x >= 1.2f) {
             growEvent2Text = false;
-            SoundsController.instance.PlaySound(Game.GameInstance.phone);
             Invoke("WriteEvent2Text", write_speed);
         }
     }
@@ -445,4 +462,11 @@ public class Game : MonoBehaviour {
         event2TextBox.GetComponentInChildren<Text>().text += event2_text[event2_index++];
         Invoke("WriteEvent2Text", write_speed);
     }
+	void ShrinkControllers() {
+		if (contr_selection.activeSelf) contr_selection.transform.localScale = Vector3.Lerp(contr_selection.transform.localScale, new Vector3(0f, contr_selection.transform.localScale.y, 0f), 0.1f);
+		if (contr_selection.activeSelf && contr_selection.transform.localScale.x <= 0.1f) {
+			contr_selection.SetActive(false);
+		}
+
+	}
 }

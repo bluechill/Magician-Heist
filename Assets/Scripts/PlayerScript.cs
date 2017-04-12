@@ -257,10 +257,10 @@ public class PlayerScript : MonoBehaviour {
 
 	void InitKeys(){
 		key_mappings = new KeyCode[4][];
-		key_mappings [0] = new KeyCode[7];
-		key_mappings [1] = new KeyCode[7];
-		key_mappings [2] = new KeyCode[7];
-		key_mappings [3] = new KeyCode[7];
+		key_mappings [0] = new KeyCode[8];
+		key_mappings [1] = new KeyCode[8];
+		key_mappings [2] = new KeyCode[8];
+		key_mappings [3] = new KeyCode[8];
 
 		key_mappings [0][0] = KeyCode.A;
 		key_mappings [0][1] = KeyCode.D;
@@ -269,6 +269,7 @@ public class PlayerScript : MonoBehaviour {
 		key_mappings [0][4] = KeyCode.E;
 		key_mappings [0][5] = KeyCode.R;
 		key_mappings [0][6] = KeyCode.Q;
+		key_mappings [0][7] = KeyCode.F;
 
 		key_mappings [1][0] = KeyCode.G;
 		key_mappings [1][1] = KeyCode.J;
@@ -277,6 +278,7 @@ public class PlayerScript : MonoBehaviour {
 		key_mappings [1][4] = KeyCode.U;
 		key_mappings [1][5] = KeyCode.I;
 		key_mappings [1][6] = KeyCode.T;
+		key_mappings [1][7] = KeyCode.K;
 
 		key_mappings [2][0] = KeyCode.L;
 		key_mappings [2][1] = KeyCode.Quote;
@@ -285,6 +287,7 @@ public class PlayerScript : MonoBehaviour {
 		key_mappings [2][4] = KeyCode.LeftBracket;
 		key_mappings [2][5] = KeyCode.RightBracket;
 		key_mappings [2][6] = KeyCode.O;
+		key_mappings [2][7] = KeyCode.Return;
 
 		key_mappings [3][0] = KeyCode.L;
 		key_mappings [3][1] = KeyCode.Quote;
@@ -293,6 +296,7 @@ public class PlayerScript : MonoBehaviour {
 		key_mappings [3][4] = KeyCode.LeftBracket;
 		key_mappings [3][5] = KeyCode.RightBracket;
 		key_mappings [3][6] = KeyCode.O;
+		key_mappings [3][7] = KeyCode.Return;
 
 	}
 
@@ -472,8 +476,8 @@ public class PlayerScript : MonoBehaviour {
 			}
 			print (InputManager.Devices.Count);
 
-			if (InputManager.Devices.Count > Game.GameInstance.playerChoices [player_num]) {
-				controller = InputManager.Devices [Game.GameInstance.playerChoices [player_num]];
+			if (InputManager.Devices.Count > player_num) {
+				controller = InputManager.Devices [player_num];
 				controller_set = true;
 
 			} else {
@@ -549,7 +553,7 @@ public class PlayerScript : MonoBehaviour {
 			return;
 		}
 		if (controller.LeftBumper) {
-			if (!cooldown && !attacking) {
+			if (!cooldown && !attacking && IsGrounded()) {
 				actions [1] = true;
 				cooldown = true;
 				Invoke ("ActionCooldown", action_cooldown);
@@ -742,9 +746,12 @@ public class PlayerScript : MonoBehaviour {
             if (Input.GetKeyDown(key_mappings[player_num][5])) {
                 actions[1] = true;
             }
-            if (Input.GetKeyDown(key_mappings[player_num][6])) {
-                actions[2] = true;
-            }
+			if (Input.GetKeyDown(key_mappings[player_num][6])) {
+				actions[2] = true;
+			}
+			if (Input.GetKeyDown(key_mappings[player_num][7])) {
+				actions[3] = true;
+			}
             if (Input.GetKey(KeyCode.Alpha1) && player_num == 0) {
                 if (cam.GetComponent<Camera>().orthographicSize <= 13.9f)
                     cam.GetComponent<Camera>().orthographicSize = Mathf.Lerp(cam.GetComponent<Camera>().orthographicSize, 14f, 0.1f);

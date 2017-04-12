@@ -30,8 +30,10 @@ public class TimerTick : MonoBehaviour {
 		if(tick > 0) number.GetComponent<Text> ().text += tick.ToString();
 		else number.GetComponent<Text> ().text += "GO!";
 		tick--;
-		if (tick == -2) {
+		if (tick == -1) {
 			Invoke ("StopTicking", 1f);
+		}
+		if (tick == -2) {
 			grow = false;
 			fade = false;
 			return;
