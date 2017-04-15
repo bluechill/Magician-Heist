@@ -67,7 +67,7 @@ public class Controllers : MonoBehaviour {
 		Game.GameInstance.start_game = true;
 
 	}
-	bool AllChoices(){
+	public bool AllChoices(){
 		return choices [0] && choices [1] && choices [2] && choices [3];
 	}
 

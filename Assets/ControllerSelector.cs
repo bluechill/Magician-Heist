@@ -56,7 +56,7 @@ public class ControllerSelector : MonoBehaviour {
 			}
 
 		}
-		if (controller_init && controller.MenuWasPressed) {
+		if (controller_init && controller.MenuWasPressed && Controllers.instance.AllChoices()) {
 			Controllers.instance.LockInChoices ();
 		}
 		if (!center)

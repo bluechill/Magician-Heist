@@ -6610,6 +6610,21 @@ Prefab:
       propertyPath: m_Name
       value: Blood Drip (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 198915087737389302, guid: 617912abaa6514b7e897d629ef6b467f,
+        type: 2}
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198915087737389302, guid: 617912abaa6514b7e897d629ef6b467f,
+        type: 2}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 0.95686275
+      objectReference: {fileID: 0}
+    - target: {fileID: 198915087737389302, guid: 617912abaa6514b7e897d629ef6b467f,
+        type: 2}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 617912abaa6514b7e897d629ef6b467f, type: 2}
   m_IsPrefabParent: 0
@@ -11643,6 +11658,21 @@ Prefab:
     - target: {fileID: 4927678069254582, guid: 617912abaa6514b7e897d629ef6b467f, type: 2}
       propertyPath: m_RootOrder
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 198915087737389302, guid: 617912abaa6514b7e897d629ef6b467f,
+        type: 2}
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198915087737389302, guid: 617912abaa6514b7e897d629ef6b467f,
+        type: 2}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 0.95686275
+      objectReference: {fileID: 0}
+    - target: {fileID: 198915087737389302, guid: 617912abaa6514b7e897d629ef6b467f,
+        type: 2}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 617912abaa6514b7e897d629ef6b467f, type: 2}
@@ -26877,6 +26907,21 @@ Prefab:
       propertyPath: m_Name
       value: Blood Drip (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 198915087737389302, guid: 617912abaa6514b7e897d629ef6b467f,
+        type: 2}
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198915087737389302, guid: 617912abaa6514b7e897d629ef6b467f,
+        type: 2}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 0.91764706
+      objectReference: {fileID: 0}
+    - target: {fileID: 198915087737389302, guid: 617912abaa6514b7e897d629ef6b467f,
+        type: 2}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 617912abaa6514b7e897d629ef6b467f, type: 2}
   m_IsPrefabParent: 0
@@ -32794,6 +32839,21 @@ Prefab:
     - target: {fileID: 1345623294233910, guid: 617912abaa6514b7e897d629ef6b467f, type: 2}
       propertyPath: m_Name
       value: Blood Drip (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 198915087737389302, guid: 617912abaa6514b7e897d629ef6b467f,
+        type: 2}
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198915087737389302, guid: 617912abaa6514b7e897d629ef6b467f,
+        type: 2}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 0.95686275
+      objectReference: {fileID: 0}
+    - target: {fileID: 198915087737389302, guid: 617912abaa6514b7e897d629ef6b467f,
+        type: 2}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 617912abaa6514b7e897d629ef6b467f, type: 2}

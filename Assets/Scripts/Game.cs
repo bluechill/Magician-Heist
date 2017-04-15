@@ -341,15 +341,22 @@ public class Game : MonoBehaviour {
 		ui.SetActive (false);
 		bool red_winner = false;
 
-		if (red_team_score > blue_team_score) {
-			red_winner = true;
-		} else if (red_team_score < blue_team_score) {
-			red_winner = false;
-		} else {
-			print ("tie");
-		}
+        win_score.text = "";
+        win_text.text = "";
 
-		win_score.text = "";
+        if (red_team_score > blue_team_score) {
+            win_text.text += "RED TEAM WINS";
+            win_score.text += "profit: $" + red_team_score.ToString();
+        } else if (red_team_score < blue_team_score) {
+            win_text.text += "BLUE TEAM WINS";
+            win_score.text += "profit: $" + blue_team_score.ToString();
+        } else {
+            win_text.text += "TIE!";
+            win_score.text += "profit: $" + blue_team_score.ToString();
+
+        }
+
+		/*win_score.text = "";
 		win_text.text = "";
 
 		if (red_winner) {
@@ -359,7 +366,7 @@ public class Game : MonoBehaviour {
 			win_text.text += "BLUE TEAM WINS";
 			win_score.text += "profit: $" + blue_team_score.ToString ();
 
-		}
+		}*/
 
 	}
 
