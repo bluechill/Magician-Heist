@@ -369,6 +369,7 @@ public class PlayerScript : MonoBehaviour {
 		blood = MonoBehaviour.Instantiate (bloodPrefab);
 		blood.transform.position = transform.transform.position;
 		if (health == 0) {
+            UpdateHealth();
 			health = 3;
 			PuffSmoke ();
 			transform.localPosition = original_position;
@@ -1201,7 +1202,7 @@ public class PlayerScript : MonoBehaviour {
 			}
 
 		}
-		UpdateHealth ();
+		//UpdateHealth ();
 		float gun_percentage = attack_cd / 3f;
         attack_cd -= Time.deltaTime;
 		if (attack_cd <= 0 && reload) {

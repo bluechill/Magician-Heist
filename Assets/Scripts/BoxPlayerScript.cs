@@ -15,7 +15,7 @@ public class BoxPlayerScript : PlayerScript {
 		age = Time.time - birthtime;
 		if (!started) {
 			started = true;
-			pointsText = GameObject.FindGameObjectWithTag ("Points Text 1").GetComponent<Text> ();
+			//pointsText = GameObject.FindGameObjectWithTag ("Points Text 1").GetComponent<Text> ();
 		}
 
 		ProcessMovement ();

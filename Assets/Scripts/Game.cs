@@ -5,7 +5,9 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using InControl;
 public class Game : MonoBehaviour {
-	public GameObject timer_tick;
+    public bool tutorial_scene = false;
+    public bool tutorial_done = false;
+    public GameObject timer_tick;
 	public GameObject contr_selection;
 	public bool start_game = false;
 	public GameObject timer;
@@ -98,8 +100,17 @@ public class Game : MonoBehaviour {
     public bool AcceptInput = false;
 	// Use this for initialization
 	void Start () {
+        if (tutorial_scene)
+        {
 
-		InitGame ();
+            SoundsController.instance.DisableLooping();
+            SoundsController.instance.StopPlaying();
+            SoundsController.instance.ResetEventTime();
+            SoundsController.instance.QueueClip(endGame);
+
+
+        }
+        InitGame ();
 
 		GameInstance = this;
 		start_time = Time.time;
@@ -131,6 +142,12 @@ public class Game : MonoBehaviour {
 	}
     // Update is called once per frame
     void Update () {
+        
+        if(tutorial_scene && tutorial_done)
+        {
+            SceneManager.LoadScene("Gamma Level");
+        }
+
 		if (!start_game) {
 			timer_tick.SetActive (false);
 			return;
@@ -154,7 +171,7 @@ public class Game : MonoBehaviour {
 			timer.SetActive (true);
 			AcceptInput = true;
 		}
-        if (run_time >= time_limit) {
+        if (run_time >= time_limit && !tutorial_scene) {
             Win();
         }
         if (growGoldText) {
@@ -198,7 +215,7 @@ public class Game : MonoBehaviour {
         }
 
         run_time = Time.time - start_time;
-		if (time_limit - run_time < 60f) {
+		if (time_limit - run_time < 60f && !tutorial_scene) {
 			low_time = true;
 
 		}

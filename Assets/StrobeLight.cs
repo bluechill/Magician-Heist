@@ -34,7 +34,7 @@ public class StrobeLight : MonoBehaviour {
 			amount = 2.0f - amount;
 
 			if (!emitted && ps != null) {
-				ps.Emit (10);
+				ps.Emit (3);
 				emitted = true;
 			}
 		}

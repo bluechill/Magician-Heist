@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class TruckScript : MonoBehaviour {
+    public GameObject dropOff;
 	public float capacity_percent = 0f;
 	public Text score_text;
     public int team_score;
@@ -11,8 +12,9 @@ public class TruckScript : MonoBehaviour {
 	public int capacity = 100;
 	public GameObject room_text;
 	public List<Collider> overStockItems;
-	public List<GameObject> countedItems;
-	public bool red_team;
+    public List<GameObject> countedItems;
+    public List<GameObject> extraItems;
+    public bool red_team;
 	public GameObject bed_center_obj;
 	public GameObject itemWall;
 	public GameObject capacity_indicator;
@@ -105,6 +107,25 @@ public class TruckScript : MonoBehaviour {
 	void Cheer(){
 		Game.GameInstance.cheering.Play ();
 	}
+    void KickoutItem()
+    {
+        if (capacity_percent <= 1f)
+        {
+            return;
+        }
+        int weight = 0;
+        List<GameObject> removals = new List<GameObject>();
+        foreach(GameObject item in countedItems)
+        {
+            weight += item.GetComponent<Item>().size;
+            if(weight > capacity)
+            {
+                item.transform.position = dropOff.transform.position;
+                RemoveItem(item);
+                return;
+            }
+        }
+    }
 	void UpdateCapacity(){
 		float boxWidth = 7.5f;
 		float sign = 1.0f;
@@ -124,9 +145,12 @@ public class TruckScript : MonoBehaviour {
 				
 				if (colliders [i].GetComponent<SpriteGlow> () != null && !colliders [i].GetComponent<Item> ().held && !colliders [i].GetComponent<Item> ().thrown &&
 				   !colliders [i].transform.IsChildOf (this.transform)) {
+
 					weight_used += colliders [i].gameObject.GetComponent<Item> ().size;
+
 					if (colliders [i].gameObject.GetComponent<Item> ().counted == false) {
-						if (red_team) {
+
+                        if (red_team) {
 							Game.GameInstance.red_team_score += colliders [i].gameObject.GetComponent<Item> ().points;
 						} else {
 							Game.GameInstance.blue_team_score += colliders [i].gameObject.GetComponent<Item> ().points;
@@ -150,6 +174,9 @@ public class TruckScript : MonoBehaviour {
 				}
 			}
 		}
+
+        KickoutItem();
+
 
 		if (taggedColliders.Count == 0) {
 			return;
