@@ -1189,7 +1189,7 @@ public class PlayerScript : MonoBehaviour {
         if (!Game.GameInstance.AcceptInput) {
             rb.velocity = Vector3.zero;
             if (Game.GameInstance.run_time > Game.GameInstance.time_limit) {
-                animator.Stop();
+				animator.StopPlayback ();
             }
         }
 		if (rolling) {

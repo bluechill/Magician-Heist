@@ -51,10 +51,10 @@ public class Player : MonoBehaviour {
 		}
 
 		if (rb.velocity.magnitude > 0f && !animating) {
-			var playableClip = AnimationClipPlayable.Create (walkClip);
-			playableClip.speed = rb.velocity.magnitude;
-			animator.Play (playableClip);
-			animating = true;
+//			var playableClip = AnimationClipPlayable.Create (walkClip);
+//			playableClip.speed = rb.velocity.magnitude;
+//			animator.Play (playableClip);
+//			animating = true;
 		}
 
 	}

@@ -46,10 +46,10 @@ public class Guard : LayerMonoBehavior {
 			agent.speed = searchSpeed;
 
 		if (agent.velocity.magnitude > 0f && !animating) {
-			var playableClip = AnimationClipPlayable.Create (guardWalk);
-			playableClip.speed = agent.speed;
-			animator.Play (playableClip);
-			animating = true;
+//			var playableClip = AnimationClipPlayable.Create (guardWalk);
+//			playableClip.speed = agent.speed;
+//			animator.Play (playableClip);
+//			animating = true;
 		}
 
 		if (agent.velocity.x <= 0.0f)

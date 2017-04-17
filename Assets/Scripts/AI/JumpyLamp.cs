@@ -48,10 +48,10 @@ public class JumpyLamp : LayerMonoBehavior {
 		rb.velocity = new Vector3(amount, 0f,0f);
 
 		if (rb.velocity.magnitude > 0f && !animating) {
-			var playableClip = AnimationClipPlayable.Create (lampJump);
-			playableClip.speed = animationSpeed;
-			animator.Play (playableClip);
-			animating = true;
+//			var playableClip = AnimationClipPlayable.Create (lampJump);
+//			playableClip.speed = animationSpeed;
+//			animator.Play (playableClip);
+//			animating = true;
 		}
 	}
 

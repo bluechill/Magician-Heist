@@ -1,4 +1,6 @@
-﻿Shader "Transparent/RenderTexture" {
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "Transparent/RenderTexture" {
     Properties {
         _Mask ("Mask (RGB)", 2D) = "black" {}
         _MainTex ("MainTex (RGB)", 2D) = "white" {}
@@ -33,7 +35,7 @@
                 v2f vert (appdata_t v)
                 {
                     v2f o;
-                    o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
+                    o.vertex = UnityObjectToClipPos(v.vertex);
                     o.texcoord = v.texcoord;
                     return o;
                 }
