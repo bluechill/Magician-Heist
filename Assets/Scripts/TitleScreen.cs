@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using InControl;
 public class TitleScreen : MonoBehaviour {
+	bool starting = false;
+	public GameObject black;
     bool cooldown = false;
 	public bool kill = false;
 	public bool grow = true;
@@ -24,26 +26,28 @@ public class TitleScreen : MonoBehaviour {
 	void Update () {
 		for (int i = 0; i < 4; i++) {
 			if (InputManager.Devices.Count > i) {
-                if (InputManager.Devices[i].Action1)
+                if (InputManager.Devices[i].Action1 && !starting)
                 {
                     if (!cooldown)
                     {
+						starting = true;
                         Game.GameInstance.beep.Play();
                         cooldown = true;
                         Invoke("BeepCD", 0.5f);
+						Kill();
                     }
-                    Kill();
                 }
-                if (InputManager.Devices[i].Action2)
+                if (InputManager.Devices[i].Action2 && !starting)
                 {
-                    tutorial = true;
                     if (!cooldown)
                     {
+						starting = true;
+						tutorial = true;
                         Game.GameInstance.beep.Play();
                         cooldown = true;
                         Invoke("BeepCD", 0.5f);
+						Kill();
                     }
-                    Kill();
                 }
             }
 		}
@@ -53,19 +57,27 @@ public class TitleScreen : MonoBehaviour {
 		if (kill) {
 			DestroyThis ();
 		}
+		
 	}
 	public void Kill(){
 		grow = false;
 		kill = true;
 	}
 	void DestroyThis(){
-		selector.SetActive (true);
+
+		if (tutorial) {
+			black.SetActive (true);
+		} else {	
+			black.SetActive (false);
+			selector.SetActive (true);
+		}
 
 
 		for (int i = 0; i < kill_objs.Length; i++) {
 			kill_objs[i].transform.localScale = Vector3.Lerp (kill_objs[i].transform.localScale, new Vector3(0f, 1f, 1f), 0.1f);
 			if (kill_objs[i].transform.localScale.x <= 0.001f) {
-                if(tutorial) SceneManager.LoadScene("Tutorial Level");
+				if(tutorial) SceneManager.LoadScene ("Tutorial Level");
+
 				Destroy (this.transform.parent.parent.gameObject);
 			}
 		}

@@ -905,8 +905,6 @@ public class PlayerScript : MonoBehaviour {
 				OpenDoor ();
 			else if (nearestActionObject.tag == "Elevator")
 				SwitchElevator ();
-			else if (nearestActionObject.tag == "Closet")
-				UseCloset ();
 			else
 				PickUp ();
 		} else if (is_holding) {
@@ -1097,23 +1095,6 @@ public class PlayerScript : MonoBehaviour {
 		nearestActionObject.GetComponent<Elevator> ().GetOut (this.gameObject);
 	}
 
-	public void UseCloset(){
-		nearestActionObject.GetComponent<Closet> ().SwitchStates ();
-		if (!nearestActionObject.GetComponent<Closet> ().open && is_in_closet) {
-			Hide ();
-		} else {
-			Reveal ();
-		}
-	}
-	public void EnterCloset(){
-		is_in_closet = true;
-		nearestActionObject.GetComponent<Closet> ().GetIn (this.gameObject);
-	}
-	public void ExitCloset(){
-		is_in_closet = false;
-		nearestActionObject.GetComponent<Closet> ().GetOut (this.gameObject);
-		nearestActionObject = null;
-	}
 
 	private void FindNearestItem() {
 		if (nearestActionObject != null)

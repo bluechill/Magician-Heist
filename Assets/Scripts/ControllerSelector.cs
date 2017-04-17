@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using InControl;
 
 public class ControllerSelector : MonoBehaviour {
+	
     bool cooldownA = false;
     bool cooldownB = false;
     bool cooldownM = false;
@@ -37,7 +38,7 @@ public class ControllerSelector : MonoBehaviour {
 	void Update () {
 		TryInitController ();
 		TakeInput ();
-		MoveToCenter ();
+		//MoveToCenter ();
 		LockPos ();
 		SetAButton ();
 	}
@@ -61,21 +62,29 @@ public class ControllerSelector : MonoBehaviour {
                 center = true;
 				lock_quad = false;
 				Controllers.instance.choices [choice] = false;
-				Controllers.instance.choice_nums [controller_num] = -1;
+				Controllers.instance.choice_nums [choice] = -1;
 				choice = -1;
 			}
 
 		}
         // && Controllers.instance.AllChoices()
-        if (controller_init && controller.MenuWasPressed) {
-            if (!cooldownM)
-            {
-                Game.GameInstance.beep.Play();
-                cooldownM = true;
-                Invoke("BeepCDM", 0.5f);
-            }
-            Controllers.instance.LockInChoices ();
+
+		bool require_4;
+		if (Controllers.instance.require_4_controllers) {
+			require_4 = Controllers.instance.AllChoices ();
+		} else {
+			require_4 = true;
 		}
+		if (controller_init && controller.MenuWasPressed && require_4) {
+			if (!cooldownM)
+			{
+				Game.GameInstance.beep.Play();
+				cooldownM = true;
+				Invoke("BeepCDM", 0.5f);
+			}
+			Controllers.instance.LockInChoices ();
+		}
+
 		if (!center)
 			return;
 		if(controller_init && transform.localPosition.x + controller.LeftStickX * move_speed * Time.deltaTime > x_border.x && transform.localPosition.x + controller.LeftStickX * move_speed * Time.deltaTime < x_border.y) transform.localPosition = new Vector3 (transform.localPosition.x + controller.LeftStickX * move_speed * Time.deltaTime, transform.localPosition.y, 0f);

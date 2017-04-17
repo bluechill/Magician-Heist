@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Controllers : MonoBehaviour {
+	public bool require_4_controllers;
 	public static Controllers instance;
 	public bool[] choices;
 	public int[] choice_nums;

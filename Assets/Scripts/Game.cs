@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using InControl;
 public class Game : MonoBehaviour {
     
+	public Material light_shader;
     public bool tutorial_scene = false;
     public bool tutorial_done = false;
     public GameObject timer_tick;
@@ -277,6 +278,10 @@ public class Game : MonoBehaviour {
             RTA2_Items[rand3].gameObject.GetComponent<Item>().enabled = true;
             RTA2_Items[rand3].gameObject.GetComponent<Collider>().enabled = true;
             RTA2_Items[rand3].gameObject.GetComponent<Item>().points = 300;
+			GameObject sparkles3 = MonoBehaviour.Instantiate (sparklesPrefab);
+			sparkles3.transform.parent = RTA2_Items[rand3].GetComponent<Transform>();
+			sparkles3.transform.localPosition = new Vector3 (0f, 0.5f, 0f);
+			RTA2_Items [rand3].gameObject.GetComponent<SpriteRenderer> ().material = light_shader;
             RTA_Arrows[2].GetComponent<Transform>().position = new Vector3(RTA2_Items[rand3].gameObject.GetComponent<Transform>().position.x, RTA2_Items[rand3].gameObject.GetComponent<Transform>().position.y + 1.5f);
             RTA_Arrows[2].GetComponent<Transform>().parent = RTA2_Items[rand3].GetComponent<Transform>();
 			RTA_Arrows [2].GetComponent<Arrow> ().SetOriginal ();
