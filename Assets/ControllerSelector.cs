@@ -5,7 +5,10 @@ using UnityEngine.UI;
 using InControl;
 
 public class ControllerSelector : MonoBehaviour {
-	public GameObject a_button;
+    bool cooldownA = false;
+    bool cooldownB = false;
+    bool cooldownM = false;
+    public GameObject a_button;
 	public Sprite a_button_sprite;
 	public Sprite b_button_sprite;
 	public int controller_num;
@@ -46,9 +49,16 @@ public class ControllerSelector : MonoBehaviour {
 		}
 	}
 	void TakeInput(){
-		if (controller_init && controller.Action2) {
-			if (choice != -1) {
-				center = true;
+
+        if (controller_init && controller.Action2) {
+            if (!cooldownB)
+            {
+                Game.GameInstance.beep.Play();
+                cooldownB = true;
+                Invoke("BeepCDB", 0.5f);
+            }
+            if (choice != -1) {
+                center = true;
 				lock_quad = false;
 				Controllers.instance.choices [choice] = false;
 				Controllers.instance.choice_nums [controller_num] = -1;
@@ -58,14 +68,27 @@ public class ControllerSelector : MonoBehaviour {
 		}
         // && Controllers.instance.AllChoices()
         if (controller_init && controller.MenuWasPressed) {
-			Controllers.instance.LockInChoices ();
+            if (!cooldownM)
+            {
+                Game.GameInstance.beep.Play();
+                cooldownM = true;
+                Invoke("BeepCDM", 0.5f);
+            }
+            Controllers.instance.LockInChoices ();
 		}
 		if (!center)
 			return;
 		if(controller_init && transform.localPosition.x + controller.LeftStickX * move_speed * Time.deltaTime > x_border.x && transform.localPosition.x + controller.LeftStickX * move_speed * Time.deltaTime < x_border.y) transform.localPosition = new Vector3 (transform.localPosition.x + controller.LeftStickX * move_speed * Time.deltaTime, transform.localPosition.y, 0f);
 		if(controller_init && transform.localPosition.y + controller.LeftStickY * move_speed * Time.deltaTime > y_border.x && transform.localPosition.y + controller.LeftStickY * move_speed * Time.deltaTime < y_border.y)  transform.localPosition = new Vector3 (transform.localPosition.x, transform.localPosition.y + controller.LeftStickY *  move_speed * Time.deltaTime, 0f);
 		if (controller_init && controller.Action1) {
-			GetQuadrant ();
+            if (!cooldownA)
+            {
+                Game.GameInstance.beep.Play();
+                cooldownA = true;
+                Invoke("BeepCDA", 0.5f);
+            }
+
+            GetQuadrant();
 		}
 	}
 	void SetAButton(){
@@ -167,4 +190,16 @@ public class ControllerSelector : MonoBehaviour {
 		}
 
 	}
+    void BeepCDA()
+    {
+        cooldownA = false;
+    }
+    void BeepCDB()
+    {
+        cooldownB = false;
+    }
+    void BeepCDM()
+    {
+        cooldownM = false;
+    }
 }

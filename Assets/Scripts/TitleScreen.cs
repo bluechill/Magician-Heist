@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using InControl;
 public class TitleScreen : MonoBehaviour {
+    bool cooldown = false;
 	public bool kill = false;
 	public bool grow = true;
     bool tutorial = false;
@@ -25,12 +26,23 @@ public class TitleScreen : MonoBehaviour {
 			if (InputManager.Devices.Count > i) {
                 if (InputManager.Devices[i].Action1)
                 {
+                    if (!cooldown)
+                    {
+                        Game.GameInstance.beep.Play();
+                        cooldown = true;
+                        Invoke("BeepCD", 0.5f);
+                    }
                     Kill();
                 }
                 if (InputManager.Devices[i].Action2)
                 {
                     tutorial = true;
-               
+                    if (!cooldown)
+                    {
+                        Game.GameInstance.beep.Play();
+                        cooldown = true;
+                        Invoke("BeepCD", 0.5f);
+                    }
                     Kill();
                 }
             }
@@ -65,4 +77,8 @@ public class TitleScreen : MonoBehaviour {
 			grow = false;
 		}
 	}
+    void BeepCD()
+    {
+        cooldown = false;
+    }
 }

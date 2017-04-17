@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using InControl;
 public class Game : MonoBehaviour {
+    
     public bool tutorial_scene = false;
     public bool tutorial_done = false;
     public GameObject timer_tick;
@@ -37,6 +38,7 @@ public class Game : MonoBehaviour {
     bool shrinkEvent2Text = false;
 
 	public GameObject sparklesPrefab;
+    public AudioSource beep;
 	public AudioSource cheering;
 	public AudioSource itemRemoval;
 	public AudioSource chaChing;
