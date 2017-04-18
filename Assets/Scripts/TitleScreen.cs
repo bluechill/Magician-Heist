@@ -64,21 +64,18 @@ public class TitleScreen : MonoBehaviour {
 		kill = true;
 	}
 	void DestroyThis(){
-
-		if (tutorial) {
-			black.SetActive (true);
-		} else {	
-			black.SetActive (false);
-			selector.SetActive (true);
-		}
+		black.SetActive (true);
 
 
 		for (int i = 0; i < kill_objs.Length; i++) {
 			kill_objs[i].transform.localScale = Vector3.Lerp (kill_objs[i].transform.localScale, new Vector3(0f, 1f, 1f), 0.1f);
 			if (kill_objs[i].transform.localScale.x <= 0.001f) {
-				if(tutorial) SceneManager.LoadScene ("Tutorial Level");
-
-				Destroy (this.transform.parent.parent.gameObject);
+				if (tutorial)
+					SceneManager.LoadScene ("Tutorial Level");
+				else {
+					selector.SetActive (true);
+					Destroy (this.transform.parent.parent.gameObject);
+				}
 			}
 		}
 

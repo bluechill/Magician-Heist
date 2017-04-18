@@ -78,11 +78,13 @@ public class ControllerSelector : MonoBehaviour {
 		if (controller_init && controller.MenuWasPressed && require_4) {
 			if (!cooldownM)
 			{
+				
 				Game.GameInstance.beep.Play();
 				cooldownM = true;
 				Invoke("BeepCDM", 0.5f);
+				Controllers.instance.LockInChoices ();
+				GetComponentInParent<Grow> ().enabled = false;
 			}
-			Controllers.instance.LockInChoices ();
 		}
 
 		if (!center)
