@@ -83,7 +83,7 @@ public class ControllerSelector : MonoBehaviour {
 				cooldownM = true;
 				Invoke("BeepCDM", 0.5f);
 				Controllers.instance.LockInChoices ();
-				GetComponentInParent<Grow> ().enabled = false;
+				GetComponentInParent<Grow> ().enabled = false;	
 			}
 		}
 

@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 using InControl;
 
 public class PlayerScript : MonoBehaviour {
+	public bool ready;
+	public GameObject ready_check;
 	public GameObject bloodDrip;
 	public GameObject destination;
 	public GameObject gun_icon;
@@ -523,6 +525,10 @@ public class PlayerScript : MonoBehaviour {
 		}
 
         if (controller.MenuWasPressed ) {
+			if (Game.GameInstance.tutorial_scene) {
+				ready = true;
+				ready_check.SetActive (true);
+			}
             if (Game.GameInstance.end) {
                 Game.GameInstance.RestartGame();
             }
