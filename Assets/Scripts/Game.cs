@@ -329,6 +329,7 @@ public class Game : MonoBehaviour {
         }
 
         if (low_time) {
+			timer.GetComponent<JuicyTree> ().enabled = true;
 			FlashTimer ();
 		}
 		if (time_limit - run_time < 25f && !tutorial_scene && !said_low_time) {
@@ -455,6 +456,7 @@ public class Game : MonoBehaviour {
         SceneManager.LoadScene("play_test_no_tut");
     }
 	public void FlashTimer(){
+		
 		GetComponent<TimerFlash> ().Use ();
 	}
 	public void GrowWinMenuX(){
