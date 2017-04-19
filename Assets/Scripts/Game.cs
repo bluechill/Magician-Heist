@@ -22,7 +22,9 @@ public class Game : MonoBehaviour {
 	bool shrinkGoldText = false;
 	public GameObject goldbar1;
 	public GameObject goldbar2;
-
+	bool said_low_time = false;
+	bool said_losing_team1 = false;
+	bool said_losing_team2 = false;
 	public GameObject event1TextBox;
 	string[] event1_text = {"We've ", "located ", "some ", "valuable ", "items, ", "be ", "on ", "the ", "lookout ", "for ", "these ", "arrows !"};
 	int event1_index = 0;
@@ -50,6 +52,21 @@ public class Game : MonoBehaviour {
 	public AudioSource gun_cock;
 	public AudioSource gun_reload;
 	public AudioSource gun_shot;
+
+	// VOICE OVERS 
+
+	public AudioSource[] first_event;
+	public AudioSource[] second_event;
+	public AudioSource[] third_event;
+	public AudioSource[] time_running_out;
+	public AudioSource[] lead_change;
+	public AudioSource[] funny;
+	public bool[] funny_said;
+	bool funny_saying = false;
+	public AudioSource blue_team_losing;
+	public AudioSource red_team_losing;
+
+
 	public AudioClip mainLoop;
 	public AudioClip endGame;
 	public bool keyb_debug;
@@ -103,6 +120,10 @@ public class Game : MonoBehaviour {
     public bool AcceptInput = false;
 	// Use this for initialization
 	void Start () {
+		funny_said = new bool[funny.Length];
+		for (int i = 0; i < funny.Length; i++) {
+			funny_said [i] = false;
+		}
         if (tutorial_scene)
         {
 
@@ -226,6 +247,9 @@ public class Game : MonoBehaviour {
         if (run_time > 5 && !RTA1_Active) {
             RTA1_Active = true;
             // PLAY VOICE LINE HERE
+
+			first_event [Random.Range (0, first_event.Length)].Play ();
+
             int rand1 = Random.Range(0, RTA1_Items.Length);
             int rand2 = Random.Range(0, RTA1_Items.Length);
             print(rand1);
@@ -264,13 +288,13 @@ public class Game : MonoBehaviour {
 			shrinkEvent1Text = true;
 		}
         if (run_time > 90 && Gold_Door_Active) {
-
 			OpenGoldDoor();
         }
 		if (run_time > 101) {
 			shrinkGoldText = true;
 		}
         if (run_time > 150 && !RTA2_Active) {
+			third_event [Random.Range (0, third_event.Length)].Play ();
             RTA2_Active = true;
             event2TextBox.SetActive(true);
             growEvent2Text = true;
@@ -306,6 +330,26 @@ public class Game : MonoBehaviour {
 
         if (low_time) {
 			FlashTimer ();
+		}
+		if (time_limit - run_time < 25f && !tutorial_scene && !said_low_time) {
+			said_low_time = true;
+			time_running_out [Random.Range (0, time_running_out.Length)].Play ();
+		}
+		if (time_limit - run_time < 130f && !tutorial_scene && !said_losing_team2) {
+			said_losing_team2 = true;
+			lead_change [Random.Range (0, lead_change.Length)].Play ();
+
+		}
+		if (time_limit - run_time < 90f && !tutorial_scene && !said_losing_team1) {
+
+			said_losing_team1 = true;
+			if (blue_team_score > red_team_score) {
+				red_team_losing.Play ();
+			} else if(blue_team_score < red_team_score){
+				blue_team_losing.Play ();
+			} else {
+				said_losing_team1 = false;
+			}
 		}
 		UpdateUI ();
 		if (end)
@@ -418,6 +462,8 @@ public class Game : MonoBehaviour {
 		Gold_Door_Active = false;
 		Destroy(Gold_Door);
 		//PLAY AUDIO OF DOOR BEING DESTROYED
+		second_event [Random.Range (0, second_event.Length)].Play ();
+
 		goldTextBox.SetActive(true);
 		growGoldText = true;
 	}
@@ -505,5 +551,32 @@ public class Game : MonoBehaviour {
 			contr_selection.SetActive(false);
 		}
 
+	}
+	bool FunnyLeft(){
+		for (int i = 0; i < funny.Length; i++) {
+			if(!funny_said[i]){
+				return true;
+			}
+		}
+		return false;
+	}
+	public void FunnyQuote(){
+		if(funny_saying || !FunnyLeft()){
+			return;
+		}
+		Invoke ("SayFunnyQuote", 4.4f);
+	}
+	public void SayFunnyQuote(){
+
+		int r = Random.Range (0, Game.GameInstance.funny.Length);
+
+		while(Game.GameInstance.funny_said[r]){
+			r = Random.Range (0, Game.GameInstance.funny.Length);
+			if (!FunnyLeft ())
+				return;
+		}
+
+		Game.GameInstance.funny [r].Play();
+		Game.GameInstance.funny_said[r] = true;
 	}
 }

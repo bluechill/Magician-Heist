@@ -106,7 +106,9 @@ public class TruckScript : MonoBehaviour {
 	}
 	void Cheer(){
 		Game.GameInstance.cheering.Play ();
+		Game.GameInstance.FunnyQuote ();
 	}
+
     void KickoutItem()
     {
         if (capacity_percent <= 1f)
