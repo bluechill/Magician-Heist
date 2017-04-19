@@ -1292,6 +1292,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 1706307047}
     m_Modifications:
+    - target: {fileID: 114928323117634708, guid: 59a2bcb1ec1574401b119451857218f6,
+        type: 2}
+      propertyPath: kill_objs.Array.size
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 224243642575307922, guid: 59a2bcb1ec1574401b119451857218f6,
         type: 2}
       propertyPath: m_LocalPosition.x
@@ -1387,6 +1392,11 @@ Prefab:
       propertyPath: selector
       value: 
       objectReference: {fileID: 1153011020}
+    - target: {fileID: 114928323117634708, guid: 59a2bcb1ec1574401b119451857218f6,
+        type: 2}
+      propertyPath: kill_objs.Array.data[3]
+      value: 
+      objectReference: {fileID: 1237119176}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 59a2bcb1ec1574401b119451857218f6, type: 2}
   m_IsPrefabParent: 0
@@ -26186,6 +26196,11 @@ Transform:
   m_PrefabParentObject: {fileID: 4906341033274388, guid: de1cf125127dc42d6a9e8486c0291d26,
     type: 2}
   m_PrefabInternal: {fileID: 1232023244}
+--- !u!1 &1237119176 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1575821957794108, guid: 59a2bcb1ec1574401b119451857218f6,
+    type: 2}
+  m_PrefabInternal: {fileID: 43509362}
 --- !u!1 &1238059899
 GameObject:
   m_ObjectHideFlags: 0
@@ -34449,14 +34464,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.27205884, g: 0.27205884, b: 0.27205884, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.603}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 387b771002bda47b69b345f19ca16362, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c65e3147d1be94a56acb6c57bb084561, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

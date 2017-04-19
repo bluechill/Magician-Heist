@@ -67,9 +67,10 @@ public class TitleScreen : MonoBehaviour {
 		black.SetActive (true);
 
 
+
 		for (int i = 0; i < kill_objs.Length; i++) {
-			kill_objs[i].transform.localScale = Vector3.Lerp (kill_objs[i].transform.localScale, new Vector3(0f, 1f, 1f), 0.1f);
-			if (kill_objs[i].transform.localScale.x <= 0.001f) {
+			kill_objs[i].transform.localScale = Vector3.Lerp (kill_objs[i].transform.localScale, new Vector3(0f, 1f, 1f), 0.13f);
+			if (kill_objs[i].transform.localScale.x <= 0.01f) {
 				if (tutorial)
 					SceneManager.LoadScene ("Tutorial Level");
 				else {
