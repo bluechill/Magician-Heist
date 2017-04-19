@@ -34,7 +34,7 @@ public class Game : MonoBehaviour {
 	public GameObject event1_arrow2;
 
     public GameObject event2TextBox;
-	string[] event2_text = {"The ", "Boss ", "heard ", "they ", "got ", "a ", "rare ", "painting ", "in ", "there ", "he ", "wants,     ","GO ", "GET ", "IT !"};
+	string[] event2_text = {"The ", "Boss ", "heard ", "they ", "got ", "a ", "rare ", "painting ", "in ", "there ", "he ", "wants, ","GO ", "GET ", "IT !"};
 
 	int event2_index = 0;
     bool growEvent2Text = false;
@@ -335,9 +335,11 @@ public class Game : MonoBehaviour {
 			said_low_time = true;
 			time_running_out [Random.Range (0, time_running_out.Length)].Play ();
 		}
-		if (time_limit - run_time < 130f && !tutorial_scene && !said_losing_team2) {
-			said_losing_team2 = true;
-			lead_change [Random.Range (0, lead_change.Length)].Play ();
+		if (time_limit - run_time < 165f && !tutorial_scene && !said_losing_team2) {
+			if (red_team_score != blue_team_score) {
+				said_losing_team2 = true;
+				lead_change [Random.Range (0, lead_change.Length)].Play ();
+			}
 
 		}
 		if (time_limit - run_time < 90f && !tutorial_scene && !said_losing_team1) {
