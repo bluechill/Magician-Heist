@@ -96,6 +96,7 @@ public class SoundsController : MonoBehaviour {
 			nextEventTime = AudioSettings.dspTime;
 
 		source.GetComponent<AudioSource>().PlayScheduled (nextEventTime);
+		source.GetComponent<AudioSource> ().volume = 0.4f;
 		sound_objects [source.GetComponent<AudioSource>()] = nextEventTime;
 		nextEventTime = nextEventTime + clip.length;
 	}

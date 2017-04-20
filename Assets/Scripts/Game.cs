@@ -409,7 +409,7 @@ public class Game : MonoBehaviour {
         AcceptInput = false;
         end = true;
 		win_menu.SetActive (true);
-		ui.SetActive (false);
+//		ui.SetActive (false);
 		bool red_winner = false;
 
         win_score.text = "";
