@@ -214,6 +214,27 @@ public class PlayerScript : MonoBehaviour {
 		is_holding = false;
 		held_object.GetComponent<Item> ().held = false;
 	}
+	public bool CantRoll(){
+		RaycastHit hit, hit2;
+
+		Vector3 extents = GetComponent<Collider> ().bounds.extents;
+
+		Vector3 posLeft = transform.position - new Vector3(extents.x, 0f,0f);
+		Vector3 posRight = transform.position + new Vector3(extents.x, 0f,0f);
+
+		int layer = 1 << LayerMask.NameToLayer ("Default");
+
+		Physics.Raycast(posLeft, -Vector3.right, out hit, 1.1f, layer);
+		Physics.Raycast(posRight, -Vector3.right, out hit2, 1.1f, layer);
+
+		if (hit.collider != null || hit2.collider != null) {
+			//ray hit an environment object
+
+			//float distance = Mathf.Abs(hit.point.y - transform.position.y);
+			return true;
+		}
+		return false;
+	}
 	public bool IsGrounded(){
 		RaycastHit hit, hit2;
 
@@ -560,7 +581,7 @@ public class PlayerScript : MonoBehaviour {
 			return;
 		}
 		if (controller.LeftBumper) {
-			if (!cooldown && !attacking && IsGrounded()) {
+			if (!cooldown && !attacking && IsGrounded() && !CantRoll()) {
 				actions [1] = true;
 				cooldown = true;
 				Invoke ("ActionCooldown", action_cooldown);
