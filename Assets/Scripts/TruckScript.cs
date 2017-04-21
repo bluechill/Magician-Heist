@@ -38,7 +38,7 @@ public class TruckScript : MonoBehaviour {
 		}
 		room_text.GetComponent<TextMesh> ().text = "";
 		room_text.GetComponent<TextMesh> ().text += weight_used.ToString ();
-		FindContained ();
+		//FindContained ();
 		//FillSpace ();
 		
 		UpdateScore ();
@@ -319,18 +319,20 @@ public class TruckScript : MonoBehaviour {
 
 				if (!V3EqualsFine (countedItems [i].transform.position, new Vector3 (x_, bed_center_obj.transform.position.y, 0f))) {
 					countedItems [i].transform.position = Vector3.Lerp(countedItems [i].transform.position, new Vector3 (x_, bed_center_obj.transform.position.y, 0f), 0.05f) ;
-
+					countedItems [i].GetComponent<Rigidbody> ().velocity = Vector3.zero;
 				}
 
 
 				if (countedItems [i].GetComponent<Item> ().tree) {
 					if (!V3EqualsFine (countedItems [i].transform.position, new Vector3 (countedItems [i].transform.position.x, bed_center_obj.transform.position.y + (0.18f), 0f))) {
 						countedItems [i].transform.position = Vector3.Lerp(countedItems [i].transform.position, new Vector3 (countedItems [i].transform.position.x, bed_center_obj.transform.position.y + (0.15f), 0f), 0.05f) ;
+						countedItems [i].GetComponent<Rigidbody> ().velocity = Vector3.zero;
 					}
 
 				} else if (!countedItems [i].GetComponent<Item> ().couch) {
 					if (!V3EqualsFine (countedItems [i].transform.position, new Vector3 (countedItems [i].transform.position.x, bed_center_obj.transform.position.y - (0.25f), 0f))) {
 						countedItems [i].transform.position = Vector3.Lerp(countedItems [i].transform.position, new Vector3 (countedItems [i].transform.position.x, bed_center_obj.transform.position.y - (0.25f), 0f), 0.05f) ;
+						countedItems [i].GetComponent<Rigidbody> ().velocity = Vector3.zero;
 					}
 
 				}

@@ -248,7 +248,7 @@ public class Game : MonoBehaviour {
             RTA1_Active = true;
             // PLAY VOICE LINE HERE
 
-			first_event [Random.Range (0, first_event.Length)].Play ();
+			VoiceController.instance.QueueClip (first_event [Random.Range (0, first_event.Length)].clip);
 
             int rand1 = Random.Range(0, RTA1_Items.Length);
             int rand2 = Random.Range(0, RTA1_Items.Length);
@@ -294,7 +294,7 @@ public class Game : MonoBehaviour {
 			shrinkGoldText = true;
 		}
         if (run_time > 150 && !RTA2_Active) {
-			third_event [Random.Range (0, third_event.Length)].Play ();
+			VoiceController.instance.QueueClip (third_event [Random.Range (0, third_event.Length)].clip);
             RTA2_Active = true;
             event2TextBox.SetActive(true);
             growEvent2Text = true;
@@ -334,12 +334,12 @@ public class Game : MonoBehaviour {
 		}
 		if (time_limit - run_time < 25f && !tutorial_scene && !said_low_time) {
 			said_low_time = true;
-			time_running_out [Random.Range (0, time_running_out.Length)].Play ();
+			VoiceController.instance.QueueClip (time_running_out [Random.Range (0, time_running_out.Length)].clip);
 		}
 		if (time_limit - run_time < 165f && !tutorial_scene && !said_losing_team2) {
 			if (red_team_score != blue_team_score) {
 				said_losing_team2 = true;
-				lead_change [Random.Range (0, lead_change.Length)].Play ();
+				VoiceController.instance.QueueClip (lead_change [Random.Range (0, lead_change.Length)].clip);
 			}
 
 		}
@@ -347,9 +347,9 @@ public class Game : MonoBehaviour {
 
 			said_losing_team1 = true;
 			if (blue_team_score > red_team_score) {
-				red_team_losing.Play ();
+				VoiceController.instance.QueueClip (red_team_losing.clip );
 			} else if(blue_team_score < red_team_score){
-				blue_team_losing.Play ();
+				VoiceController.instance.QueueClip (blue_team_losing.clip );
 			} else {
 				said_losing_team1 = false;
 			}
@@ -466,7 +466,7 @@ public class Game : MonoBehaviour {
 		Gold_Door_Active = false;
 		Destroy(Gold_Door);
 		//PLAY AUDIO OF DOOR BEING DESTROYED
-		second_event [Random.Range (0, second_event.Length)].Play ();
+		VoiceController.instance.QueueClip (second_event [Random.Range (0, second_event.Length)].clip);
 
 		goldTextBox.SetActive(true);
 		growGoldText = true;
@@ -580,7 +580,7 @@ public class Game : MonoBehaviour {
 				return;
 		}
 
-		Game.GameInstance.funny [r].Play();
+		VoiceController.instance.QueueClip (Game.GameInstance.funny [r].clip);
 		Game.GameInstance.funny_said[r] = true;
 	}
 }
