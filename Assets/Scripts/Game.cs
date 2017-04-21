@@ -166,7 +166,9 @@ public class Game : MonoBehaviour {
 	}
     // Update is called once per frame
     void Update () {
-        
+		if (Input.GetKeyDown (KeyCode.Escape)) {
+			SceneManager.LoadScene ("Gamma Level");
+		}
         if(tutorial_scene && tutorial_done)
         {
             SceneManager.LoadScene("Gamma Level");

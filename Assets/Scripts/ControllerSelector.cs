@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using InControl;
 
@@ -50,21 +51,25 @@ public class ControllerSelector : MonoBehaviour {
 		}
 	}
 	void TakeInput(){
-
+		if (controller_init && controller.Action4) {
+			Game.GameInstance.beep.Play();
+			SceneManager.LoadScene (SceneManager.GetActiveScene().name);
+		}
         if (controller_init && controller.Action2) {
-            if (!cooldownB)
-            {
-                Game.GameInstance.beep.Play();
-                cooldownB = true;
-                Invoke("BeepCDB", 0.5f);
-            }
-            if (choice != -1) {
-                center = true;
+
+			if (choice != -1) {
+				if (!cooldownB)
+				{
+					Game.GameInstance.beep.Play();
+					cooldownB = true;
+					Invoke("BeepCDB", 0.5f);
+				}
+				center = true;
 				lock_quad = false;
 				Controllers.instance.choices [choice] = false;
 				Controllers.instance.choice_nums [choice] = -1;
 				choice = -1;
-			}
+			} 
 
 		}
         // && Controllers.instance.AllChoices()
